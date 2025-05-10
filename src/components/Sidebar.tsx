@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Pencil, Bookmark, Layers, CampingTent, Box } from 'lucide-react';
+import { Home, Pencil, Bookmark, Layers, Tent, Box } from 'lucide-react';
 
 interface SidebarItemProps {
   to: string;
@@ -64,7 +63,7 @@ const Sidebar = () => {
         </SidebarSection>
 
         <SidebarSection title="Projects">
-          <SidebarItem to="/campsite" icon={CampingTent} external>Campsite</SidebarItem>
+          <SidebarItem to="/campsite" icon={Tent} external>Campsite</SidebarItem>
           <SidebarItem to="/design-details" icon={Box} external>Design Details</SidebarItem>
           <SidebarItem to="/staff-design" icon={Box} external>Staff Design</SidebarItem>
           <SidebarItem to="/figma-plugins" icon={Box} external>Figma Plugins</SidebarItem>
