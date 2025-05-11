@@ -6,7 +6,8 @@ const BottomNavigation = () => {
   const location = useLocation();
   const [activeTabRect, setActiveTabRect] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
   const [previousTabRect, setPreviousTabRect] = useState<{ left: number; width: number } | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  const [animationDirection, setAnimationDirection] = useState<'right' | 'left' | null>(null);
   const [previousPathname, setPreviousPathname] = useState(location.pathname);
   const tabRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const initialRender = useRef(true);
@@ -65,18 +66,23 @@ const BottomNavigation = () => {
       
       // Get the new position
       const newPosition = getTabPosition(activeIndex);
-      if (newPosition) {
-        // Start animation
-        setIsAnimating(true);
+      if (newPosition && prevPosition) {
+        // Determine animation direction
+        const direction = previousIndex < activeIndex ? 'right' : 'left';
+        setAnimationDirection(direction);
         
-        // Set the new position after a brief delay to allow the animation to start
+        // Start animation sequence
+        setAnimating(true);
+        
+        // Set the new position and reset animation state after animation completes
         setTimeout(() => {
           setActiveTabRect(newPosition);
           
           // Animation complete
           setTimeout(() => {
-            setIsAnimating(false);
-          }, 300); // Match this with the CSS transition duration
+            setAnimating(false);
+            setAnimationDirection(null);
+          }, 500); // Match duration with CSS animation
         }, 50);
       }
     }
@@ -85,27 +91,19 @@ const BottomNavigation = () => {
     setPreviousPathname(location.pathname);
   }, [location.pathname]);
 
-  // Determine direction of movement
-  const getDirection = () => {
-    const previousIndex = navItems.findIndex(item => item.path === previousPathname);
-    const activeIndex = navItems.findIndex(item => item.path === location.pathname);
-    return previousIndex < activeIndex ? 'right' : 'left';
-  };
-
   return (
     <div className="fixed bottom-2 left-2 right-2 md:hidden">
       <div className="bg-portfolio-sidebar rounded-full shadow-lg border border-[#333] relative">
         {/* Animated background for selected tab */}
         {previousTabRect && (
           <div 
-            className={`absolute h-[calc(100%-8px)] top-1 rounded-full bg-[#333] transition-all duration-300 ease-out ${isAnimating ? 'transition-all' : ''}`}
+            className={`absolute h-[calc(100%-8px)] top-1 rounded-full bg-[#333] transition-all duration-300 ease-out ${
+              animating && animationDirection === 'right' ? 'animate-[expand-right_0.5s_ease-out_forwards]' : 
+              animating && animationDirection === 'left' ? 'animate-[expand-left_0.5s_ease-out_forwards]' : ''
+            }`}
             style={{ 
-              left: isAnimating ? `${previousTabRect.left + 4}px` : `${activeTabRect.left + 4}px`,
-              width: isAnimating ? `${activeTabRect.width - 8}px` : `${activeTabRect.width - 8}px`,
-              transformOrigin: getDirection() === 'right' ? 'left' : 'right',
-              transform: isAnimating ? 
-                `scaleX(${(activeTabRect.width + Math.abs(activeTabRect.left - previousTabRect.left)) / activeTabRect.width})` : 
-                'scaleX(1)',
+              left: `${activeTabRect.left + 4}px`,
+              width: `${activeTabRect.width - 8}px`,
             }}
           />
         )}

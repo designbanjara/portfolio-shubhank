@@ -44,13 +44,31 @@
 
 /* Bottom Navigation Animation */
 @keyframes expand-right {
-  0% { transform: scaleX(1); transform-origin: left; }
-  50% { transform: scaleX(1.5); transform-origin: left; }
-  100% { transform: scaleX(1); transform-origin: left; }
+  0% { 
+    transform: scaleX(1); 
+    transform-origin: left; 
+  }
+  50% { 
+    transform: scaleX(1.5); 
+    transform-origin: left; 
+  }
+  100% { 
+    transform: scaleX(1); 
+    transform-origin: left; 
+  }
 }
 
 @keyframes expand-left {
-  0% { transform: scaleX(1); transform-origin: right; }
-  50% { transform: scaleX(1.5); transform-origin: right; }
-  100% { transform: scaleX(1); transform-origin: right; }
+  0% { 
+    transform: scaleX(1); 
+    transform-origin: right; 
+  }
+  50% { 
+    transform: scaleX(1.5); 
+    transform-origin: right; 
+  }
+  100% { 
+    transform: scaleX(1); 
+    transform-origin: right; 
+  }
 }
