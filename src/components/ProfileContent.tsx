@@ -5,15 +5,15 @@ import SocialLinks from './SocialLinks';
 const ProfileContent = () => {
   return (
     <div className="max-w-2xl mx-auto py-6 md:py-10 px-4">
-      <h1 className="text-xl md:text-2xl font-custom font-bold mb-4 md:mb-6">Shubhank Pawar</h1>
+      <h1 className="text-3xl font-custom font-bold mb-6">Shubhank Pawar</h1>
       <div className="space-y-4 md:space-y-6">
         <p className="text-base md:text-lg">
           Hey, I'm Shubhank. I'm a digital designer, based out of Bangalore, India.
-          I'm currently designing products at <a href="#" className="text-portfolio-link hover:underline">PhonePe</a>.
+          I'm currently designing products at <a href="#" className="text-[#F97316] hover:underline">PhonePe</a>.
         </p>
 
         <p className="text-base md:text-lg">
-          Before PhonePe, I spent couple of years designing at <a href="#" className="text-portfolio-link hover:underline">Razorpay</a>. Majorly working on their mobile app and merchant experience
+          Before PhonePe, I spent couple of years designing at <a href="#" className="text-[#F97316] hover:underline">Razorpay</a>. Majorly working on their mobile app and merchant experience
         </p>
 
         <p className="text-base md:text-lg">
