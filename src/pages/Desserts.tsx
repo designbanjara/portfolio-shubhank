@@ -12,7 +12,6 @@ const Desserts = () => {
           <div className="space-y-6">
             <p className="text-lg">Explore Shubhank's favorite desserts and recipes.</p>
             
-            {/* Placeholder content */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               <div className="border border-[#333] rounded-lg p-4">
                 <h2 className="text-xl font-bold mb-2">Chocolate Lava Cake</h2>
