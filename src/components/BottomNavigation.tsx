@@ -13,9 +13,9 @@ const BottomNavigation = () => {
   ];
 
   return (
-    <div className="fixed bottom-2 left-2 right-2 md:hidden">
+    <div className="fixed bottom-4 left-2 right-2 md:hidden">
       <div className="bg-portfolio-sidebar rounded-full shadow-lg border border-[#333] relative">
-        <div className="flex justify-around relative">
+        <div className="flex justify-around relative py-1">
           {navItems.map((item, index) => {
             const isActive = location.pathname === item.path;
             return (
