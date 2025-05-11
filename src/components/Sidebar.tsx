@@ -6,9 +6,11 @@ import {
   CakeIcon,
   ClockIcon,
   EnvelopeIcon,
+  PencilIcon,
 } from '@heroicons/react/24/solid';
 import { 
   Linkedin,
+  Twitter,
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -65,6 +67,7 @@ const Sidebar = () => {
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
+          <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
           <SidebarItem to="/work-in-progress" icon={ClockIcon}>Work in Progress</SidebarItem>
           <SidebarItem to="/desserts" icon={CakeIcon}>Desserts</SidebarItem>
         </SidebarSection>
@@ -73,6 +76,7 @@ const Sidebar = () => {
       <div className="p-4 mt-auto">
         <SidebarSection title="Online">
           <SidebarItem to="https://linkedin.com" icon={Linkedin} external>LinkedIn</SidebarItem>
+          <SidebarItem to="https://twitter.com" icon={Twitter} external>Twitter</SidebarItem>
           <SidebarItem to="mailto:contact@example.com" icon={EnvelopeIcon} external>Mail</SidebarItem>
         </SidebarSection>
       </div>

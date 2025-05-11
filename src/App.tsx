@@ -10,6 +10,7 @@ import Stack from "./pages/Stack";
 import NotFound from "./pages/NotFound";
 import WorkInProgress from "./pages/WorkInProgress";
 import Desserts from "./pages/Desserts";
+import Writing from "./pages/Writing";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/stack" element={<Stack />} />
           <Route path="/work-in-progress" element={<WorkInProgress />} />
           <Route path="/desserts" element={<Desserts />} />
+          <Route path="/writing" element={<Writing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
