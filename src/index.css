@@ -61,7 +61,12 @@
   }
 
   a {
-    @apply text-[#F97316] hover:underline transition-colors;
+    @apply text-[#F97316] transition-colors;
+  }
+
+  /* Navigation items should not have underlines */
+  .nav-item a, nav a, header a, .navigation-link {
+    @apply no-underline hover:no-underline;
   }
 
   /* Add the display-p3 accent color */

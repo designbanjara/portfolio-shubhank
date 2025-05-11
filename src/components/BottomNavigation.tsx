@@ -5,6 +5,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 const BottomNavigation = () => {
   const location = useLocation();
   const [activeTabRect, setActiveTabRect] = useState({ left: 0, width: 0 });
+  const [previousPathname, setPreviousPathname] = useState(location.pathname);
   const tabRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   
   const navItems = [
@@ -30,6 +31,9 @@ const BottomNavigation = () => {
         }
       }
     }
+    
+    // Update previous pathname for next animation
+    setPreviousPathname(location.pathname);
   }, [location.pathname]);
 
   return (
@@ -51,7 +55,7 @@ const BottomNavigation = () => {
               to={item.path}
               ref={el => tabRefs.current[index] = el}
               className={({ isActive }) => 
-                `flex items-center justify-center py-3 px-4 m-1 rounded-full text-base font-medium transition-colors ${
+                `flex items-center justify-center py-3 px-4 rounded-full text-base font-medium transition-colors ${
                   isActive 
                     ? 'text-white' 
                     : 'text-gray-400 hover:text-white'
