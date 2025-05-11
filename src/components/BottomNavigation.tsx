@@ -6,6 +6,7 @@ const BottomNavigation = () => {
   const location = useLocation();
   const [activeTabRect, setActiveTabRect] = useState({ left: 0, width: 0 });
   const [previousPathname, setPreviousPathname] = useState(location.pathname);
+  const [direction, setDirection] = useState(0); // 0 = initial, -1 = right to left, 1 = left to right
   const tabRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   
   const navItems = [
@@ -19,6 +20,11 @@ const BottomNavigation = () => {
     // Find the currently active tab and get its position
     const activeIndex = navItems.findIndex(item => item.path === location.pathname);
     const previousIndex = navItems.findIndex(item => item.path === previousPathname);
+    
+    // Determine direction of movement
+    if (previousIndex !== activeIndex) {
+      setDirection(previousIndex < activeIndex ? 1 : -1);
+    }
     
     if (activeIndex >= 0 && tabRefs.current[activeIndex]) {
       const activeTab = tabRefs.current[activeIndex];
@@ -46,7 +52,8 @@ const BottomNavigation = () => {
           className="absolute h-[calc(100%-8px)] top-1 rounded-full bg-[#333] transition-all duration-300 ease-in-out"
           style={{ 
             left: `${activeTabRect.left + 4}px`, 
-            width: `${activeTabRect.width - 8}px` 
+            width: `${activeTabRect.width - 8}px`,
+            transformOrigin: direction > 0 ? 'left' : 'right',
           }}
         />
         
