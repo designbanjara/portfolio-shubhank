@@ -9,6 +9,8 @@ import Writing from "./pages/Writing";
 import Bookmarks from "./pages/Bookmarks";
 import Stack from "./pages/Stack";
 import NotFound from "./pages/NotFound";
+import WorkInProgress from "./pages/WorkInProgress";
+import Desserts from "./pages/Desserts";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/writing" element={<Writing />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/stack" element={<Stack />} />
+          <Route path="/work-in-progress" element={<WorkInProgress />} />
+          <Route path="/desserts" element={<Desserts />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
