@@ -19,7 +19,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				custom: ['CustomFont', 'sans-serif'],
+				custom: ['MintGrotesk', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

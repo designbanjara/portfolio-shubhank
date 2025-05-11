@@ -1,9 +1,8 @@
 
 @font-face {
-  font-family: 'CustomFont';
-  src: url('./custom-font.woff2') format('woff2'),
-       url('./custom-font.woff') format('woff');
-  font-weight: normal;
+  font-family: 'MintGrotesk';
+  src: url('./Mint-Grotesk-Bold-V131.woff2') format('woff2');
+  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
