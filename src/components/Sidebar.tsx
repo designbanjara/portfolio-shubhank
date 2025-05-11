@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Pencil, Bookmark, Layers, Tent, Github, Youtube, Twitter, Figma } from 'lucide-react';
+import { Home, Pencil, Bookmark, Layers, Tent, Github, Youtube, Twitter, Figma, Box as BoxIcon, LayoutDashboard, Package, Shield } from 'lucide-react';
 
 interface SidebarItemProps {
   to: string;
@@ -59,18 +59,18 @@ const Sidebar = () => {
 
         <SidebarSection title="Me">
           <SidebarItem to="/bookmarks" icon={Bookmark}>Bookmarks</SidebarItem>
-          <SidebarItem to="/ama" icon={Box}>AMA</SidebarItem>  
+          <SidebarItem to="/ama" icon={LayoutDashboard}>AMA</SidebarItem>  
           <SidebarItem to="/stack" icon={Layers}>Stack</SidebarItem>
         </SidebarSection>
 
         <SidebarSection title="Projects">
           <SidebarItem to="/campsite" icon={Tent} external>Campsite</SidebarItem>
-          <SidebarItem to="/design-details" icon={Box} external>Design Details</SidebarItem>
-          <SidebarItem to="/staff-design" icon={Box} external>Staff Design</SidebarItem>
-          <SidebarItem to="/figma-plugins" icon={Box} external>Figma Plugins</SidebarItem>
-          <SidebarItem to="/security-checklist" icon={Box}>Security Checklist</SidebarItem>
-          <SidebarItem to="/hacker-news" icon={Box}>Hacker News</SidebarItem>
-          <SidebarItem to="/app-dissection" icon={Box}>App Dissection</SidebarItem>
+          <SidebarItem to="/design-details" icon={Package} external>Design Details</SidebarItem>
+          <SidebarItem to="/staff-design" icon={BoxIcon} external>Staff Design</SidebarItem>
+          <SidebarItem to="/figma-plugins" icon={Figma} external>Figma Plugins</SidebarItem>
+          <SidebarItem to="/security-checklist" icon={Shield}>Security Checklist</SidebarItem>
+          <SidebarItem to="/hacker-news" icon={Package}>Hacker News</SidebarItem>
+          <SidebarItem to="/app-dissection" icon={LayoutDashboard}>App Dissection</SidebarItem>
         </SidebarSection>
 
         <SidebarSection title="Online">
