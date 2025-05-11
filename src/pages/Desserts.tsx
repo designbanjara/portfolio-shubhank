@@ -3,6 +3,7 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 import DessertsContent from '../components/DessertsContent';
 import MobileHeader from '../components/MobileHeader';
+import BottomNavigation from '../components/BottomNavigation';
 
 const Desserts = () => {
   return (
@@ -15,12 +16,15 @@ const Desserts = () => {
         <Sidebar />
       </div>
       
-      {/* Main content - responsive padding */}
-      <main className="md:ml-56">
-        <div className="max-w-3xl mx-auto py-6 md:py-10 px-4">
+      {/* Main content - responsive padding with floating treatment */}
+      <main className="md:ml-56 pb-20 md:pb-6">
+        <div className="max-w-3xl mx-auto py-6 md:py-10 px-4 bg-portfolio-sidebar m-2 rounded-lg border border-[#333]">
           <DessertsContent />
         </div>
       </main>
+
+      {/* Bottom navigation for mobile */}
+      <BottomNavigation />
     </div>
   );
 };

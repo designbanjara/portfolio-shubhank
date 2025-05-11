@@ -2,6 +2,7 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
+import BottomNavigation from '../components/BottomNavigation';
 
 const Stack = () => {
   return (
@@ -14,13 +15,16 @@ const Stack = () => {
         <Sidebar />
       </div>
       
-      {/* Main content - responsive padding */}
-      <main className="md:ml-56">
-        <div className="p-4 md:p-8">
+      {/* Main content - responsive padding with floating treatment */}
+      <main className="md:ml-56 pb-20 md:pb-6">
+        <div className="max-w-3xl mx-auto py-6 md:py-10 px-4 bg-portfolio-sidebar m-2 rounded-lg border border-[#333]">
           <h1 className="text-2xl font-bold">Stack</h1>
           <p className="mt-4">This page would contain information about Brian's technology stack.</p>
         </div>
       </main>
+
+      {/* Bottom navigation for mobile */}
+      <BottomNavigation />
     </div>
   );
 };
