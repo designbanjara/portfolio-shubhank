@@ -2,10 +2,13 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import BottomNavigation from '../components/BottomNavigation';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const WorkInProgress = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="min-h-screen bg-portfolio-dark text-white">
+    <div className={`min-h-screen ${isMobile ? 'bg-[#222222]' : 'bg-portfolio-dark'} text-white`}>
       {/* Desktop Sidebar - hidden on mobile */}
       <div className="hidden md:block">
         <Sidebar />
