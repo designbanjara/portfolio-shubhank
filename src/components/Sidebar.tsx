@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { 
   Linkedin,
+  FileText,
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -74,6 +75,7 @@ const Sidebar = () => {
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
           <SidebarItem to="/writing" icon={PencilIcon} exact>Writing</SidebarItem>
+          <SidebarItem to="/writings" icon={FileText} exact>Writings</SidebarItem>
           <SidebarItem to="/work-in-progress" icon={ClockIcon}>Work in Progress</SidebarItem>
           <SidebarItem to="/desserts" icon={CakeIcon}>Desserts</SidebarItem>
         </SidebarSection>
