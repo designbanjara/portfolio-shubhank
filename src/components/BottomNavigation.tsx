@@ -22,12 +22,12 @@ const BottomNavigation = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                className="flex items-center justify-center py-3 px-4 rounded-full text-base font-medium transition-colors z-10 relative text-gray-400 hover:text-white"
+                className="flex items-center justify-center py-3 w-full rounded-full text-base font-medium transition-colors z-10 relative text-gray-400 hover:text-white"
               >
                 {isActive && (
                   <motion.div 
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-[#333] rounded-full"
+                    className="absolute inset-0 bg-[#333] rounded-full w-full h-full"
                     initial={false}
                     transition={{ 
                       type: "spring", 
