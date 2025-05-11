@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -16,17 +16,13 @@ const BottomNavigation = () => {
     <div className="fixed bottom-4 left-2 right-2 md:hidden">
       <div className="bg-portfolio-sidebar rounded-full shadow-lg border border-[#333] relative">
         <div className="flex justify-around relative py-1">
-          {navItems.map((item, index) => {
+          {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <NavLink
                 key={item.path}
                 to={item.path}
-                className={`flex items-center justify-center py-3 px-4 rounded-full text-base font-medium transition-colors z-10 relative ${
-                  isActive 
-                    ? 'text-white' 
-                    : 'text-gray-400 hover:text-white'
-                }`}
+                className="flex items-center justify-center py-3 px-4 rounded-full text-base font-medium transition-colors z-10 relative text-gray-400 hover:text-white"
               >
                 {isActive && (
                   <motion.div 
@@ -41,7 +37,9 @@ const BottomNavigation = () => {
                     }}
                   />
                 )}
-                <span className="relative z-10">{item.label}</span>
+                <span className={`relative z-10 ${isActive ? 'text-white' : ''}`}>
+                  {item.label}
+                </span>
               </NavLink>
             );
           })}
