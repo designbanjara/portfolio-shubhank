@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../components/ui/pagination';
+import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type BlogPost = {
   id: number;
@@ -74,6 +77,21 @@ const blogPosts: BlogPost[] = [
           </div>
         </div>
         
+        <h2 className="text-3xl mt-8 mb-4">Left Navigation Padding Guide</h2>
+        <p className="mb-4">Consistent padding in navigation elements creates visual rhythm and improves user experience:</p>
+        
+        <div className="bg-[#222] p-6 rounded-lg mb-8">
+          <div className="mb-4">
+            <strong>Sidebar Container:</strong> p-4 (padding: 1rem)
+          </div>
+          <div className="mb-4">
+            <strong>Navigation Items:</strong> px-3 py-2 (horizontal: 0.75rem, vertical: 0.5rem)
+          </div>
+          <div>
+            <strong>Section Spacing:</strong> mt-3 (margin-top: 0.75rem)
+          </div>
+        </div>
+        
         <h2 className="text-3xl mt-8 mb-4">Paragraphs</h2>
         <p className="mb-4">Good typography starts with well-formatted paragraphs. Use adequate line height and spacing between paragraphs to improve readability.</p>
         <p className="mb-4">This is a second paragraph showing spacing between paragraphs. Notice how the space helps the reader's eyes rest between thoughts.</p>
@@ -102,7 +120,7 @@ const blogPosts: BlogPost[] = [
         </ol>
         
         <h2 className="text-3xl mt-8 mb-4">Blockquotes</h2>
-        <blockquote className="border-l-4 border-primary pl-4 italic mb-6">
+        <blockquote className="border-l-4 border-accent pl-4 italic mb-6">
           "Typography is what makes the invisible visible. Good typography enhances the character of the text without drawing attention to itself."
           <footer className="text-sm mt-2 text-gray-400">— Robert Bringhurst</footer>
         </blockquote>
@@ -143,6 +161,7 @@ const blogPosts: BlogPost[] = [
 
 const Writing = () => {
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   
   const selectedBlog = selectedPost !== null ? blogPosts.find(post => post.id === selectedPost) : null;
   
@@ -167,11 +186,38 @@ const Writing = () => {
       }
     }
   };
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.scrollY;
+      if (position > 180) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen flex bg-portfolio-dark text-white">
       <Sidebar />
-      <div className="flex-1 overflow-auto ml-56">
+      <div className="flex-1 overflow-auto ml-56 relative">
+        {selectedBlog && isScrolled && (
+          <div 
+            className="fixed top-0 left-56 right-0 bg-portfolio-dark/90 backdrop-blur-sm z-10 px-4 py-3 border-b border-[#333] transition-opacity duration-300"
+          >
+            <div className="max-w-3xl mx-auto flex justify-between items-center">
+              <h2 className="font-medium">{selectedBlog.title}</h2>
+              <span className="text-sm text-gray-400">{selectedBlog.date}</span>
+            </div>
+          </div>
+        )}
+        
         <div className="max-w-3xl mx-auto py-10 px-4">
           {selectedBlog ? (
             <div className="animate-fade-in">

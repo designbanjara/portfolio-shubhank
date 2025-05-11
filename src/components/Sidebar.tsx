@@ -32,7 +32,7 @@ const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: Side
   const activeState = isWriting ? writeActive : isActive;
   
   const content = (
-    <div className={`flex items-center gap-3 px-2 py-1 rounded-md hover:bg-[#333333] ${activeState ? 'bg-[#333333] text-white' : 'text-gray-300'}`}>
+    <div className={`flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#333333] ${activeState ? 'bg-[#333333] text-white' : 'text-gray-300'}`}>
       <Icon className="h-4 w-4" />
       <span className="text-sm font-medium">{children}</span>
       {external && <span className="ml-auto text-xs">↗</span>}
@@ -68,7 +68,7 @@ const SidebarSection = ({ title, children }: { title?: string; children: React.R
 const Sidebar = () => {
   return (
     <div className="w-56 bg-portfolio-sidebar border-r border-[#333] fixed h-screen flex flex-col">
-      <div className="p-3 flex-grow">
+      <div className="p-4 flex-grow">
         <div className="font-custom font-bold text-white mb-5 text-2xl">Shubhank Pawar</div>
 
         <SidebarSection>
@@ -79,7 +79,7 @@ const Sidebar = () => {
         </SidebarSection>
       </div>
 
-      <div className="p-3 mt-auto">
+      <div className="p-4 mt-auto">
         <SidebarSection title="Online">
           <SidebarItem to="https://linkedin.com" icon={Linkedin} external>LinkedIn</SidebarItem>
           <SidebarItem to="mailto:contact@example.com" icon={EnvelopeIcon} external>Mail</SidebarItem>
