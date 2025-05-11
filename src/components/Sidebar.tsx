@@ -1,14 +1,15 @@
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { 
   HomeIcon, 
   PencilIcon, 
-  GlobeAltIcon,
+  CakeIcon,
+  ClockIcon,
 } from '@heroicons/react/24/solid';
 import { 
-  LinkedinIcon,
-  MailIcon,
+  Linkedin,
+  Mail,
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -19,8 +20,11 @@ interface SidebarItemProps {
 }
 
 const SidebarItem = ({ to, icon: Icon, children, external }: SidebarItemProps) => {
+  const location = useLocation();
+  const isActive = location.pathname === to && to !== '/writing';
+  
   const content = (
-    <div className="flex items-center gap-3 px-2 py-1 rounded-md hover:bg-[#333333] text-gray-300">
+    <div className={`flex items-center gap-3 px-2 py-1 rounded-md hover:bg-[#333333] ${isActive ? 'bg-[#333333] text-white' : 'text-gray-300'}`}>
       <Icon className="h-4 w-4" />
       <span>{children}</span>
       {external && <span className="ml-auto text-xs">↗</span>}
@@ -38,9 +42,7 @@ const SidebarItem = ({ to, icon: Icon, children, external }: SidebarItemProps) =
   return (
     <NavLink
       to={to}
-      className={({ isActive }) =>
-        isActive ? "block bg-[#333333] rounded-md mb-3" : "block mb-3"
-      }
+      className="block mb-3"
     >
       {content}
     </NavLink>
@@ -58,18 +60,18 @@ const Sidebar = () => {
   return (
     <div className="w-56 bg-portfolio-sidebar border-r border-[#333] overflow-y-auto">
       <div className="p-3">
-        <div className="font-custom font-bold text-white mb-6 text-lg">Shubhank Pawar</div>
+        <div className="font-custom font-bold text-white mb-6 text-xl">Shubhank Pawar</div>
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon}>Home</SidebarItem>
           <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
-          <SidebarItem to="/work-in-progress" icon={PencilIcon}>Work in Progress</SidebarItem>
-          <SidebarItem to="/desserts" icon={PencilIcon}>Desserts</SidebarItem>
+          <SidebarItem to="/work-in-progress" icon={ClockIcon}>Work in Progress</SidebarItem>
+          <SidebarItem to="/desserts" icon={CakeIcon}>Desserts</SidebarItem>
         </SidebarSection>
 
         <SidebarSection title="Online">
-          <SidebarItem to="/linkedin" icon={LinkedinIcon} external>LinkedIn</SidebarItem>
-          <SidebarItem to="/mail" icon={MailIcon} external>Mail</SidebarItem>
+          <SidebarItem to="https://linkedin.com" icon={Linkedin} external>LinkedIn</SidebarItem>
+          <SidebarItem to="mailto:contact@example.com" icon={Mail} external>Mail</SidebarItem>
         </SidebarSection>
       </div>
     </div>
