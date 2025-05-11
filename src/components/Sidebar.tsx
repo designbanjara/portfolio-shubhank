@@ -3,14 +3,12 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
   HomeIcon, 
-  PencilIcon, 
   CakeIcon,
   ClockIcon,
   EnvelopeIcon,
 } from '@heroicons/react/24/solid';
 import { 
   Linkedin,
-  FileText,
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -23,17 +21,10 @@ interface SidebarItemProps {
 
 const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: SidebarItemProps) => {
   const location = useLocation();
-  const isActive = exact ? location.pathname === to : location.pathname.startsWith(to) && to !== '/writing';
-  
-  // Special handling for writing section
-  const isWriting = to === '/writing';
-  const inWritingSubPage = location.pathname === '/writing' || location.pathname.startsWith('/writing/');
-  const writeActive = isWriting && inWritingSubPage && location.pathname === '/writing';
-  
-  const activeState = isWriting ? writeActive : isActive;
+  const isActive = exact ? location.pathname === to : location.pathname.startsWith(to);
   
   const content = (
-    <div className={`flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#333333] ${activeState ? 'bg-[#333333] text-white' : 'text-gray-300'}`}>
+    <div className={`flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#333333] ${isActive ? 'bg-[#333333] text-white' : 'text-gray-300'}`}>
       <Icon className="h-4 w-4" />
       <span className="text-sm font-medium">{children}</span>
       {external && <span className="ml-auto text-xs">↗</span>}
@@ -74,8 +65,6 @@ const Sidebar = () => {
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
-          <SidebarItem to="/writing" icon={PencilIcon} exact>Writing</SidebarItem>
-          <SidebarItem to="/writings" icon={FileText} exact>Writings</SidebarItem>
           <SidebarItem to="/work-in-progress" icon={ClockIcon}>Work in Progress</SidebarItem>
           <SidebarItem to="/desserts" icon={CakeIcon}>Desserts</SidebarItem>
         </SidebarSection>

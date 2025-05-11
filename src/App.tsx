@@ -5,8 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Writing2 from "./pages/Writing2";
-import Writings from "./pages/Writings";
 import Bookmarks from "./pages/Bookmarks";
 import Stack from "./pages/Stack";
 import NotFound from "./pages/NotFound";
@@ -23,8 +21,6 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/writing" element={<Writing2 />} />
-          <Route path="/writings" element={<Writings />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/stack" element={<Stack />} />
           <Route path="/work-in-progress" element={<WorkInProgress />} />
