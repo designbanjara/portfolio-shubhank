@@ -204,7 +204,7 @@ const Writing = () => {
   return (
     <div className="min-h-screen flex bg-portfolio-dark text-white">
       <Sidebar />
-      <div className="flex-1 overflow-auto ml-56">
+      <main className="flex-1 ml-56">
         {selectedBlog && isScrolled && (
           <div 
             className="fixed top-0 left-56 right-0 bg-portfolio-dark/90 backdrop-blur-sm z-10 px-4 py-3 border-b border-[#333] transition-opacity duration-300"
@@ -261,7 +261,7 @@ const Writing = () => {
             </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 };
