@@ -14,7 +14,7 @@ const BottomNavigation = () => {
 
   return (
     <div className="fixed bottom-4 left-2 right-2 md:hidden">
-      <div className="bg-portfolio-sidebar rounded-full shadow-lg border border-[#333] relative">
+      <div className="bg-portfolio-sidebar rounded-full shadow-lg border border-[#333] relative overflow-hidden">
         <div className="flex justify-around relative py-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -27,7 +27,8 @@ const BottomNavigation = () => {
                 {isActive && (
                   <motion.div 
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-[#333] rounded-full w-full h-full"
+                    className="absolute inset-0 bg-[#333] rounded-full w-full h-full z-[-1]"
+                    style={{ boxShadow: '0 0 0 1px #333' }}
                     initial={false}
                     transition={{ 
                       type: "spring", 
