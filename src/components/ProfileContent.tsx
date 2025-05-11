@@ -8,7 +8,8 @@ const ProfileContent = () => {
       <h1 className="text-3xl font-custom font-bold mb-6">Brian Lovin</h1>
       <div className="space-y-6">
         <p className="text-lg">
-          Hey, I'm Shubhank. I'm a digital designer, based out of Bangalore, <India></India>.I'm currently designing products at <a href="#" className="text-portfolio-link hover:underline">PhonePe</a>.
+          Hey, I'm Shubhank. I'm a digital designer, based out of Bangalore, India.
+          I'm currently designing products at <a href="#" className="text-portfolio-link hover:underline">PhonePe</a>.
         </p>
 
         <p className="text-lg">
