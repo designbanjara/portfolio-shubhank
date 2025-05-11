@@ -21,7 +21,7 @@ const BottomNavigation = () => {
         <div className="flex justify-around relative py-1">
           {navItems.map(item => {
           const isActive = location.pathname === item.path;
-          return <NavLink key={item.path} to={item.path} className="flex items-center justify-center py-3 w-full rounded-full text-base font-medium transition-colors z-10 relative text-gray-400 hover:text-white mx-[6px]">
+          return <NavLink key={item.path} to={item.path} className="flex items-center justify-center py-3 w-full rounded-full text-base font-medium transition-colors z-10 relative text-gray-400 hover:text-white mx-[4px]">
                 {isActive && <motion.div layoutId="activeTab" className="absolute inset-0 bg-[#333] rounded-full w-full h-full z-[-1]" style={{
               boxShadow: '0 0 0 1px #333'
             }} initial={false} transition={{
