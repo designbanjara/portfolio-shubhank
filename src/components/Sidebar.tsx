@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Pencil, Bookmark, Layers, Tent, Box } from 'lucide-react';
+import { Home, Pencil, Bookmark, Layers, Tent, Github, Youtube, Twitter, Figma } from 'lucide-react';
 
 interface SidebarItemProps {
   to: string;
@@ -73,10 +74,10 @@ const Sidebar = () => {
         </SidebarSection>
 
         <SidebarSection title="Online">
-          <SidebarItem to="/twitter" icon={Box} external>Twitter</SidebarItem>
-          <SidebarItem to="/youtube" icon={Box} external>YouTube</SidebarItem>
-          <SidebarItem to="/github" icon={Box} external>GitHub</SidebarItem>
-          <SidebarItem to="/figma" icon={Box} external>Figma</SidebarItem>
+          <SidebarItem to="/twitter" icon={Twitter} external>Twitter</SidebarItem>
+          <SidebarItem to="/youtube" icon={Youtube} external>YouTube</SidebarItem>
+          <SidebarItem to="/github" icon={Github} external>GitHub</SidebarItem>
+          <SidebarItem to="/figma" icon={Figma} external>Figma</SidebarItem>
         </SidebarSection>
       </div>
     </div>

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Separator } from './ui/separator';
 
 interface SocialLinkProps {
   name: string;
@@ -19,9 +20,13 @@ const SocialLinks = () => {
   return (
     <div className="mt-10">
       <SocialLink name="Online" action="Follow" />
+      <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="Threads" action="Follow" />
+      <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="YouTube" action="Subscribe" />
+      <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="GitHub" action="Follow" />
+      <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="Figma" action="Follow" />
     </div>
   );
