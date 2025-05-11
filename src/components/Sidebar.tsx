@@ -67,7 +67,7 @@ const Sidebar = () => {
   return (
     <div className="w-56 bg-portfolio-sidebar border-r border-[#333] overflow-y-auto">
       <div className="p-3">
-        <div className="font-medium text-white mb-4">Brian Lovin</div>
+        <div className="font-custom font-bold text-white mb-4">Shubhank Pawar</div>
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon}>Home</SidebarItem>
