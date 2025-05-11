@@ -1,19 +1,13 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  HomeIcon, 
-  CakeIcon,
-  ClockIcon,
-  PencilIcon,
-} from '@heroicons/react/24/solid';
 
 const BottomNavigation = () => {
   const navItems = [
-    { path: '/', label: 'Home', icon: HomeIcon },
-    { path: '/writing', label: 'Writing', icon: PencilIcon },
-    { path: '/work-in-progress', label: 'WIP', icon: ClockIcon },
-    { path: '/desserts', label: 'Desserts', icon: CakeIcon },
+    { path: '/', label: 'Home' },
+    { path: '/writing', label: 'Writing' },
+    { path: '/work-in-progress', label: 'WIP' },
+    { path: '/desserts', label: 'Desserts' },
   ];
 
   return (
@@ -25,13 +19,14 @@ const BottomNavigation = () => {
               key={item.path}
               to={item.path}
               className={({ isActive }) => 
-                `flex flex-col items-center py-3 px-1 ${
-                  isActive ? 'text-white' : 'text-gray-400 hover:text-gray-200'
+                `flex items-center justify-center py-3 px-4 m-1 rounded-full text-base font-medium transition-colors ${
+                  isActive 
+                    ? 'bg-[#333] text-white' 
+                    : 'text-gray-400 hover:text-white'
                 }`
               }
             >
-              <item.icon className="h-5 w-5" />
-              <span className="text-xs mt-1">{item.label}</span>
+              {item.label}
             </NavLink>
           ))}
         </div>
