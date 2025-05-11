@@ -6,7 +6,7 @@ const WorkInProgress = () => {
   return (
     <div className="min-h-screen flex bg-portfolio-dark text-white">
       <Sidebar />
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 ml-56">
         <div className="w-full h-screen">
           <iframe 
             src="https://writings.werkinprogress.design" 

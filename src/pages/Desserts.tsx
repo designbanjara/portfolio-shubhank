@@ -6,7 +6,7 @@ const Desserts = () => {
   return (
     <div className="min-h-screen flex bg-portfolio-dark text-white">
       <Sidebar />
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto ml-56">
         <div className="max-w-3xl mx-auto py-10 px-4">
           <h1 className="text-3xl font-custom font-bold mb-6">Desserts</h1>
           <div className="space-y-6">
