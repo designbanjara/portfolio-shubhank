@@ -1,14 +1,11 @@
 
 import React from 'react';
 import Sidebar from '../components/Sidebar';
-import MobileHeader from '../components/MobileHeader';
+import BottomNavigation from '../components/BottomNavigation';
 
 const WorkInProgress = () => {
   return (
     <div className="min-h-screen bg-portfolio-dark text-white">
-      {/* Mobile Header - visible only on small screens */}
-      <MobileHeader />
-      
       {/* Desktop Sidebar - hidden on mobile */}
       <div className="hidden md:block">
         <Sidebar />
@@ -26,6 +23,9 @@ const WorkInProgress = () => {
           />
         </div>
       </main>
+
+      {/* Bottom navigation for mobile */}
+      <BottomNavigation />
     </div>
   );
 };
