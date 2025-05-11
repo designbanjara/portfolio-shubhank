@@ -22,17 +22,11 @@ const BottomNavigation = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                className={({ isActive }) => 
-                  `flex items-center justify-center ${
-                    isActive 
-                      ? 'py-2 px-3' // Reduced padding by 1px on each side (2pt total)
-                      : 'py-3 px-4' 
-                  } rounded-full text-base font-medium transition-colors z-10 relative ${
-                    isActive 
-                      ? 'text-white' 
-                      : 'text-gray-400 hover:text-white'
-                  }`
-                }
+                className={`flex items-center justify-center py-3 px-4 rounded-full text-base font-medium transition-colors z-10 relative ${
+                  isActive 
+                    ? 'text-white' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
               >
                 {isActive && (
                   <motion.div 
