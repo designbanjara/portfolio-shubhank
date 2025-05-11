@@ -18,6 +18,8 @@ const BottomNavigation = () => {
   useEffect(() => {
     // Find the currently active tab and get its position
     const activeIndex = navItems.findIndex(item => item.path === location.pathname);
+    const previousIndex = navItems.findIndex(item => item.path === previousPathname);
+    
     if (activeIndex >= 0 && tabRefs.current[activeIndex]) {
       const activeTab = tabRefs.current[activeIndex];
       if (activeTab) {
