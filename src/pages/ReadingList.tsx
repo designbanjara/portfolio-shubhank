@@ -105,16 +105,18 @@ const ReadingList = () => {
       
       {/* Main content - responsive padding without card treatment */}
       <main className="md:ml-56 pb-20 md:pb-6">
-        <div className="max-w-4xl mx-auto py-6 md:py-10 px-4">
+        <div className="max-w-2xl mx-auto py-10 px-4">
           <div className="space-y-8">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">Reading List</h1>
-              <p className="text-gray-400">Books, articles, and resources I'm currently reading or recommend.</p>
+              <h1 className="text-3xl font-custom font-bold mb-6">Reading List</h1>
+              <p className="text-lg">Books, articles, and resources I'm currently reading or recommend.</p>
             </div>
             
-            <BookSection title="Currently Reading" books={currentlyReading} />
-            <BookSection title="Want to Read" books={wantToRead} />
-            <BookSection title="Recommended" books={recommended} />
+            <div className="space-y-8 mt-8">
+              <BookSection title="Currently Reading" books={currentlyReading} />
+              <BookSection title="Want to Read" books={wantToRead} />
+              <BookSection title="Recommended" books={recommended} />
+            </div>
           </div>
         </div>
       </main>
