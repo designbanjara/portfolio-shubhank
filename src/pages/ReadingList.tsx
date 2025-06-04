@@ -3,15 +3,14 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 import BottomNavigation from '../components/BottomNavigation';
 import { Card, CardContent } from '../components/ui/card';
-import { AspectRatio } from '../components/ui/aspect-ratio';
 
 const ReadingList = () => {
   const currentlyReading = [
     {
       id: 1,
-      title: "The Design of Everyday Things",
-      author: "Don Norman",
-      image: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=600&fit=crop"
+      title: "Building with M3 Expressive",
+      author: "Material Design",
+      image: "https://lh3.googleusercontent.com/H8YNKWyGGqWfkHqNz6dPZ3MFzqOYtH9HlpQJRlQjKgKwQxHpFzR5XNE1KfNjCgQeJ9hQKQwE9HFhRN9nQ1E8QQ=w2400"
     },
     {
       id: 2,
@@ -72,13 +71,14 @@ const ReadingList = () => {
   const BookCard = ({ book }: { book: { id: number; title: string; author: string; image: string } }) => (
     <Card className="bg-[#1a1a1a] border border-[#333] hover:border-[#555] transition-colors">
       <CardContent className="p-4">
-        <AspectRatio ratio={3/4} className="mb-3">
+        <div className="mb-3">
           <img
             src={book.image}
             alt={book.title}
-            className="w-full h-full object-cover rounded-md"
+            className="w-full object-cover rounded-md"
+            style={{ aspectRatio: 'auto' }}
           />
-        </AspectRatio>
+        </div>
         <h4 className="text-white font-semibold text-sm mb-1 line-clamp-2">{book.title}</h4>
         <p className="text-gray-400 text-xs">{book.author}</p>
       </CardContent>
