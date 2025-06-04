@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import WorkInProgress from "./pages/WorkInProgress";
 import Desserts from "./pages/Desserts";
 import Writing from "./pages/Writing";
+import ReadingList from "./pages/ReadingList";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/work-in-progress" element={<WorkInProgress />} />
           <Route path="/desserts" element={<Desserts />} />
           <Route path="/writing" element={<Writing />} />
+          <Route path="/reading-list" element={<ReadingList />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
