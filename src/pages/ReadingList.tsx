@@ -1,10 +1,101 @@
 
 import React from 'react';
 import Sidebar from '../components/Sidebar';
-import MobileHeader from '../components/MobileHeader';
 import BottomNavigation from '../components/BottomNavigation';
+import { Card, CardContent } from '../components/ui/card';
+import { AspectRatio } from '../components/ui/aspect-ratio';
 
 const ReadingList = () => {
+  const currentlyReading = [
+    {
+      id: 1,
+      title: "The Design of Everyday Things",
+      author: "Don Norman",
+      image: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=600&fit=crop"
+    },
+    {
+      id: 2,
+      title: "Atomic Habits",
+      author: "James Clear",
+      image: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400&h=600&fit=crop"
+    },
+    {
+      id: 3,
+      title: "Clean Code",
+      author: "Robert C. Martin",
+      image: "https://images.unsplash.com/photo-1441057206919-63d19fac2369?w=400&h=600&fit=crop"
+    }
+  ];
+
+  const wantToRead = [
+    {
+      id: 4,
+      title: "System Design Interview",
+      author: "Alex Xu",
+      image: "https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=600&fit=crop"
+    },
+    {
+      id: 5,
+      title: "The Pragmatic Programmer",
+      author: "David Thomas",
+      image: "https://images.unsplash.com/photo-1551038247-3d9af20df552?w=400&h=600&fit=crop"
+    },
+    {
+      id: 6,
+      title: "Designing Data-Intensive Applications",
+      author: "Martin Kleppmann",
+      image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=400&h=600&fit=crop"
+    }
+  ];
+
+  const recommended = [
+    {
+      id: 7,
+      title: "You Don't Know JS",
+      author: "Kyle Simpson",
+      image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=600&fit=crop"
+    },
+    {
+      id: 8,
+      title: "The Phoenix Project",
+      author: "Gene Kim",
+      image: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?w=400&h=600&fit=crop"
+    },
+    {
+      id: 9,
+      title: "Refactoring",
+      author: "Martin Fowler",
+      image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=400&h=600&fit=crop"
+    }
+  ];
+
+  const BookCard = ({ book }: { book: { id: number; title: string; author: string; image: string } }) => (
+    <Card className="bg-[#1a1a1a] border border-[#333] hover:border-[#555] transition-colors">
+      <CardContent className="p-4">
+        <AspectRatio ratio={3/4} className="mb-3">
+          <img
+            src={book.image}
+            alt={book.title}
+            className="w-full h-full object-cover rounded-md"
+          />
+        </AspectRatio>
+        <h4 className="text-white font-semibold text-sm mb-1 line-clamp-2">{book.title}</h4>
+        <p className="text-gray-400 text-xs">{book.author}</p>
+      </CardContent>
+    </Card>
+  );
+
+  const BookSection = ({ title, books }: { title: string; books: typeof currentlyReading }) => (
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+      <div className="grid grid-cols-3 gap-4">
+        {books.map((book) => (
+          <BookCard key={book.id} book={book} />
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-portfolio-dark text-white">
       {/* Desktop Sidebar - hidden on mobile */}
@@ -14,29 +105,16 @@ const ReadingList = () => {
       
       {/* Main content - responsive padding without card treatment */}
       <main className="md:ml-56 pb-20 md:pb-6">
-        <div className="max-w-3xl mx-auto py-6 md:py-10 px-4">
-          <div className="space-y-6">
+        <div className="max-w-4xl mx-auto py-6 md:py-10 px-4">
+          <div className="space-y-8">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">Reading List</h1>
               <p className="text-gray-400">Books, articles, and resources I'm currently reading or recommend.</p>
             </div>
             
-            <div className="space-y-4">
-              <div className="p-4 bg-[#1a1a1a] rounded-lg border border-[#333]">
-                <h3 className="text-lg font-semibold text-white mb-2">Currently Reading</h3>
-                <p className="text-gray-400">No books currently being read.</p>
-              </div>
-              
-              <div className="p-4 bg-[#1a1a1a] rounded-lg border border-[#333]">
-                <h3 className="text-lg font-semibold text-white mb-2">Want to Read</h3>
-                <p className="text-gray-400">Reading list coming soon.</p>
-              </div>
-              
-              <div className="p-4 bg-[#1a1a1a] rounded-lg border border-[#333]">
-                <h3 className="text-lg font-semibold text-white mb-2">Recommended Articles</h3>
-                <p className="text-gray-400">Curated articles and resources coming soon.</p>
-              </div>
-            </div>
+            <BookSection title="Currently Reading" books={currentlyReading} />
+            <BookSection title="Want to Read" books={wantToRead} />
+            <BookSection title="Recommended" books={recommended} />
           </div>
         </div>
       </main>
