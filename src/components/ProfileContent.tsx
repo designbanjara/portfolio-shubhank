@@ -12,7 +12,7 @@ const ProfileContent = () => {
         </p>
 
         <p className="text-base md:text-lg">
-          Before PhonePe, I spent couple of years designing at <a href="#" className="text-[#F97316]">Razorpay</a>. Majorly working on their mobile app and merchant experience
+          Before PhonePe, I spent couple of years designing at <a href="https://razorpay.com/" className="text-[#F97316]">Razorpay</a>. Majorly working on their mobile app and merchant experience
         </p>
 
         <p className="text-base md:text-lg">
