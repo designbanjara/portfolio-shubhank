@@ -17,6 +17,10 @@ const ProfileContent = () => {
         </p>
 
         <p className="text-base md:text-lg">
+          After Razorpay, I had a short stint in HR tech only to realise it was not my cup of tea.
+        </p>
+
+        <p className="text-base md:text-lg">
           Before Razorpay, I designed experiences for social media and mobility domains. 
         </p>
 
