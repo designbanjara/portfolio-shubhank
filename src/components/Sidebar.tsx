@@ -8,10 +8,8 @@ import {
   PencilIcon,
   BookOpenIcon,
 } from '@heroicons/react/24/solid';
-import { 
-  X,
-} from 'lucide-react';
 import LinkedinIcon from './icons/LinkedinIcon';
+import XIcon from './icons/XIcon';
 
 interface SidebarItemProps {
   to: string;
@@ -77,7 +75,7 @@ const Sidebar = () => {
       <div className="p-4 mt-auto">
         <SidebarSection title="Online">
           <SidebarItem to="https://linkedin.com" icon={LinkedinIcon} external>LinkedIn</SidebarItem>
-          <SidebarItem to="https://twitter.com" icon={X} external>X</SidebarItem>
+          <SidebarItem to="https://x.com/designbanjara" icon={XIcon} external>X</SidebarItem>
           <SidebarItem to="mailto:contact@example.com" icon={EnvelopeIcon} external>Mail</SidebarItem>
         </SidebarSection>
       </div>
