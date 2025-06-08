@@ -13,11 +13,7 @@ const ProfileContent = () => {
         </p>
 
         <p className="text-base md:text-lg">
-          Before PhonePe, I spent couple of years designing at <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer" className="text-[#F97316]">Razorpay</a>. Majorly working on their mobile app and merchant experience
-        </p>
-
-        <p className="text-base md:text-lg">
-          After Razorpay, I had a short stint in HR tech only to realise it was not my cup of tea.
+          Before PhonePe, I spent couple of years designing at <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer" className="text-[#F97316]">Razorpay</a>. Majorly working on their mobile app and merchant experience. After Razorpay, I had a short stint in HR tech only to realise it was not my cup of tea.
         </p>
 
         <p className="text-base md:text-lg">
