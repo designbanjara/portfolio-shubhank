@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { 
   Linkedin,
-  Twitter,
+  X,
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -78,7 +78,7 @@ const Sidebar = () => {
       <div className="p-4 mt-auto">
         <SidebarSection title="Online">
           <SidebarItem to="https://linkedin.com" icon={Linkedin} external>LinkedIn</SidebarItem>
-          <SidebarItem to="https://twitter.com" icon={Twitter} external>Twitter</SidebarItem>
+          <SidebarItem to="https://twitter.com" icon={X} external>X</SidebarItem>
           <SidebarItem to="mailto:contact@example.com" icon={EnvelopeIcon} external>Mail</SidebarItem>
         </SidebarSection>
       </div>
