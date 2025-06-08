@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
@@ -10,9 +9,9 @@ import {
   BookOpenIcon,
 } from '@heroicons/react/24/solid';
 import { 
-  Linkedin,
   X,
 } from 'lucide-react';
+import LinkedinIcon from './icons/LinkedinIcon';
 
 interface SidebarItemProps {
   to: string;
@@ -77,7 +76,7 @@ const Sidebar = () => {
 
       <div className="p-4 mt-auto">
         <SidebarSection title="Online">
-          <SidebarItem to="https://linkedin.com" icon={Linkedin} external>LinkedIn</SidebarItem>
+          <SidebarItem to="https://linkedin.com" icon={LinkedinIcon} external>LinkedIn</SidebarItem>
           <SidebarItem to="https://twitter.com" icon={X} external>X</SidebarItem>
           <SidebarItem to="mailto:contact@example.com" icon={EnvelopeIcon} external>Mail</SidebarItem>
         </SidebarSection>
