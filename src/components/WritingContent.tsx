@@ -1,19 +1,14 @@
-
 import React from 'react';
-
 const WritingContent = () => {
-  return (
-    <div className="max-w-2xl mx-auto py-10 px-4">
+  return <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-custom font-bold mb-6">Writing</h1>
       <div className="space-y-6">
         <p className="text-lg">Explore Shubhank's thoughts, articles and essays.</p>
         
         <div className="space-y-8 mt-8">
           <article className="border-b border-[#333] pb-6">
-            <a href="#" className="block group hover:bg-[#1f1f1f] p-4 -m-4 rounded-lg transition-colors">
-              <h2 className="text-lg font-bold mb-3 text-white group-hover:text-gray-100">
-                The Art of Mindful Coding
-              </h2>
+            <a href="#" className="block group hover:bg-[#1f1f1f] p-4 -m-4 rounded-lg transition-colors my-[16px] px-[16px] mx-[16px]">
+              <h2 className="mb-3 text-white group-hover:text-gray-100 font-bold text-lg">The Art of Mindful Coding</h2>
               <p className="text-gray-300">An exploration of how mindfulness practices can improve focus and creativity in software development.</p>
             </a>
           </article>
@@ -37,8 +32,6 @@ const WritingContent = () => {
           </article>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default WritingContent;
