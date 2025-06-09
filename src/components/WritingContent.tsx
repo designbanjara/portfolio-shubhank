@@ -10,27 +10,30 @@ const WritingContent = () => {
         
         <div className="space-y-8 mt-8">
           <article className="border-b border-[#333] pb-6">
-            <h2 className="text-2xl font-bold mb-2">
-              <a href="#" className="text-[#F97316] hover:underline">The Art of Mindful Coding</a>
-            </h2>
-            <div className="text-gray-400 mb-3">March 15, 2025</div>
-            <p className="text-gray-300">An exploration of how mindfulness practices can improve focus and creativity in software development.</p>
+            <a href="#" className="block group hover:bg-[#1f1f1f] p-4 -m-4 rounded-lg transition-colors">
+              <h2 className="text-xl font-bold mb-3 text-white group-hover:text-gray-100">
+                The Art of Mindful Coding
+              </h2>
+              <p className="text-gray-300">An exploration of how mindfulness practices can improve focus and creativity in software development.</p>
+            </a>
           </article>
           
           <article className="border-b border-[#333] pb-6">
-            <h2 className="text-2xl font-bold mb-2">
-              <a href="#" className="text-[#F97316] hover:underline">Design Systems That Scale</a>
-            </h2>
-            <div className="text-gray-400 mb-3">February 28, 2025</div>
-            <p className="text-gray-300">Lessons learned from building design systems that grow with your organization.</p>
+            <a href="#" className="block group hover:bg-[#1f1f1f] p-4 -m-4 rounded-lg transition-colors">
+              <h2 className="text-xl font-bold mb-3 text-white group-hover:text-gray-100">
+                Design Systems That Scale
+              </h2>
+              <p className="text-gray-300">Lessons learned from building design systems that grow with your organization.</p>
+            </a>
           </article>
           
           <article className="border-b border-[#333] pb-6">
-            <h2 className="text-2xl font-bold mb-2">
-              <a href="#" className="text-[#F97316] hover:underline">The Future of Web Interaction</a>
-            </h2>
-            <div className="text-gray-400 mb-3">January 12, 2025</div>
-            <p className="text-gray-300">Exploring emerging patterns in user interfaces and interaction design for the next generation of web applications.</p>
+            <a href="#" className="block group hover:bg-[#1f1f1f] p-4 -m-4 rounded-lg transition-colors">
+              <h2 className="text-xl font-bold mb-3 text-white group-hover:text-gray-100">
+                The Future of Web Interaction
+              </h2>
+              <p className="text-gray-300">Exploring emerging patterns in user interfaces and interaction design for the next generation of web applications.</p>
+            </a>
           </article>
         </div>
       </div>
