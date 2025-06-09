@@ -1,12 +1,31 @@
-import React from 'react';
+
+import React, { useState } from 'react';
+import { XMarkIcon } from '@heroicons/react/24/solid';
+
 const CraftDocsFloat = () => {
-  return <div className="fixed top-4 left-4 z-50 bg-card border border-border rounded-lg p-4 shadow-lg max-w-xs px-[8px] py-[4px]">
-      <p className="text-sm text-foreground">
-        This is a iframe of Craft docs.{' '}
-        <a href="#" className="text-accent hover:text-accent/80 underline transition-colors">
-          Why?
-        </a>
-      </p>
-    </div>;
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed top-4 left-60 z-50 bg-card border border-border rounded-lg shadow-lg max-w-xs">
+      <div className="flex items-start justify-between p-3">
+        <p className="text-sm text-foreground pr-2">
+          This is a iframe of Craft docs.{' '}
+          <a href="#" className="text-accent hover:text-accent/80 underline transition-colors">
+            Why?
+          </a>
+        </p>
+        <button
+          onClick={() => setIsVisible(false)}
+          className="flex-shrink-0 p-1 hover:bg-muted rounded transition-colors"
+          aria-label="Dismiss"
+        >
+          <XMarkIcon className="h-4 w-4 text-muted-foreground" />
+        </button>
+      </div>
+    </div>
+  );
 };
+
 export default CraftDocsFloat;
