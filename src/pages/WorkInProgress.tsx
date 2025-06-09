@@ -2,6 +2,7 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import BottomNavigation from '../components/BottomNavigation';
+import CraftDocsFloat from '../components/CraftDocsFloat';
 import { useIsMobile } from '../hooks/use-mobile';
 
 const WorkInProgress = () => {
@@ -9,6 +10,9 @@ const WorkInProgress = () => {
   
   return (
     <div className={`min-h-screen ${isMobile ? 'bg-[#222222]' : 'bg-portfolio-dark'} text-white`}>
+      {/* Floating Craft docs component */}
+      <CraftDocsFloat />
+      
       {/* Desktop Sidebar - hidden on mobile */}
       <div className="hidden md:block">
         <Sidebar />
