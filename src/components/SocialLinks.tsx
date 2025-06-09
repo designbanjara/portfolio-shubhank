@@ -2,12 +2,12 @@
 import React from 'react';
 import { Separator } from './ui/separator';
 import { 
-  GlobeAltIcon, 
+  EnvelopeIcon,
   ChevronRightIcon, 
-  VideoCameraIcon,
   CodeBracketIcon,
-  SwatchIcon
 } from '@heroicons/react/24/solid';
+import LinkedinIcon from './icons/LinkedinIcon';
+import XIcon from './icons/XIcon';
 
 interface SocialLinkProps {
   name: string;
@@ -33,15 +33,13 @@ const SocialLink = ({ name, action, icon: Icon }: SocialLinkProps) => {
 const SocialLinks = () => {
   return (
     <div className="mt-10">
-      <SocialLink name="Online" action="Follow" icon={GlobeAltIcon} />
+      <SocialLink name="X" action="Follow" icon={XIcon} />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="Threads" action="Follow" icon={GlobeAltIcon} />
-      <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="YouTube" action="Subscribe" icon={VideoCameraIcon} />
+      <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} />
       <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="GitHub" action="Follow" icon={CodeBracketIcon} />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="Figma" action="Follow" icon={SwatchIcon} />
+      <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} />
     </div>
   );
 };
