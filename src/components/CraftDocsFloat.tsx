@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -8,7 +7,7 @@ const CraftDocsFloat = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed top-2 left-60 z-50 bg-card border border-border rounded-lg shadow-lg max-w-xs">
+    <div className="fixed top-1 left-60 z-50 bg-card border border-border rounded-lg shadow-lg max-w-xs">
       <div className="flex items-start justify-between p-3 px-[8px] py-[4px]">
         <p className="text-sm text-foreground pr-2">
           This is a iframe of Craft docs.{' '}
