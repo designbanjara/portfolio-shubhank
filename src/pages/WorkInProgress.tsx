@@ -22,11 +22,12 @@ const WorkInProgress = () => {
       <main className="md:ml-56">
         <div className="w-full h-[calc(100vh-60px)] md:h-screen">
           <iframe 
-            src="https://writings.werkinprogress.design" 
+            src="https://writings.werkinprogress.design?theme=dark&color-scheme=dark" 
             title="Werk in Progress Writings" 
             className="w-full h-full border-none"
             sandbox="allow-scripts allow-same-origin"
             loading="lazy"
+            style={{ colorScheme: 'dark' }}
           />
         </div>
       </main>
