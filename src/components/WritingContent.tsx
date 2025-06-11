@@ -14,12 +14,12 @@ const WritingContent = () => {
               <div className="flex gap-4">
                 <img 
                   src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=80&h=80&fit=crop&crop=center" 
-                  alt="The Art of Mindful Coding"
+                  alt="The story of my experiments with Bellandur traffic"
                   className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
                   <h2 className="font-bold mb-1 text-white group-hover:text-gray-100 text-lg">
-                    The Art of Mindful Coding
+                    The story of my experiments with Bellandur traffic
                   </h2>
                   <p className="text-gray-300 text-base">An exploration of how mindfulness practices can improve focus and creativity in software development.</p>
                 </div>
