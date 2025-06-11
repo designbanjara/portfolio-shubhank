@@ -68,7 +68,7 @@ export default {
 				},
 				portfolio: {
 					dark: '#0d0d0d',
-					sidebar: '#111111',
+					sidebar: '#1a1a1a',
 					text: '#ffffff',
 					muted: '#999999',
 					link: '#4a9eff'
