@@ -1,15 +1,13 @@
+
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
   HomeIcon, 
   CakeIcon,
   ClockIcon,
-  EnvelopeIcon,
   PencilIcon,
   BookOpenIcon,
 } from '@heroicons/react/24/solid';
-import LinkedinIcon from './icons/LinkedinIcon';
-import XIcon from './icons/XIcon';
 
 interface SidebarItemProps {
   to: string;
@@ -69,14 +67,6 @@ const Sidebar = () => {
           <SidebarItem to="/reading-list" icon={BookOpenIcon}>Reading List</SidebarItem>
           <SidebarItem to="/work-in-progress" icon={ClockIcon}>Work in Progress</SidebarItem>
           <SidebarItem to="/desserts" icon={CakeIcon}>Desserts</SidebarItem>
-        </SidebarSection>
-      </div>
-
-      <div className="p-4 mt-auto">
-        <SidebarSection title="Online">
-          <SidebarItem to="https://linkedin.com" icon={LinkedinIcon} external>LinkedIn</SidebarItem>
-          <SidebarItem to="https://x.com/designbanjara" icon={XIcon} external>X</SidebarItem>
-          <SidebarItem to="mailto:contact@example.com" icon={EnvelopeIcon} external>Mail</SidebarItem>
         </SidebarSection>
       </div>
     </div>
