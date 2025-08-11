@@ -7,7 +7,7 @@ const WritingContent = () => {
         
         <div className="space-y-8 mt-8">
           <article className="border-b border-[#333] pb-6">
-            <a href="#" className="block group hover:bg-[#1f1f1f] p-4 -m-4 rounded-lg transition-colors">
+            <a href="/writing/bellandur-traffic" className="block group hover:bg-[#1f1f1f] p-4 -m-4 rounded-lg transition-colors">
               <div className="flex gap-4">
                 <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=80&h=80&fit=crop&crop=center" alt="The story of my experiments with Bellandur traffic" className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
                 <div className="flex-1 min-w-0">
