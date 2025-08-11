@@ -38,35 +38,35 @@ const BellandurTrafficBlog = () => {
                   This is the story of how I turned this challenge into an opportunity for personal and professional growth.
                 </p>
 
-                <h2 className="font-bold text-white mt-10 mb-2 text-xl">The Problem</h2>
+                <h2 className="font-bold text-white mt-10 mb-1 text-xl">The Problem</h2>
                 <p>
                   Bellandur, home to numerous tech companies, is notorious for its traffic congestion. The daily commute 
                   became a source of stress and lost productivity. Instead of accepting this as an inevitable part of city life, 
                   I decided to experiment with different approaches to make the most of this time.
                 </p>
 
-                <h2 className="font-bold text-white mt-10 mb-2 text-xl">Experiment 1: The learning commute</h2>
+                <h2 className="font-bold text-white mt-10 mb-1 text-xl">Experiment 1: The learning commute</h2>
                 <p>
                   My first experiment involved converting travel time into learning time. I started listening to podcasts, 
                   audiobooks, and online courses during my commute. This simple change transformed my perception of traffic 
                   from a waste of time to an investment in personal development.
                 </p>
 
-                <h2 className="font-bold text-white mt-10 mb-2 text-xl">Experiment 2: Flexible Working Hours</h2>
+                <h2 className="font-bold text-white mt-10 mb-1 text-xl">Experiment 2: Flexible Working Hours</h2>
                 <p>
                   Next, I negotiated with my employer to adjust my working hours. By starting earlier and finishing earlier, 
                   I could avoid peak traffic hours. This reduced my commute time by nearly 40% and gave me more evening time 
                   for personal activities.
                 </p>
 
-                <h2 className="font-bold text-white mt-10 mb-2 text-xl">Experiment 3: The Mindfulness Practice</h2>
+                <h2 className="font-bold text-white mt-10 mb-1 text-xl">Experiment 3: The Mindfulness Practice</h2>
                 <p>
                   Perhaps the most transformative experiment was using traffic time for mindfulness practice. Instead of 
                   getting frustrated, I used the stillness to practice breathing exercises and meditation. This not only 
                   improved my mental health but also enhanced my focus and creativity at work.
                 </p>
 
-                <h2 className="font-bold text-white mt-10 mb-2 text-xl">The Results</h2>
+                <h2 className="font-bold text-white mt-10 mb-1 text-xl">The Results</h2>
                 <p>
                   These experiments didn't just improve my commute; they changed my entire approach to problem-solving. 
                   I learned that constraints often hide opportunities, and with the right mindset, even the most frustrating 
@@ -78,7 +78,7 @@ const BellandurTrafficBlog = () => {
                   some of the most productive hours of my day."
                 </blockquote>
 
-                <h2 className="font-bold text-white mt-10 mb-2 text-xl">Key Takeaways</h2>
+                <h2 className="font-bold text-white mt-10 mb-1 text-xl">Key Takeaways</h2>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Reframe constraints as opportunities for innovation</li>
                   <li>Small changes in routine can have significant impacts</li>
