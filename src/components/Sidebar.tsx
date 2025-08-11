@@ -59,7 +59,7 @@ const Sidebar = () => {
   return (
     <div className="w-56 bg-portfolio-sidebar border-r border-[#333] fixed h-screen flex flex-col">
       <div className="p-4 flex-grow">
-        <div className="font-custom font-bold text-white mb-5 text-2xl">Shubhank Pawar</div>
+        <div className="font-custom font-bold text-white mb-5 text-lg">Shubhank Pawar</div>
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
