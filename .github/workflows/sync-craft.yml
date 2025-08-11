@@ -25,15 +25,20 @@ jobs:
         
       - name: Sync Craft content
         env:
-          CRAFT_INDEX_URL: ${{ secrets.CRAFT_INDEX_URL }}
+          CRAFT_INDEX_URL: ${{ secrets.CRAFT_INDEX_URL || vars.CRAFT_INDEX_URL }}
         run: npm run sync:craft
         
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add src/content/posts/ .craft-sync-cache.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 Auto-sync Craft content"
+          # Stage generated content; don't fail if specific files are absent
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🤖 Auto-sync Craft content"
+          fi
           
       - name: Push changes
         uses: ad-m/github-push-action@master
