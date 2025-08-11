@@ -52,7 +52,7 @@ const BellandurTrafficBlog = () => {
                   from a waste of time to an investment in personal development.
                 </p>
 
-                <h2 className="font-bold text-white mt-10 mb-4 text-xl mx-0 px-0 py-0 my-[4px]">Experiment 2: Flexible Working Hours</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-xl px-0 py-0 my-[4px] mx-0">Experiment 2: Flexible Working Hours</h2>
                 <p>
                   Next, I negotiated with my employer to adjust my working hours. By starting earlier and finishing earlier, 
                   I could avoid peak traffic hours. This reduced my commute time by nearly 40% and gave me more evening time 
@@ -66,7 +66,7 @@ const BellandurTrafficBlog = () => {
                   improved my mental health but also enhanced my focus and creativity at work.
                 </p>
 
-                <h2 className="font-bold text-white mt-10 mb-4 text-2xl">The Results</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-xl">The Results</h2>
                 <p>
                   These experiments didn't just improve my commute; they changed my entire approach to problem-solving. 
                   I learned that constraints often hide opportunities, and with the right mindset, even the most frustrating 
@@ -78,7 +78,7 @@ const BellandurTrafficBlog = () => {
                   some of the most productive hours of my day."
                 </blockquote>
 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Key Takeaways</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-xl">Key Takeaways</h2>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Reframe constraints as opportunities for innovation</li>
                   <li>Small changes in routine can have significant impacts</li>
