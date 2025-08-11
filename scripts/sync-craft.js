@@ -23,6 +23,8 @@ const cachePath = path.join(projectRoot, '.craft-sync-cache.json');
 const CRAFT_INDEX_URL = process.env.CRAFT_INDEX_URL || 'https://shubhank.craft.me/';
 const SYNC_INTERVAL_HOURS = 6; // How often to check for updates
 const FORCE_SYNC = String(process.env.CRAFT_FORCE_SYNC || '').toLowerCase() === 'true';
+const CRAWL_DEPTH = Number(process.env.CRAFT_CRAWL_DEPTH || 2);
+const MAX_PAGES = Number(process.env.CRAFT_MAX_PAGES || 20);
 
 /** @typedef {{ url: string; title: string; date?: string; slug?: string; lastChecked?: number }} ArticleMeta */
 
@@ -30,28 +32,40 @@ const FORCE_SYNC = String(process.env.CRAFT_FORCE_SYNC || '').toLowerCase() === 
  * Extract article links from Craft index page
  * Adjust selectors based on your Craft page structure
  */
-function extractArticlesFromIndex(html) {
-  const articles = [];
-  // Capture any Craft shared page links (craft.do or craft.me) containing /s/
-  const urlRegex = /https?:\/\/[^"'\s)]+craft\.(?:do|me)\/s\/[A-Za-z0-9_-]+/g;
-  const urlMatches = html.match(urlRegex) || [];
-  const unique = Array.from(new Set(urlMatches));
-
-  for (const url of unique) {
-    // Try to get the anchor text as title
-    const safeUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const anchorRegex = new RegExp(`<a[^>]*href=["']${safeUrl}["'][^>]*>([\s\S]*?)<\/a>`, 'i');
-    const m = html.match(anchorRegex);
-    let title = m ? m[1].replace(/<[^>]*>/g, '').trim() : '';
-    if (!title || title.length < 3) {
-      // Fallback: slugify last segment
-      const last = url.split('/')?.pop() || 'Article';
-      title = last.replace(/[-_]/g, ' ');
-    }
-    articles.push({ url, title, slug: generateSlug(title) });
+function resolveUrl(href, baseUrl) {
+  try {
+    return new URL(href, baseUrl).toString();
+  } catch {
+    return null;
   }
+}
 
-  return articles;
+function extractHrefLinks(html, baseUrl) {
+  const links = [];
+  const anchorRegex = /<a[^>]*href=["']([^"'#]+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  let match;
+  while ((match = anchorRegex.exec(html)) !== null) {
+    const abs = resolveUrl(match[1], baseUrl);
+    if (abs) {
+      const title = match[2]?.replace(/<[^>]*>/g, '').trim() || '';
+      links.push({ url: abs, title });
+    }
+  }
+  return links;
+}
+
+function extractArticlesFromIndex(html, baseUrl) {
+  const links = extractHrefLinks(html, baseUrl);
+  const articles = links
+    .filter(l => /https?:\/\/[^\s]+craft\.(?:do|me)\/s\//.test(l.url) || /\/s\//.test(l.url))
+    .map(l => ({
+      url: l.url,
+      title: l.title && l.title.length > 2 ? l.title : (l.url.split('/')?.pop() || 'Article').replace(/[-_]/g, ' '),
+      slug: generateSlug(l.title && l.title.length > 2 ? l.title : (l.url.split('/')?.pop() || 'article'))
+    }));
+  // De-duplicate by URL
+  const seen = new Set();
+  return articles.filter(a => (seen.has(a.url) ? false : seen.add(a.url)));
 }
 
 function generateSlug(title) {
@@ -177,9 +191,41 @@ async function main() {
     }
     
     const indexHtml = await indexRes.text();
-    const articles = extractArticlesFromIndex(indexHtml);
-    
-    console.log(`📚 Found ${articles.length} articles`);
+
+    // Crawl up to CRAWL_DEPTH within same origin to discover /s/ links
+    const origin = new URL(CRAFT_INDEX_URL).origin;
+    const queue = [{ url: CRAFT_INDEX_URL, depth: 0, html: indexHtml }];
+    const visited = new Set([CRAFT_INDEX_URL]);
+    const articles = [];
+
+    while (queue.length && visited.size <= MAX_PAGES) {
+      const { url, depth, html } = queue.shift();
+      const foundHere = extractArticlesFromIndex(html, url);
+      foundHere.forEach(a => {
+        if (!articles.find(x => x.url === a.url)) articles.push(a);
+      });
+      if (depth < CRAWL_DEPTH) {
+        const links = extractHrefLinks(html, url)
+          .filter(l => l.url.startsWith(origin));
+        for (const link of links) {
+          if (!visited.has(link.url)) {
+            visited.add(link.url);
+            try {
+              const res = await fetch(link.url, { headers: { 'User-Agent': 'CraftSync/1.0 (+github.com)' } });
+              if (res.ok) {
+                const childHtml = await res.text();
+                queue.push({ url: link.url, depth: depth + 1, html: childHtml });
+              }
+            } catch {
+              // ignore fetch errors during crawl
+            }
+          }
+          if (visited.size > MAX_PAGES) break;
+        }
+      }
+    }
+
+    console.log(`📚 Found ${articles.length} article link(s)`);
     
     let newArticles = 0;
     
