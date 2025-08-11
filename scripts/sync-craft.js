@@ -20,8 +20,9 @@ const contentDir = path.join(projectRoot, 'src', 'content', 'posts');
 const cachePath = path.join(projectRoot, '.craft-sync-cache.json');
 
 // Configuration - update these values
-const CRAFT_INDEX_URL = process.env.CRAFT_INDEX_URL || 'https://your-craft-writings-page.craft.do';
+const CRAFT_INDEX_URL = process.env.CRAFT_INDEX_URL || 'https://shubhank.craft.me/';
 const SYNC_INTERVAL_HOURS = 6; // How often to check for updates
+const FORCE_SYNC = String(process.env.CRAFT_FORCE_SYNC || '').toLowerCase() === 'true';
 
 /** @typedef {{ url: string; title: string; date?: string; slug?: string; lastChecked?: number }} ArticleMeta */
 
@@ -31,40 +32,25 @@ const SYNC_INTERVAL_HOURS = 6; // How often to check for updates
  */
 function extractArticlesFromIndex(html) {
   const articles = [];
-  
-  // Try multiple selectors for article links
-  const linkSelectors = [
-    'a[href*="/s/"]', // Craft share links
-    '.article-link',   // Custom class
-    'article a',       // Links in article elements
-    '.content a[href*="craft.do"]' // Any craft.do links in content
-  ];
-  
-  for (const selector of linkSelectors) {
-    const matches = html.match(new RegExp(`<a[^>]*href="([^"]*)"[^>]*>([^<]*)</a>`, 'gi'));
-    if (matches) {
-      for (const match of matches) {
-        const hrefMatch = match.match(/href="([^"]*)"/);
-        const titleMatch = match.match(/>([^<]*)</);
-        
-        if (hrefMatch && titleMatch) {
-          const url = hrefMatch[1];
-          const title = titleMatch[1].trim();
-          
-          // Only include craft.do links that look like articles
-          if (url.includes('craft.do') && title.length > 10) {
-            articles.push({
-              url: url.startsWith('http') ? url : `https://craft.do${url}`,
-              title: title,
-              slug: generateSlug(title)
-            });
-          }
-        }
-      }
-      if (articles.length > 0) break; // Found articles with this selector
+  // Capture any Craft shared page links (craft.do or craft.me) containing /s/
+  const urlRegex = /https?:\/\/[^"'\s)]+craft\.(?:do|me)\/s\/[A-Za-z0-9_-]+/g;
+  const urlMatches = html.match(urlRegex) || [];
+  const unique = Array.from(new Set(urlMatches));
+
+  for (const url of unique) {
+    // Try to get the anchor text as title
+    const safeUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const anchorRegex = new RegExp(`<a[^>]*href=["']${safeUrl}["'][^>]*>([\s\S]*?)<\/a>`, 'i');
+    const m = html.match(anchorRegex);
+    let title = m ? m[1].replace(/<[^>]*>/g, '').trim() : '';
+    if (!title || title.length < 3) {
+      // Fallback: slugify last segment
+      const last = url.split('/')?.pop() || 'Article';
+      title = last.replace(/[-_]/g, ' ');
     }
+    articles.push({ url, title, slug: generateSlug(title) });
   }
-  
+
   return articles;
 }
 
@@ -157,6 +143,7 @@ function saveCache(cache) {
  * Check if we should sync (based on time interval)
  */
 function shouldSync(cache) {
+  if (FORCE_SYNC) return true;
   const now = Date.now();
   const lastSync = cache.lastSync || 0;
   const intervalMs = SYNC_INTERVAL_HOURS * 60 * 60 * 1000;
