@@ -25,6 +25,7 @@ const SYNC_INTERVAL_HOURS = 6; // How often to check for updates
 const FORCE_SYNC = String(process.env.CRAFT_FORCE_SYNC || '').toLowerCase() === 'true';
 const CRAWL_DEPTH = Number(process.env.CRAFT_CRAWL_DEPTH || 2);
 const MAX_PAGES = Number(process.env.CRAFT_MAX_PAGES || 20);
+const ACCEPT_SAME_ORIGIN_AS_POSTS = String(process.env.CRAFT_ACCEPT_SAME_ORIGIN || 'true').toLowerCase() === 'true';
 
 /** @typedef {{ url: string; title: string; date?: string; slug?: string; lastChecked?: number }} ArticleMeta */
 
@@ -66,6 +67,14 @@ function extractArticlesFromIndex(html, baseUrl) {
   // De-duplicate by URL
   const seen = new Set();
   return articles.filter(a => (seen.has(a.url) ? false : seen.add(a.url)));
+}
+
+function extractTitleFromHtml(html) {
+  const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  if (h1 && h1[1]) return h1[1].replace(/<[^>]*>/g, '').trim();
+  const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  if (title && title[1]) return title[1].replace(/<[^>]*>/g, '').trim();
+  return undefined;
 }
 
 function generateSlug(title) {
@@ -221,6 +230,20 @@ async function main() {
             }
           }
           if (visited.size > MAX_PAGES) break;
+        }
+      }
+    }
+
+    // Fallback: if no /s/ links found, consider same-origin html pages as posts (opt-in)
+    if (ACCEPT_SAME_ORIGIN_AS_POSTS && articles.length === 0) {
+      const candidates = queue
+        .filter(q => q.url !== CRAFT_INDEX_URL)
+        .filter(q => !q.url.match(/\.(css|js|png|jpg|jpeg|gif|svg|webp|ico|json)(\?|$)/i));
+      for (const c of candidates) {
+        const title = extractTitleFromHtml(c.html) || c.url.split('/').filter(Boolean).pop() || 'Article';
+        const slug = generateSlug(title);
+        if (!articles.find(a => a.url === c.url)) {
+          articles.push({ url: c.url, title, slug });
         }
       }
     }
