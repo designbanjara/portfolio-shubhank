@@ -4,10 +4,8 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
 import BottomNavigation from '../components/BottomNavigation';
-
 const BellandurTrafficBlog = () => {
-  return (
-    <div className="min-h-screen bg-background text-foreground">
+  return <div className="min-h-screen bg-background text-foreground">
       <MobileHeader />
       <div className="flex">
         <div className="hidden lg:block">
@@ -15,17 +13,14 @@ const BellandurTrafficBlog = () => {
         </div>
         <main className="flex-1 lg:ml-56">
           <div className="max-w-4xl mx-auto py-10 px-4">
-            <Link 
-              to="/writing" 
-              className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
-            >
+            <Link to="/writing" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
               <ArrowLeftIcon className="h-4 w-4" />
               Back to Writing
             </Link>
             
             <article className="prose prose-invert prose-lg max-w-none">
               <header className="mb-10">
-                <h1 className="text-4xl font-custom font-bold mb-4 text-white">
+                <h1 className="font-custom font-bold mb-4 text-white text-3xl">
                   The story of my experiments with Bellandur traffic
                 </h1>
                 <div className="flex items-center gap-4 text-gray-400 text-sm">
@@ -35,11 +30,7 @@ const BellandurTrafficBlog = () => {
                 </div>
               </header>
 
-              <img 
-                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400&fit=crop&crop=center" 
-                alt="Bellandur traffic experiment" 
-                className="w-full h-64 object-cover rounded-lg mb-8"
-              />
+              <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400&fit=crop&crop=center" alt="Bellandur traffic experiment" className="w-full h-64 object-cover rounded-lg mb-8" />
 
               <div className="space-y-6 text-gray-300 leading-relaxed">
                 <p className="text-xl text-gray-200">
@@ -47,35 +38,35 @@ const BellandurTrafficBlog = () => {
                   This is the story of how I turned this challenge into an opportunity for personal and professional growth.
                 </p>
 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">The Problem</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-xl">The Problem</h2>
                 <p>
                   Bellandur, home to numerous tech companies, is notorious for its traffic congestion. The daily commute 
                   became a source of stress and lost productivity. Instead of accepting this as an inevitable part of city life, 
                   I decided to experiment with different approaches to make the most of this time.
                 </p>
 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Experiment 1: The Learning Commute</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-xl">Experiment 1: The learning commute</h2>
                 <p>
                   My first experiment involved converting travel time into learning time. I started listening to podcasts, 
                   audiobooks, and online courses during my commute. This simple change transformed my perception of traffic 
                   from a waste of time to an investment in personal development.
                 </p>
 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Experiment 2: Flexible Working Hours</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-xl mx-0 px-0 py-0 my-[4px]">Experiment 2: Flexible Working Hours</h2>
                 <p>
                   Next, I negotiated with my employer to adjust my working hours. By starting earlier and finishing earlier, 
                   I could avoid peak traffic hours. This reduced my commute time by nearly 40% and gave me more evening time 
                   for personal activities.
                 </p>
 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Experiment 3: The Mindfulness Practice</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-xl">Experiment 3: The Mindfulness Practice</h2>
                 <p>
                   Perhaps the most transformative experiment was using traffic time for mindfulness practice. Instead of 
                   getting frustrated, I used the stillness to practice breathing exercises and meditation. This not only 
                   improved my mental health but also enhanced my focus and creativity at work.
                 </p>
 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">The Results</h2>
+                <h2 className="font-bold text-white mt-10 mb-4 text-2xl">The Results</h2>
                 <p>
                   These experiments didn't just improve my commute; they changed my entire approach to problem-solving. 
                   I learned that constraints often hide opportunities, and with the right mindset, even the most frustrating 
@@ -106,8 +97,6 @@ const BellandurTrafficBlog = () => {
         </main>
       </div>
       <BottomNavigation />
-    </div>
-  );
+    </div>;
 };
-
 export default BellandurTrafficBlog;
