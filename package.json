@@ -8,7 +8,9 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync:craft": "node ./scripts/sync-craft.js",
+    "sync:craft:force": "CRAFT_FORCE_SYNC=true node ./scripts/sync-craft.js"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -50,6 +52,7 @@
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
+    "node-fetch": "^3.3.2",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",

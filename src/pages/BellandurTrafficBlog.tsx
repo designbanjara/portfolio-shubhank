@@ -12,13 +12,13 @@ const BellandurTrafficBlog = () => {
           <Sidebar />
         </div>
         <main className="flex-1 lg:ml-56">
-          <div className="max-w-4xl mx-auto py-10 px-4">
+          <div className="max-w-[672px] mx-auto py-10 px-4">
             <Link to="/writing" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
               <ArrowLeftIcon className="h-4 w-4" />
               Back to Writing
             </Link>
             
-            <article className="prose prose-invert prose-lg max-w-none">
+            <article className="prose prose-invert prose-lg">
               <header className="mb-10">
                 <h1 className="font-custom font-bold mb-4 text-white text-3xl">
                   The story of my experiments with Bellandur traffic
@@ -32,7 +32,7 @@ const BellandurTrafficBlog = () => {
 
               <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400&fit=crop&crop=center" alt="Bellandur traffic experiment" className="w-full h-64 object-cover rounded-lg mb-8" />
 
-              <div className="space-y-6 text-gray-300 leading-loose">
+              <div className="space-y-10 text-gray-300 leading-loose">
                 <p className="text-xl text-gray-200">
                   Living in Bangalore, specifically around Bellandur, I found myself spending nearly 3 hours daily in traffic. 
                   This is the story of how I turned this challenge into an opportunity for personal and professional growth.
