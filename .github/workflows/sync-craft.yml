@@ -25,6 +25,9 @@ jobs:
           
       - name: Install dependencies
         run: npm install
+
+      - name: Install Playwright (Chromium)
+        run: npx playwright install --with-deps chromium | cat
         
       - name: Sync Craft content
         env:
@@ -33,6 +36,7 @@ jobs:
           CRAFT_ACCEPT_SAME_ORIGIN: ${{ vars.CRAFT_ACCEPT_SAME_ORIGIN }}
           CRAFT_CRAWL_DEPTH: ${{ vars.CRAFT_CRAWL_DEPTH }}
           CRAFT_MAX_PAGES: ${{ vars.CRAFT_MAX_PAGES }}
+          CRAFT_USE_PLAYWRIGHT: ${{ vars.CRAFT_USE_PLAYWRIGHT || 'true' }}
         run: npm run sync:craft
         
       - name: Commit changes
