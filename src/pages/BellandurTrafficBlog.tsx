@@ -32,7 +32,7 @@ const BellandurTrafficBlog = () => {
 
               <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400&fit=crop&crop=center" alt="Bellandur traffic experiment" className="w-full h-64 object-cover rounded-lg mb-8" />
 
-              <div className="space-y-2 text-gray-300 leading-relaxed">
+              <div className="space-y-4 text-gray-300 leading-relaxed">
                 <p className="text-xl text-gray-200">
                   Living in Bangalore, specifically around Bellandur, I found myself spending nearly 3 hours daily in traffic. 
                   This is the story of how I turned this challenge into an opportunity for personal and professional growth.
