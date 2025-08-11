@@ -29,6 +29,10 @@ jobs:
       - name: Sync Craft content
         env:
           CRAFT_INDEX_URL: ${{ secrets.CRAFT_INDEX_URL || vars.CRAFT_INDEX_URL }}
+          CRAFT_FORCE_SYNC: ${{ vars.CRAFT_FORCE_SYNC }}
+          CRAFT_ACCEPT_SAME_ORIGIN: ${{ vars.CRAFT_ACCEPT_SAME_ORIGIN }}
+          CRAFT_CRAWL_DEPTH: ${{ vars.CRAFT_CRAWL_DEPTH }}
+          CRAFT_MAX_PAGES: ${{ vars.CRAFT_MAX_PAGES }}
         run: npm run sync:craft
         
       - name: Commit changes
