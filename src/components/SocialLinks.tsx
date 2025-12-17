@@ -39,13 +39,13 @@ const SocialLink = ({ name, action, icon: Icon, href }: SocialLinkProps) => {
 const SocialLinks = () => {
   return (
     <div className="mt-10">
-      <SocialLink name="X" action="Follow" icon={XIcon} href="https://x.com/yourhandle" />
+      <SocialLink name="X" action="Follow" icon={XIcon} href="https://x.com/designbanjara" />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} href="https://linkedin.com/in/yourprofile" />
+      <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} href="https://www.linkedin.com/in/shubhank-pawar-51139194/" />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="GitHub" action="Follow" icon={CodeBracketIcon} href="https://github.com/yourusername" />
+      <SocialLink name="GitHub" action="Follow" icon={CodeBracketIcon} href="https://github.com/designbanjara" />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} href="mailto:your@email.com" />
+      <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} href="mailto:pawarshubhank@gmail.com" />
     </div>
   );
 };
