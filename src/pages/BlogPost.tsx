@@ -53,159 +53,202 @@ const BlogPost = () => {
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
   const renderContent = (blocks: CraftBlock[]) => {
-    return blocks.map((block, index) => {
-      // Helper to extract URL from markdown if needed
-      const extractUrlFromMarkdown = (markdown: string) => {
-        const match = markdown.match(/!\[.*?\]\((.*?)\)/);
-        return match ? match[1] : null;
-      };
+    const result: React.ReactNode[] = [];
+    let i = 0;
 
+    // Helper to extract URL from markdown if needed
+    const extractUrlFromMarkdown = (markdown: string) => {
+      const match = markdown.match(/!\[.*?\]\((.*?)\)/);
+      return match ? match[1] : null;
+    };
+
+    while (i < blocks.length) {
+      const block = blocks[i];
+
+      // Check if this is a list item
+      if (block.type === 'text' && block.listStyle) {
+        // Collect consecutive list items of the same type
+        const listItems: CraftBlock[] = [];
+        const listType = block.listStyle;
+        
+        while (
+          i < blocks.length && 
+          blocks[i].type === 'text' && 
+          blocks[i].listStyle === listType
+        ) {
+          listItems.push(blocks[i]);
+          i++;
+        }
+
+        // Render wrapped list based on type
+        const ListTag = listType === 'bullet' ? 'ul' : 'ol';
+        result.push(
+          <ListTag 
+            key={`list-${i}`} 
+            className={`${listType === 'bullet' ? 'list-disc' : 'list-decimal'} pl-6 mb-4 space-y-2`}
+          >
+            {listItems.map((item, idx) => (
+              <li key={item.id || idx} className="text-gray-300">
+                {item.markdown.replace(/^[-*]\s/, '').replace(/^\d+\.\s/, '')}
+              </li>
+            ))}
+          </ListTag>
+        );
+        continue;
+      }
+
+      // Handle non-list blocks
       switch (block.type) {
         case 'text':
           if (block.textStyle === 'h2') {
-            return (
-              <h2 key={block.id || index} className="font-bold text-white mb-4 text-2xl mt-8">
+            result.push(
+              <h2 key={block.id || i} className="font-bold text-white mb-4 text-2xl mt-8">
                 {block.markdown.replace(/^## /, '')}
               </h2>
             );
           } else if (block.textStyle === 'h3') {
-            return (
-              <h3 key={block.id || index} className="font-bold text-white mb-3 text-xl mt-6">
+            result.push(
+              <h3 key={block.id || i} className="font-bold text-white mb-3 text-xl mt-6">
                 {block.markdown.replace(/^### /, '')}
               </h3>
             );
           } else if (block.decorations?.includes('quote')) {
-            return (
+            result.push(
               <blockquote
-                key={block.id || index}
+                key={block.id || i}
                 className="border-l-4 border-gray-600 pl-6 my-6 text-gray-200 italic"
               >
                 {block.markdown.replace(/^> /, '')}
               </blockquote>
             );
-          } else if (block.listStyle === 'bullet') {
-            return (
-              <li key={block.id || index} className="ml-6 text-gray-300">
-                {block.markdown.replace(/^- /, '')}
-              </li>
-            );
           } else {
-            return (
-              <p key={block.id || index} className="text-gray-300 leading-relaxed mb-4">
+            result.push(
+              <p key={block.id || i} className="text-gray-300 leading-relaxed mb-4">
                 {block.markdown}
               </p>
             );
           }
+          break;
 
         case 'image':
           // Try to get URL from block.url or parse from markdown
           const imageUrl = block.url || extractUrlFromMarkdown(block.markdown);
-          if (!imageUrl) return null;
-          
-          return (
-            <div key={block.id || index} className="mb-6 mt-6">
-              <img
-                src={imageUrl}
-                alt=""
-                className="w-full rounded-lg"
-                onError={(e) => {
-                  console.error('Failed to load image:', imageUrl);
-                  // Hide broken images
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </div>
-          );
-
-        case 'video':
-          if (!block.url) return null;
-          return (
-            <div key={block.id || index} className="mb-6 mt-6">
-              <video
-                controls
-                className="w-full rounded-lg"
-                src={block.url}
-                onError={(e) => {
-                  console.error('Failed to load video:', block.url);
-                }}
-              >
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          );
-
-        case 'file':
-          // Handle embedded files/media
-          if (!block.url) return null;
-          const isVideo = block.url?.match(/\.(mp4|webm|ogg|mov)$/i);
-          const isImage = block.url?.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i);
-          
-          if (isVideo) {
-            return (
-              <div key={block.id || index} className="mb-6 mt-6">
-                <video
-                  controls
-                  className="w-full rounded-lg"
-                  src={block.url}
-                >
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            );
-          } else if (isImage) {
-            return (
-              <div key={block.id || index} className="mb-6 mt-6">
+          if (imageUrl) {
+            result.push(
+              <div key={block.id || i} className="mb-6 mt-6">
                 <img
-                  src={block.url}
+                  src={imageUrl}
                   alt=""
                   className="w-full rounded-lg"
                   onError={(e) => {
-                    console.error('Failed to load file image:', block.url);
+                    console.error('Failed to load image:', imageUrl);
+                    // Hide broken images
                     e.currentTarget.style.display = 'none';
                   }}
                 />
               </div>
             );
           }
-          // For other file types, show a download link
-          return (
-            <div key={block.id || index} className="mb-6 mt-6">
-              <a
-                href={block.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#2a2a2a] hover:bg-[#333] rounded-lg text-gray-300 transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5"
+          break;
+
+        case 'video':
+          if (block.url) {
+            result.push(
+              <div key={block.id || i} className="mb-6 mt-6">
+                <video
+                  controls
+                  className="w-full rounded-lg"
+                  src={block.url}
+                  onError={(e) => {
+                    console.error('Failed to load video:', block.url);
+                  }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            );
+          }
+          break;
+
+        case 'file':
+          // Handle embedded files/media
+          if (block.url) {
+            const isVideo = block.url?.match(/\.(mp4|webm|ogg|mov)$/i);
+            const isImage = block.url?.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i);
+            
+            if (isVideo) {
+              result.push(
+                <div key={block.id || i} className="mb-6 mt-6">
+                  <video
+                    controls
+                    className="w-full rounded-lg"
+                    src={block.url}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              );
+            } else if (isImage) {
+              result.push(
+                <div key={block.id || i} className="mb-6 mt-6">
+                  <img
+                    src={block.url}
+                    alt=""
+                    className="w-full rounded-lg"
+                    onError={(e) => {
+                      console.error('Failed to load file image:', block.url);
+                      e.currentTarget.style.display = 'none';
+                    }}
                   />
-                </svg>
-                Download File
-              </a>
-            </div>
-          );
+                </div>
+              );
+            } else {
+              // For other file types, show a download link
+              result.push(
+                <div key={block.id || i} className="mb-6 mt-6">
+                  <a
+                    href={block.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#2a2a2a] hover:bg-[#333] rounded-lg text-gray-300 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                      />
+                    </svg>
+                    Download File
+                  </a>
+                </div>
+              );
+            }
+          }
+          break;
 
         default:
           if (block.content) {
-            return (
-              <div key={block.id || index}>
+            result.push(
+              <div key={block.id || i}>
                 {renderContent(block.content)}
               </div>
             );
           }
-          return null;
+          break;
       }
-    });
+
+      i++;
+    }
+
+    return result;
   };
 
   if (loading) {
