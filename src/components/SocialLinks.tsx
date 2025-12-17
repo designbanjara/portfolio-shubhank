@@ -13,33 +13,39 @@ interface SocialLinkProps {
   name: string;
   action: string;
   icon: React.ElementType;
+  href: string;
 }
 
-const SocialLink = ({ name, action, icon: Icon }: SocialLinkProps) => {
+const SocialLink = ({ name, action, icon: Icon, href }: SocialLinkProps) => {
   return (
-    <div className="flex justify-between items-center py-2">
+    <a 
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex justify-between items-center py-2 hover:bg-white/5 transition-colors duration-200 rounded-lg px-3 -mx-3 cursor-pointer group"
+    >
       <div className="text-white flex items-center gap-2">
         <Icon className="h-4 w-4" />
         <span>{name}</span>
       </div>
-      <div className="text-gray-400 hover:text-white cursor-pointer flex items-center">
+      <div className="text-gray-400 group-hover:text-white transition-colors flex items-center">
         {action}
         <ChevronRightIcon className="h-3 w-3 ml-1" />
       </div>
-    </div>
+    </a>
   );
 };
 
 const SocialLinks = () => {
   return (
     <div className="mt-10">
-      <SocialLink name="X" action="Follow" icon={XIcon} />
+      <SocialLink name="X" action="Follow" icon={XIcon} href="https://x.com/yourhandle" />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} />
+      <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} href="https://linkedin.com/in/yourprofile" />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="GitHub" action="Follow" icon={CodeBracketIcon} />
+      <SocialLink name="GitHub" action="Follow" icon={CodeBracketIcon} href="https://github.com/yourusername" />
       <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} />
+      <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} href="mailto:your@email.com" />
     </div>
   );
 };

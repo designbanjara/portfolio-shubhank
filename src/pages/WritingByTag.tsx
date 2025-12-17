@@ -15,7 +15,10 @@ const WritingByTag = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      if (!tag) return;
+      if (!tag) {
+        setLoading(false);
+        return;
+      }
       
       setLoading(true);
       try {
