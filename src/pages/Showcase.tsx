@@ -1,10 +1,10 @@
 
 import React from 'react';
 import Sidebar from '../components/Sidebar';
-import DessertsContent from '../components/DessertsContent';
+import ShowcaseContent from '../components/ShowcaseContent';
 import BottomNavigation from '../components/BottomNavigation';
 
-const Desserts = () => {
+const Showcase = () => {
   return (
     <div className="min-h-screen bg-portfolio-dark text-white">
       {/* Desktop Sidebar - hidden on mobile */}
@@ -15,7 +15,7 @@ const Desserts = () => {
       {/* Main content - responsive padding without card treatment */}
       <main className="md:ml-56 pb-20 md:pb-6">
         <div className="max-w-3xl mx-auto py-6 md:py-10 px-4">
-          <DessertsContent />
+          <ShowcaseContent />
         </div>
       </main>
 
@@ -25,4 +25,5 @@ const Desserts = () => {
   );
 };
 
-export default Desserts;
+export default Showcase;
+

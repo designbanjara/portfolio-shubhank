@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Sidebar from '../components/Sidebar';
@@ -7,32 +7,19 @@ import BottomNavigation from '../components/BottomNavigation';
 import { craftApi, BlogPost } from '../services/craftApi';
 import { Badge } from '../components/ui/badge';
 import { getPostSlug } from '../lib/slugify';
+import { useBlogPosts } from '../hooks/useCraftApi';
 
 const WritingByTag = () => {
   const { tag } = useParams<{ tag: string }>();
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: allPosts = [], isLoading: loading } = useBlogPosts();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      if (!tag) {
-        setLoading(false);
-        return;
-      }
-      
-      setLoading(true);
-      try {
-        const fetchedPosts = await craftApi.getPostsByTag(tag);
-        setPosts(fetchedPosts);
-      } catch (error) {
-        console.error('Error fetching posts by tag:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, [tag]);
+  // Filter posts by tag from cached data
+  const posts = useMemo(() => {
+    if (!tag || !allPosts.length) return [];
+    return allPosts.filter((post) => 
+      post.properties?.tags?.includes(tag)
+    );
+  }, [allPosts, tag]);
 
   return (
     <div className="min-h-screen bg-portfolio-dark text-white">

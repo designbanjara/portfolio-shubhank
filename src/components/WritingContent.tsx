@@ -1,54 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { craftApi, BlogPost } from '../services/craftApi';
 import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { getPostSlug } from '../lib/slugify';
+import { useBlogPosts } from '../hooks/useCraftApi';
 
 const WritingContent = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
+  const { data: posts = [], isLoading: loading } = useBlogPosts();
   const [searchQuery, setSearchQuery] = useState('');
-  const [allTags, setAllTags] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [fetchedPosts, tags] = await Promise.all([
-          craftApi.getBlogPosts(),
-          craftApi.getAllTags(),
-        ]);
-        setPosts(fetchedPosts);
-        setFilteredPosts(fetchedPosts);
-        setAllTags(tags);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    // Filter by search query
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      const result = posts.filter((post) => {
-        const titleMatch = post.title.toLowerCase().includes(query);
-        const blurbMatch = post.properties?.blurb?.toLowerCase().includes(query);
-        const tagsMatch = post.properties?.tags?.some((tag) =>
-          tag.toLowerCase().includes(query)
-        );
-        return titleMatch || blurbMatch || tagsMatch;
-      });
-      setFilteredPosts(result);
-    } else {
-      setFilteredPosts(posts);
+  // Filter posts by search query
+  const filteredPosts = useMemo(() => {
+    if (!searchQuery) {
+      return posts;
     }
+    
+    const query = searchQuery.toLowerCase();
+    return posts.filter((post) => {
+      const titleMatch = post.title.toLowerCase().includes(query);
+      const blurbMatch = post.properties?.blurb?.toLowerCase().includes(query);
+      const tagsMatch = post.properties?.tags?.some((tag) =>
+        tag.toLowerCase().includes(query)
+      );
+      return titleMatch || blurbMatch || tagsMatch;
+    });
   }, [searchQuery, posts]);
 
   if (loading) {
@@ -71,7 +47,7 @@ const WritingContent = () => {
     <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-custom font-bold mb-6">Writing</h1>
       <div className="space-y-6">
-        <p className="text-base text-gray-300">
+        <p className="text-lg text-gray-300">
           Each article features distinct visual or interaction styles. I use them as a space to explore different design approaches in context.
         </p>
 
@@ -85,21 +61,6 @@ const WritingContent = () => {
             className="bg-[#1a1a1a] border-[#333] text-white placeholder:text-gray-500"
           />
         </div>
-
-        {/* Tags */}
-        {allTags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {allTags.map((tag) => (
-              <Link
-                key={tag}
-                to={`/writing/tag/${tag}`}
-                className="px-3 py-1 rounded-full text-sm transition-colors bg-[#1f1f1f] text-gray-400 hover:bg-[#2a2a2a]"
-              >
-                {tag}
-              </Link>
-            ))}
-          </div>
-        )}
 
         {/* Posts */}
         <div className="space-y-8 mt-8">
@@ -149,7 +110,7 @@ const WritingContent = () => {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h2 className="font-bold mb-1 text-white group-hover:text-gray-100 text-lg">
+                        <h2 className="font-bold mb-1 text-white group-hover:text-gray-100 text-xl">
                           {post.title}
                         </h2>
                         {post.properties?.date && (
@@ -158,7 +119,7 @@ const WritingContent = () => {
                           </p>
                         )}
                         {post.properties?.blurb && (
-                          <p className="text-gray-300 text-sm line-clamp-2">
+                          <p className="text-gray-300 text-lg line-clamp-2">
                             {post.properties.blurb}
                           </p>
                         )}

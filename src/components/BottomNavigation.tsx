@@ -19,12 +19,8 @@ const BottomNavigation = () => {
       label: 'Reading'
     },
     {
-      path: '/work-in-progress',
-      label: 'WIP'
-    },
-    {
-      path: '/desserts',
-      label: 'Desserts'
+      path: '/showcase',
+      label: 'Showcase'
     }
   ];
 

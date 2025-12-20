@@ -79,8 +79,8 @@ const ReadingList = () => {
             style={{ aspectRatio: 'auto' }}
           />
         </div>
-        <h4 className="text-white font-semibold text-sm mb-1 line-clamp-2">{book.title}</h4>
-        <p className="text-gray-400 text-xs">{book.author}</p>
+        <h4 className="text-white font-semibold text-xl mb-1 line-clamp-2">{book.title}</h4>
+        <p className="text-gray-400 text-base">{book.author}</p>
       </CardContent>
     </Card>
   );
@@ -104,12 +104,11 @@ const ReadingList = () => {
       </div>
       
       {/* Main content - responsive padding without card treatment */}
-      <main className="md:ml-56 pb-20 md:pb-6">
+      <main className="md:ml-56 pt-10 pb-20 md:pb-6">
         <div className="max-w-2xl mx-auto py-10 px-4">
           <div className="space-y-8">
             <div>
               <h1 className="text-3xl font-custom font-bold mb-6">Reading List</h1>
-              <p className="text-lg">Books, articles, and resources I'm currently reading or recommend.</p>
             </div>
             
             <div className="space-y-8 mt-8">

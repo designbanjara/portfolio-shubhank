@@ -25,6 +25,25 @@ const ProfileContent = () => {
         </p>
 
         <SocialLinks />
+
+        {/* Substack Embed */}
+        <div className="mt-10 substack-embed-wrapper">
+          <iframe 
+            src="https://designbanjara.substack.com/embed" 
+            width="480" 
+            height="320" 
+            style={{ 
+              border: '1px solid hsl(var(--border))', 
+              background: 'hsl(var(--background))', 
+              maxWidth: '100%',
+              borderRadius: 'var(--radius)'
+            }} 
+            frameBorder="0" 
+            scrolling="no"
+            className="w-full substack-iframe"
+            title="Substack Newsletter"
+          ></iframe>
+        </div>
       </div>
     </div>
   );

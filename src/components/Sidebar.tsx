@@ -3,10 +3,9 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
   HomeIcon, 
-  CakeIcon,
-  ClockIcon,
   PencilIcon,
   BookOpenIcon,
+  PhotoIcon,
 } from '@heroicons/react/24/solid';
 
 interface SidebarItemProps {
@@ -64,9 +63,8 @@ const Sidebar = () => {
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
           <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
+          <SidebarItem to="/showcase" icon={PhotoIcon}>Showcase</SidebarItem>
           <SidebarItem to="/reading-list" icon={BookOpenIcon}>Reading List</SidebarItem>
-          <SidebarItem to="/work-in-progress" icon={ClockIcon}>Work in Progress</SidebarItem>
-          <SidebarItem to="/desserts" icon={CakeIcon}>Desserts</SidebarItem>
         </SidebarSection>
       </div>
     </div>

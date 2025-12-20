@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useParams, useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
@@ -7,46 +7,33 @@ import BottomNavigation from '../components/BottomNavigation';
 import { craftApi, BlogPost as BlogPostType, CraftBlock } from '../services/craftApi';
 import { Badge } from '../components/ui/badge';
 import { getPostSlug } from '../lib/slugify';
+import { useBlogPosts } from '../hooks/useCraftApi';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
-  const navigate = useNavigate();
-  const [post, setPost] = useState<BlogPostType | null>(null);
-  const [allPosts, setAllPosts] = useState<BlogPostType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: allPosts = [], isLoading: loading } = useBlogPosts();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const posts = await craftApi.getBlogPosts();
-        setAllPosts(posts);
+  // Find the post from cached data
+  const post = useMemo(() => {
+    if (!allPosts.length) return null;
 
-        // Try to get post from location state first
-        const postId = location.state?.postId;
-        let foundPost: BlogPostType | null = null;
+    // Try to get post from location state first
+    const postId = location.state?.postId;
+    if (postId) {
+      return allPosts.find((p) => p.id === postId) || null;
+    }
 
-        if (postId) {
-          foundPost = posts.find((p) => p.id === postId) || null;
-        } else {
-          // Find by slug
-          foundPost = posts.find((p) => {
-            const postSlug = getPostSlug(p.title);
-            return postSlug === slug;
-          }) || null;
-        }
+    // Find by slug
+    if (slug) {
+      return allPosts.find((p) => {
+        const postSlug = getPostSlug(p.title);
+        return postSlug === slug;
+      }) || null;
+    }
 
-        setPost(foundPost);
-      } catch (error) {
-        console.error('Error fetching post:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [slug, location.state]);
+    return null;
+  }, [allPosts, slug, location.state]);
 
   const currentIndex = post ? allPosts.findIndex((p) => p.id === post.id) : -1;
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
@@ -102,13 +89,13 @@ const BlogPost = () => {
         case 'text':
           if (block.textStyle === 'h2') {
             result.push(
-              <h2 key={block.id || i} className="font-bold text-white mb-4 text-2xl mt-8">
+              <h2 key={block.id || i} className="font-bold text-white mb-4 text-2xl !mt-[60px]">
                 {block.markdown.replace(/^## /, '')}
               </h2>
             );
           } else if (block.textStyle === 'h3') {
             result.push(
-              <h3 key={block.id || i} className="font-bold text-white mb-3 text-xl mt-6">
+              <h3 key={block.id || i} className="font-bold text-white mb-0 text-xl mt-10 leading-7">
                 {block.markdown.replace(/^### /, '')}
               </h3>
             );

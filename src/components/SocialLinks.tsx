@@ -4,7 +4,6 @@ import { Separator } from './ui/separator';
 import { 
   EnvelopeIcon,
   ChevronRightIcon, 
-  CodeBracketIcon,
 } from '@heroicons/react/24/solid';
 import LinkedinIcon from './icons/LinkedinIcon';
 import XIcon from './icons/XIcon';
@@ -42,8 +41,6 @@ const SocialLinks = () => {
       <SocialLink name="X" action="Follow" icon={XIcon} href="https://x.com/designbanjara" />
       <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} href="https://www.linkedin.com/in/shubhank-pawar-51139194/" />
-      <Separator className="my-2 border-dotted opacity-40" />
-      <SocialLink name="GitHub" action="Follow" icon={CodeBracketIcon} href="https://github.com/designbanjara" />
       <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} href="mailto:pawarshubhank@gmail.com" />
     </div>
