@@ -1,5 +1,12 @@
 const CRAFT_API_BASE = 'https://connect.craft.do/links/8a3DPwLXbQU/api/v1';
 
+type CraftDocumentsResponse = {
+  items: Array<{
+    id: string;
+    title: string;
+  }>;
+};
+
 export interface CraftBlock {
   id: string;
   type: string; // 'text', 'image', 'video', 'file', 'page', 'collection', etc.
@@ -8,6 +15,7 @@ export interface CraftBlock {
   decorations?: string[]; // 'quote', 'bold', 'italic', etc.
   listStyle?: string; // 'bullet', 'numbered', etc.
   url?: string; // For images, videos, and files
+  rows?: Array<Array<{ value: string; attributes?: string[] }>>; // For tables
   content?: CraftBlock[]; // Nested blocks
 }
 
@@ -68,10 +76,10 @@ export const craftApi = {
         throw new Error('Failed to fetch documents');
       }
       
-      const docsData = await docsResponse.json();
+      const docsData = (await docsResponse.json()) as CraftDocumentsResponse;
       
       // Find the "Personal Blog" document
-      const blogDoc = docsData.items.find((doc: any) => 
+      const blogDoc = docsData.items.find((doc) => 
         doc.title === 'Personal Blog'
       );
       
@@ -103,6 +111,64 @@ export const craftApi = {
         });
     } catch (error) {
       console.error('Error fetching blog posts:', error);
+      return [];
+    }
+  },
+
+  // Get all projects from the collection
+  async getProjects(): Promise<BlogPost[]> {
+    try {
+      // First, get the list of documents
+      const docsResponse = await fetch(`${CRAFT_API_BASE}/documents`, {
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      
+      if (!docsResponse.ok) {
+        throw new Error('Failed to fetch documents');
+      }
+      
+      const docsData = (await docsResponse.json()) as CraftDocumentsResponse;
+      
+      // Find the "Projects" document
+      const projectsDoc = docsData.items.find((doc) => 
+        doc.title === 'Projects'
+      );
+      
+      if (!projectsDoc) {
+        console.error('Projects document not found');
+        return [];
+      }
+      
+      // Fetch the projects document content
+      const document = await craftApi.getDocument(projectsDoc.id);
+      
+      // Find the Projects collection (prefer one named "Projects", otherwise use first collection)
+      const projectsCollection = document.content?.find(
+        (block) => block.type === 'collection' && block.markdown === 'Projects'
+      );
+      
+      // If no collection with "Projects" name, try to find any collection
+      const collection = projectsCollection || document.content?.find(
+        (block) => block.type === 'collection'
+      );
+      
+      if (!collection?.items) {
+        return [];
+      }
+      
+      // Filter for published projects only
+      return collection.items
+        .filter((project) => project.properties?.published === true)
+        .sort((a, b) => {
+          // Sort by date, newest first
+          const dateA = a.properties?.date || '';
+          const dateB = b.properties?.date || '';
+          return dateB.localeCompare(dateA);
+        });
+    } catch (error) {
+      console.error('Error fetching projects:', error);
       return [];
     }
   },

@@ -50,19 +50,177 @@
   body {
     @apply bg-portfolio-dark text-portfolio-text antialiased;
     font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    line-height: 1.4;
   }
   
   h1 {
     @apply font-custom;
+    font-size: 2em;
+    line-height: 1.1;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
   }
   
   h2, h3, h4, h5, h6 {
     font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  /* Override prose styles for h2 elements in blog posts */
-  .prose h2 {
-    margin-top: 60px !important;
+  h2 {
+    font-size: 1.5em;
+    line-height: 1.25;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: 1.125em;
+    line-height: 1.4;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  /* H3 spacing only in blog post content */
+  .post-body h3,
+  .prose h3,
+  article.prose h3 {
+    margin-top: 2.68333333em;
+    margin-bottom: 0.89444444em;
+  }
+
+  h2 + h3 {
+    margin-top: 0;
+  }
+
+  /* Reset h3 margins in navigation and listing contexts */
+  article.border-b h3,
+  .group h3,
+  a.group h3 {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  h4 {
+    font-size: 1em;
+    line-height: 1.4;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1.4em;
+  }
+
+  p {
+    margin-bottom: 1.4em;
+  }
+
+  blockquote {
+    margin: 0 2em 1.4em 2em;
+    font-style: italic;
+  }
+
+  @media (max-width: 734px) {
+    blockquote {
+      margin-left: 0.75em;
+      margin-right: 0.75em;
+    }
+  }
+
+  ul, ol {
+    margin-bottom: 1.4em;
+    padding-left: 1.5em;
+  }
+
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  /* Blog post spacing - match Cultured Code blog */
+  /* Only apply to h2 within actual blog post content, not listing pages */
+  .post-body h2,
+  .prose h2,
+  article.prose h2,
+  article .post-body h2 {
+    margin-top: 2.5625em;
+    margin-bottom: 0.85416667em;
+  }
+
+  /* First h2 in post body should have top spacing */
+  .post-body > h2:first-child,
+  .prose > h2:first-child,
+  article.prose > h2:first-child {
+    margin-top: 2.5625em;
+  }
+
+  /* H2 after introduction */
+  .introduction + h2 {
+    margin-top: 2.5625em;
+  }
+
+  /* Reset h2 margins in listing pages - be more specific */
+  /* Target articles that are NOT inside a prose/article.prose context */
+  article:not(.prose):not([class*="prose"]) h2,
+  /* Also reset for any h2 that's not in a blog post context */
+  article.border-b h2 {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Paragraph spacing in blog posts */
+  .post-body p,
+  .prose p,
+  article.prose p {
+    margin-bottom: 1.4em;
+  }
+
+  /* Paragraph after h2 should not have extra top margin */
+  .post-body h2 + p,
+  .prose h2 + p,
+  article.prose h2 + p {
+    margin-top: 0;
+  }
+
+  /* Images and figures spacing - only in blog posts */
+  .post-body figure,
+  .post-body img,
+  .prose figure,
+  .prose img,
+  article.prose figure,
+  article.prose img {
+    margin-bottom: 1.4em;
+  }
+
+  /* Lists spacing - only in blog posts */
+  .post-body ul,
+  .post-body ol,
+  .prose ul,
+  .prose ol,
+  article.prose ul,
+  article.prose ol {
+    margin-bottom: 1.4em;
+  }
+
+  /* Blockquotes spacing - only in blog posts */
+  .post-body blockquote,
+  .prose blockquote,
+  article.prose blockquote {
+    margin-bottom: 1.4em;
+  }
+
+  /* Last element should not have bottom margin */
+  .post-body > *:last-child,
+  .prose > *:last-child,
+  article.prose > *:last-child {
+    margin-bottom: 0;
   }
 
   a {

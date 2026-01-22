@@ -3,7 +3,8 @@ import React from 'react';
 import { Separator } from './ui/separator';
 import { 
   EnvelopeIcon,
-  ChevronRightIcon, 
+  ChevronRightIcon,
+  NewspaperIcon,
 } from '@heroicons/react/24/solid';
 import LinkedinIcon from './icons/LinkedinIcon';
 import XIcon from './icons/XIcon';
@@ -13,9 +14,10 @@ interface SocialLinkProps {
   action: string;
   icon: React.ElementType;
   href: string;
+  subtext?: string;
 }
 
-const SocialLink = ({ name, action, icon: Icon, href }: SocialLinkProps) => {
+const SocialLink = ({ name, action, icon: Icon, href, subtext }: SocialLinkProps) => {
   return (
     <a 
       href={href}
@@ -25,7 +27,12 @@ const SocialLink = ({ name, action, icon: Icon, href }: SocialLinkProps) => {
     >
       <div className="text-white flex items-center gap-2">
         <Icon className="h-4 w-4" />
-        <span>{name}</span>
+        <div className="flex flex-col">
+          <span>{name}</span>
+          {subtext && (
+            <span className="text-xs text-gray-400">{subtext}</span>
+          )}
+        </div>
       </div>
       <div className="text-gray-400 group-hover:text-white transition-colors flex items-center">
         {action}
@@ -43,6 +50,14 @@ const SocialLinks = () => {
       <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} href="https://www.linkedin.com/in/shubhank-pawar-51139194/" />
       <Separator className="my-2 border-dotted opacity-40" />
       <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} href="mailto:pawarshubhank@gmail.com" />
+      <Separator className="my-2 border-dotted opacity-40" />
+      <SocialLink
+        name="Newsletter"
+        action="Subscribe"
+        icon={NewspaperIcon}
+        href="https://designbanjara.substack.com/"
+        subtext="Redirects to Substack"
+      />
     </div>
   );
 };

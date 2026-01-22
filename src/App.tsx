@@ -10,9 +10,9 @@ import Bookmarks from "./pages/Bookmarks";
 import Stack from "./pages/Stack";
 import NotFound from "./pages/NotFound";
 import Writing from "./pages/Writing";
+import Projects from "./pages/Projects";
 import BlogPost from "./pages/BlogPost";
 import WritingByTag from "./pages/WritingByTag";
-import ReadingList from "./pages/ReadingList";
 import Showcase from "./pages/Showcase";
 import { craftApi } from "./services/craftApi";
 import { craftQueryKeys } from "./hooks/useCraftApi";
@@ -36,6 +36,12 @@ const DataPrefetcher = () => {
       queryKey: craftQueryKeys.posts(),
       queryFn: () => craftApi.getBlogPosts(),
     });
+
+    // Prefetch projects on first load
+    queryClient.prefetchQuery({
+      queryKey: craftQueryKeys.projects(),
+      queryFn: () => craftApi.getProjects(),
+    });
   }, [queryClient]);
 
   return null;
@@ -52,10 +58,11 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/stack" element={<Stack />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:slug" element={<BlogPost />} />
           <Route path="/writing" element={<Writing />} />
           <Route path="/writing/tag/:tag" element={<WritingByTag />} />
           <Route path="/writing/:slug" element={<BlogPost />} />
-          <Route path="/reading-list" element={<ReadingList />} />
           <Route path="/showcase" element={<Showcase />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

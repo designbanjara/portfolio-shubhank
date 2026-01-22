@@ -11,12 +11,12 @@ const BottomNavigation = () => {
       label: 'Home'
     },
     {
-      path: '/writing',
-      label: 'Writing'
+      path: '/projects',
+      label: 'Projects'
     },
     {
-      path: '/reading-list',
-      label: 'Reading'
+      path: '/writing',
+      label: 'Writing'
     },
     {
       path: '/showcase',
@@ -29,7 +29,10 @@ const BottomNavigation = () => {
       <div className="bg-portfolio-sidebar rounded-full shadow-lg border border-[#333] relative overflow-hidden">
         <div className="flex justify-around relative py-1">
           {navItems.map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive =
+              item.path === '/'
+                ? location.pathname === '/'
+                : location.pathname.startsWith(item.path);
             return (
               <NavLink
                 key={item.path}

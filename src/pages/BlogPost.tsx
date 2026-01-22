@@ -1,43 +1,50 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
 import BottomNavigation from '../components/BottomNavigation';
-import { craftApi, BlogPost as BlogPostType, CraftBlock } from '../services/craftApi';
+import { craftApi, CraftBlock } from '../services/craftApi';
 import { Badge } from '../components/ui/badge';
 import { getPostSlug } from '../lib/slugify';
-import { useBlogPosts } from '../hooks/useCraftApi';
+import { useBlogPosts, useProjects } from '../hooks/useCraftApi';
+import { Dialog, DialogContent } from '../components/ui/dialog';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
-  const { data: allPosts = [], isLoading: loading } = useBlogPosts();
+  const isProjectRoute = location.pathname.startsWith('/projects');
+  const { data: allPosts = [], isLoading: loadingPosts } = useBlogPosts();
+  const { data: allProjects = [], isLoading: loadingProjects } = useProjects();
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  
+  const allItems = isProjectRoute ? allProjects : allPosts;
+  const loading = isProjectRoute ? loadingProjects : loadingPosts;
 
   // Find the post from cached data
   const post = useMemo(() => {
-    if (!allPosts.length) return null;
+    if (!allItems.length) return null;
 
     // Try to get post from location state first
     const postId = location.state?.postId;
     if (postId) {
-      return allPosts.find((p) => p.id === postId) || null;
+      return allItems.find((p) => p.id === postId) || null;
     }
 
     // Find by slug
     if (slug) {
-      return allPosts.find((p) => {
+      return allItems.find((p) => {
         const postSlug = getPostSlug(p.title);
         return postSlug === slug;
       }) || null;
     }
 
     return null;
-  }, [allPosts, slug, location.state]);
+  }, [allItems, slug, location.state]);
 
-  const currentIndex = post ? allPosts.findIndex((p) => p.id === post.id) : -1;
-  const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
-  const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+  const currentIndex = post ? allItems.findIndex((p) => p.id === post.id) : -1;
+  const prevPost = currentIndex > 0 ? allItems[currentIndex - 1] : null;
+  const nextPost = currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
 
   const renderContent = (blocks: CraftBlock[]) => {
     const result: React.ReactNode[] = [];
@@ -48,6 +55,128 @@ const BlogPost = () => {
       const match = markdown.match(/!\[.*?\]\((.*?)\)/);
       return match ? match[1] : null;
     };
+
+    // Detect "a paragraph that is just a URL", even if Craft gives us multiple lines like:
+    // [https://...]
+    // (https://...)
+    // or markdown link syntax: [label](https://...)
+    const extractStandaloneUrl = (text: string) => {
+      const trimmed = text.trim();
+
+      // Markdown link where the whole paragraph is the link
+      const mdLinkMatch = trimmed.match(/^\[[^\]]*\]\((https?:\/\/[^)\s]+)\)\s*$/i);
+      if (mdLinkMatch) return mdLinkMatch[1];
+
+      // Extract URLs that may be wrapped by [], (), etc.
+      const urlMatches = trimmed.match(/https?:\/\/[^\s)\]]+/gi);
+      if (!urlMatches || urlMatches.length === 0) return null;
+
+      // If there are multiple URLs, they must all be identical (Craft sometimes duplicates them)
+      const first = urlMatches[0];
+      if (urlMatches.some((u) => u !== first)) return null;
+
+      // Ensure the remaining content is only wrappers/whitespace
+      const residue = trimmed
+        .replace(/https?:\/\/[^\s)\]]+/gi, '')
+        .replace(/[()[\]]/g, '')
+        .trim();
+
+      return residue.length === 0 ? first : null;
+    };
+
+    const isFigmaShareUrl = (url: string) => {
+      try {
+        const u = new URL(url);
+        if (!/(\.|^)figma\.com$/i.test(u.hostname)) return false;
+        // Common share/prototype paths: /proto, /file, /design
+        return (
+          u.pathname.startsWith('/proto') ||
+          u.pathname.startsWith('/file') ||
+          u.pathname.startsWith('/design')
+        );
+      } catch {
+        return false;
+      }
+    };
+
+    const toFigmaEmbedSrc = (figmaUrl: string) =>
+      `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(figmaUrl)}`;
+
+    // Very small GFM table renderer (Craft often sends tables as pipe-delimited markdown)
+    const parseGfmTable = (markdown: string) => {
+      const lines = markdown
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
+
+      // Find a header + separator pair
+      for (let idx = 0; idx < lines.length - 1; idx++) {
+        const header = lines[idx];
+        const sep = lines[idx + 1];
+
+        const looksLikeRow = header.includes('|');
+        const looksLikeSeparator =
+          sep.includes('|') &&
+          sep.includes('-') &&
+          /^[\s|:-]+$/.test(sep);
+
+        if (!looksLikeRow || !looksLikeSeparator) continue;
+
+        const splitRow = (row: string) =>
+          row
+            .replace(/^\|/, '')
+            .replace(/\|$/, '')
+            .split('|')
+            .map((c) => c.trim());
+
+        const headerCells = splitRow(header);
+        const rows: string[][] = [];
+
+        for (let j = idx + 2; j < lines.length; j++) {
+          const rowLine = lines[j];
+          if (!rowLine.includes('|')) break;
+          rows.push(splitRow(rowLine));
+        }
+
+        if (headerCells.length === 0) return null;
+        return { headerCells, rows };
+      }
+
+      return null;
+    };
+
+    const renderTable = (key: string, table: { headerCells: string[]; rows: string[][] }) => (
+      <div key={key} className="my-6 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr>
+              {table.headerCells.map((cell, idx) => (
+                <th
+                  key={`${key}-th-${idx}`}
+                  className="border border-white/10 bg-white/5 px-3 py-2 text-left font-semibold text-gray-100"
+                >
+                  {cell}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {table.rows.map((row, rIdx) => (
+              <tr key={`${key}-tr-${rIdx}`} className="align-top">
+                {row.map((cell, cIdx) => (
+                  <td
+                    key={`${key}-td-${rIdx}-${cIdx}`}
+                    className="border border-white/10 px-3 py-2 text-gray-200"
+                  >
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
 
     while (i < blocks.length) {
       const block = blocks[i];
@@ -89,13 +218,13 @@ const BlogPost = () => {
         case 'text':
           if (block.textStyle === 'h2') {
             result.push(
-              <h2 key={block.id || i} className="font-bold text-white mb-4 text-2xl !mt-[60px]">
+              <h2 key={block.id || i} className="font-bold text-white" style={{ marginTop: '69px' }}>
                 {block.markdown.replace(/^## /, '')}
               </h2>
             );
           } else if (block.textStyle === 'h3') {
             result.push(
-              <h3 key={block.id || i} className="font-bold text-white mb-0 text-xl mt-10 leading-7">
+              <h3 key={block.id || i} className="font-bold text-white">
                 {block.markdown.replace(/^### /, '')}
               </h3>
             );
@@ -103,45 +232,153 @@ const BlogPost = () => {
             result.push(
               <blockquote
                 key={block.id || i}
-                className="border-l-4 border-gray-600 pl-6 my-6 text-gray-200 italic"
+                className="text-gray-200"
               >
                 {block.markdown.replace(/^> /, '')}
               </blockquote>
             );
           } else {
+            const table = parseGfmTable(block.markdown);
+            if (table) {
+              result.push(
+                <div key={block.id || i} className="my-6 overflow-x-auto">
+                  <table className="w-full border-collapse text-sm">
+                    <thead>
+                      <tr>
+                        {table.headerCells.map((cell, idx) => (
+                          <th
+                            key={`th-${block.id || i}-${idx}`}
+                            className="border border-white/10 bg-white/5 px-3 py-2 text-left font-semibold text-gray-100"
+                          >
+                            {cell}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {table.rows.map((row, rIdx) => (
+                        <tr key={`tr-${block.id || i}-${rIdx}`} className="align-top">
+                          {row.map((cell, cIdx) => (
+                            <td
+                              key={`td-${block.id || i}-${rIdx}-${cIdx}`}
+                              className="border border-white/10 px-3 py-2 text-gray-200"
+                            >
+                              {cell}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              );
+              break;
+            }
+
+            const standaloneUrl = extractStandaloneUrl(block.markdown);
+            if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
+              result.push(
+                <figure key={block.id || i} className="my-6">
+                  <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-black">
+                    <iframe
+                      title="Figma prototype"
+                      src={toFigmaEmbedSrc(standaloneUrl)}
+                      className="w-full h-[70vh] min-h-[420px] max-h-[900px]"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allow="clipboard-write; fullscreen"
+                      allowFullScreen
+                    />
+                  </div>
+                </figure>
+              );
+            } else {
             result.push(
-              <p key={block.id || i} className="text-gray-300 leading-relaxed mb-4">
+              <p key={block.id || i} className="text-gray-300">
+                {block.markdown}
+              </p>
+            );
+            }
+          }
+          break;
+
+        case 'table': {
+          // Prefer structured rows if present
+          const rows = block.rows;
+          if (rows && rows.length > 0) {
+            const headerCells = rows[0].map((c) => c?.value ?? '');
+            const bodyRows = rows.slice(1).map((r) => r.map((c) => c?.value ?? ''));
+            result.push(renderTable(`table-${block.id || i}`, { headerCells, rows: bodyRows }));
+          } else {
+            const table = parseGfmTable(block.markdown);
+            if (table) result.push(renderTable(`table-${block.id || i}`, table));
+          }
+          break;
+        }
+
+        case 'richUrl': {
+          // Craft sometimes emits link cards as `richUrl` blocks; embed Figma prototypes here too.
+          const standaloneUrl = extractStandaloneUrl(block.markdown);
+          if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
+            result.push(
+              <figure key={block.id || i} className="my-6">
+                <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-black">
+                  <iframe
+                    title="Figma prototype"
+                    src={toFigmaEmbedSrc(standaloneUrl)}
+                    className="w-full h-[70vh] min-h-[420px] max-h-[900px]"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    allow="clipboard-write; fullscreen"
+                    allowFullScreen
+                  />
+                </div>
+              </figure>
+            );
+          } else {
+            // Fallback: show as a regular external link (use markdown as text)
+            result.push(
+              <p key={block.id || i} className="text-gray-300">
                 {block.markdown}
               </p>
             );
           }
           break;
+        }
 
-        case 'image':
+        case 'image': {
           // Try to get URL from block.url or parse from markdown
           const imageUrl = block.url || extractUrlFromMarkdown(block.markdown);
           if (imageUrl) {
             result.push(
-              <div key={block.id || i} className="mb-6 mt-6">
-                <img
-                  src={imageUrl}
-                  alt=""
-                  className="w-full rounded-lg"
-                  onError={(e) => {
-                    console.error('Failed to load image:', imageUrl);
-                    // Hide broken images
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              </div>
+              <figure key={block.id || i}>
+                <button
+                  type="button"
+                  className="block w-full cursor-zoom-in focus:outline-none"
+                  onClick={() => setLightboxUrl(imageUrl)}
+                  aria-label="Open image preview"
+                >
+                  <img
+                    src={imageUrl}
+                    alt=""
+                    className="block max-h-[480px] max-w-full w-auto rounded-lg mx-auto"
+                    onError={(e) => {
+                      console.error('Failed to load image:', imageUrl);
+                      // Hide broken images
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </button>
+              </figure>
             );
           }
           break;
+        }
 
         case 'video':
           if (block.url) {
             result.push(
-              <div key={block.id || i} className="mb-6 mt-6">
+              <figure key={block.id || i}>
                 <video
                   controls
                   className="w-full rounded-lg"
@@ -152,7 +389,7 @@ const BlogPost = () => {
                 >
                   Your browser does not support the video tag.
                 </video>
-              </div>
+              </figure>
             );
           }
           break;
@@ -165,7 +402,7 @@ const BlogPost = () => {
             
             if (isVideo) {
               result.push(
-                <div key={block.id || i} className="mb-6 mt-6">
+                <figure key={block.id || i}>
                   <video
                     controls
                     className="w-full rounded-lg"
@@ -173,21 +410,28 @@ const BlogPost = () => {
                   >
                     Your browser does not support the video tag.
                   </video>
-                </div>
+                </figure>
               );
             } else if (isImage) {
               result.push(
-                <div key={block.id || i} className="mb-6 mt-6">
-                  <img
-                    src={block.url}
-                    alt=""
-                    className="w-full rounded-lg"
-                    onError={(e) => {
-                      console.error('Failed to load file image:', block.url);
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                </div>
+                <figure key={block.id || i}>
+                  <button
+                    type="button"
+                    className="block w-full cursor-zoom-in focus:outline-none"
+                    onClick={() => setLightboxUrl(block.url!)}
+                    aria-label="Open image preview"
+                  >
+                    <img
+                      src={block.url}
+                      alt=""
+                      className="block max-h-[480px] max-w-full w-auto rounded-lg mx-auto"
+                      onError={(e) => {
+                        console.error('Failed to load file image:', block.url);
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </button>
+                </figure>
               );
             } else {
               // For other file types, show a download link
@@ -277,15 +521,15 @@ const BlogPost = () => {
           <main className="flex-1 lg:ml-56">
             <div className="max-w-[672px] mx-auto py-10 px-4">
               <Link
-                to="/writing"
+                to={isProjectRoute ? "/projects" : "/writing"}
                 className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
               >
                 <ArrowLeftIcon className="h-4 w-4" />
-                Back to Writing
+                Back to {isProjectRoute ? "Projects" : "Writing"}
               </Link>
-              <h1 className="text-2xl font-bold text-white mb-4">Post not found</h1>
+              <h1 className="text-2xl font-bold text-white mb-4">{isProjectRoute ? "Project" : "Post"} not found</h1>
               <p className="text-gray-400">
-                The blog post you're looking for doesn't exist or hasn't been published yet.
+                The {isProjectRoute ? "project" : "blog post"} you're looking for doesn't exist or hasn't been published yet.
               </p>
             </div>
           </main>
@@ -305,63 +549,67 @@ const BlogPost = () => {
         <main className="flex-1 lg:ml-56">
           <div className="max-w-[672px] mx-auto py-10 px-4">
             <Link
-              to="/writing"
+              to={isProjectRoute ? "/projects" : "/writing"}
               className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
             >
               <ArrowLeftIcon className="h-4 w-4" />
-              Back to Writing
+              Back to {isProjectRoute ? "Projects" : "Writing"}
             </Link>
 
             <article className="prose prose-invert prose-lg max-w-none">
               <header className="mb-10">
-                <h1 className="font-custom font-bold mb-4 text-white text-3xl">
+                <h3 className="post-date text-center text-gray-400 mb-2" style={{ fontSize: '0.89em', fontWeight: 400 }}>
+                  {post.properties?.date && craftApi.formatDate(post.properties.date)}
+                </h3>
+                <h1 className="post-headline font-custom font-bold text-white text-center" style={{ fontSize: '2.1em', lineHeight: '1.15', fontWeight: 700, margin: '0.5em 8%' }}>
                   {post.title}
                 </h1>
-                <div className="flex items-center gap-4 text-gray-400 text-sm mb-4">
-                  {post.properties?.date && (
-                    <>
-                      <time dateTime={post.properties.date}>
-                        {craftApi.formatDate(post.properties.date)}
-                      </time>
-                    </>
-                  )}
-                </div>
                 {post.properties?.tags && post.properties.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {post.properties.tags.map((tag) => (
-                      <Link
+                      <Badge
                         key={tag}
-                        to={`/writing/tag/${tag}`}
+                        variant="secondary"
+                        className="bg-[#2a2a2a] text-gray-400 hover:bg-[#333]"
                       >
-                        <Badge
-                          variant="secondary"
-                          className="bg-[#2a2a2a] text-gray-400 hover:bg-[#333] cursor-pointer"
-                        >
-                          {tag}
-                        </Badge>
-                      </Link>
+                        {tag}
+                      </Badge>
                     ))}
                   </div>
                 )}
               </header>
 
               {post.properties?.blurb && (
-                <p className="text-xl text-gray-200 mb-8 leading-relaxed">
+                <p className="introduction text-gray-200" style={{ fontSize: '1.25em', lineHeight: '1.25', marginBottom: '1.4em' }}>
                   {post.properties.blurb}
                 </p>
               )}
 
-              <div className="space-y-4">
+              <div className="post-body">
                 {renderContent(post.content)}
               </div>
             </article>
+
+            <Dialog open={!!lightboxUrl} onOpenChange={(open) => !open && setLightboxUrl(null)}>
+              <DialogContent className="max-w-[96vw] w-[96vw] h-[92vh] p-4 bg-background border border-white/10 flex items-center justify-center overflow-hidden">
+                {lightboxUrl ? (
+                  <div className="w-full h-full flex items-center justify-center overflow-hidden">
+                    <img
+                      src={lightboxUrl}
+                      alt=""
+                      className="max-w-full max-h-full w-auto h-auto object-contain rounded-lg"
+                    />
+                  </div>
+                ) : null}
+              </DialogContent>
+            </Dialog>
 
             {/* Prev/Next Navigation */}
             <div className="mt-16 pt-8 border-t border-[#333]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {prevPost && (
                   <Link
-                    to={`/writing/${getPostSlug(prevPost.title)}`}
+                    to={`${isProjectRoute ? "/projects" : "/writing"}/${getPostSlug(prevPost.title)}`}
                     state={{ postId: prevPost.id }}
                     className="group p-4 rounded-lg border border-[#333] hover:bg-[#1f1f1f] transition-colors"
                   >
@@ -376,7 +624,7 @@ const BlogPost = () => {
                 )}
                 {nextPost && (
                   <Link
-                    to={`/writing/${getPostSlug(nextPost.title)}`}
+                    to={`${isProjectRoute ? "/projects" : "/writing"}/${getPostSlug(nextPost.title)}`}
                     state={{ postId: nextPost.id }}
                     className="group p-4 rounded-lg border border-[#333] hover:bg-[#1f1f1f] transition-colors md:text-right"
                   >

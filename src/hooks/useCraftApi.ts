@@ -6,6 +6,7 @@ import { craftApi, BlogPost } from '../services/craftApi';
 export const craftQueryKeys = {
   all: ['craft'] as const,
   posts: () => [...craftQueryKeys.all, 'posts'] as const,
+  projects: () => [...craftQueryKeys.all, 'projects'] as const,
   tags: () => [...craftQueryKeys.all, 'tags'] as const,
   post: (id: string) => [...craftQueryKeys.posts(), id] as const,
   postsByTag: (tag: string) => [...craftQueryKeys.posts(), 'tag', tag] as const,
@@ -68,3 +69,12 @@ export const usePostsByTag = (tag: string | null) => {
   });
 };
 
+// Hook to fetch all projects
+export const useProjects = () => {
+  return useQuery({
+    queryKey: craftQueryKeys.projects(),
+    queryFn: () => craftApi.getProjects(),
+    staleTime: Infinity, // Data never goes stale, only fetched once
+    gcTime: Infinity, // Keep in cache forever
+  });
+};

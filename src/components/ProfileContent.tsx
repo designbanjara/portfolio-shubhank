@@ -9,11 +9,11 @@ const ProfileContent = () => {
       <div className="space-y-4 md:space-y-6">
         <p className="text-base md:text-lg">
           Hey, I'm Shubhank. I'm a digital designer, based out of Bangalore, India.
-          I'm currently designing products at <a href="https://www.phonepe.com/" target="_blank" rel="noopener noreferrer" className="text-[#F97316]">PhonePe</a>.
+          I'm currently designing products at <a href="https://www.phonepe.com/" target="_blank" rel="noopener noreferrer" className="text-[#60A5FA]">PhonePe</a>.
         </p>
 
         <p className="text-base md:text-lg">
-          Before PhonePe, I spent couple of years designing at <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer" className="text-[#F97316]">Razorpay</a>. Majorly working on their mobile app and merchant experience. After Razorpay, I had a short stint in HR tech only to realise it was not my cup of tea.
+          Before PhonePe, I spent couple of years designing at <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer" className="text-[#60A5FA]">Razorpay</a>. Majorly working on their mobile app and merchant experience. After Razorpay, I had a short stint in HR tech only to realise it was not my cup of tea.
         </p>
 
         <p className="text-base md:text-lg">
@@ -25,25 +25,6 @@ const ProfileContent = () => {
         </p>
 
         <SocialLinks />
-
-        {/* Substack Embed */}
-        <div className="mt-10 substack-embed-wrapper">
-          <iframe 
-            src="https://designbanjara.substack.com/embed" 
-            width="480" 
-            height="320" 
-            style={{ 
-              border: '1px solid hsl(var(--border))', 
-              background: 'hsl(var(--background))', 
-              maxWidth: '100%',
-              borderRadius: 'var(--radius)'
-            }} 
-            frameBorder="0" 
-            scrolling="no"
-            className="w-full substack-iframe"
-            title="Substack Newsletter"
-          ></iframe>
-        </div>
       </div>
     </div>
   );

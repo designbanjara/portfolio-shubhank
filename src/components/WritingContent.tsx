@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { getPostSlug } from '../lib/slugify';
 import { useBlogPosts } from '../hooks/useCraftApi';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
 const WritingContent = () => {
   const { data: posts = [], isLoading: loading } = useBlogPosts();
@@ -144,6 +145,28 @@ const WritingContent = () => {
             })
           )}
         </div>
+      </div>
+      
+      {/* Newsletter Footer */}
+      <div className="mt-10 pt-1 pb-1">
+        <a 
+          href="https://designbanjara.substack.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-wrap justify-between items-center py-3 h-full hover:bg-white/5 transition-colors duration-200 rounded-lg px-3 -mx-3 cursor-pointer group gap-1"
+          style={{ verticalAlign: 'middle' }}
+        >
+          <div className="text-white flex items-center gap-2">
+            <div className="flex flex-col">
+              <span>Get updates by subscribing to my newsletter</span>
+              <span className="text-base text-gray-400 mb-2 mt-0">Redirects to Substack</span>
+            </div>
+          </div>
+          <div className="text-white bg-blue-600 py-2 px-5 rounded-xl transition-colors flex items-center font-custom text-base">
+            Subscribe
+            <ChevronRightIcon className="h-4 w-4 ml-1" />
+          </div>
+        </a>
       </div>
     </div>
   );
