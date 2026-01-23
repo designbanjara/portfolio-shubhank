@@ -1,10 +1,7 @@
-
 import React from 'react';
 import SocialLinks from './SocialLinks';
-
 const ProfileContent = () => {
-  return (
-    <div className="max-w-2xl mx-auto py-10 px-4">
+  return <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-custom font-bold mb-6">Shubhank Pawar</h1>
       <div className="space-y-4 md:space-y-6">
         <p className="text-base md:text-lg">
@@ -13,21 +10,19 @@ const ProfileContent = () => {
         </p>
 
         <p className="text-base md:text-lg">
-          Before PhonePe, I spent couple of years designing at <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer" className="text-[#60A5FA]">Razorpay</a>. Majorly working on their mobile app and merchant experience. After Razorpay, I had a short stint in HR tech only to realise it was not my cup of tea.
+          Before PhonePe, I spent couple of years designing at <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer" className="text-[#60A5FA]">Razorpay</a>. Majorly working on their mobile app and merchant experience. 
         </p>
 
         <p className="text-base md:text-lg">
-          Before Razorpay, I designed experiences for social media and mobility domains. 
+           I have also designed experiences for social media, HR-tech and mobility domains. 
         </p>
 
         <p className="text-base md:text-lg">
-          I plan to write honestly about Design, AI in Design and the industry in India.
+          I plan to write honestly about Design, AI in Design, and the industry in India.
         </p>
 
         <SocialLinks />
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ProfileContent;
