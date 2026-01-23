@@ -9,6 +9,7 @@ import { Badge } from '../components/ui/badge';
 import { getPostSlug } from '../lib/slugify';
 import { useBlogPosts, useProjects } from '../hooks/useCraftApi';
 import { Dialog, DialogContent } from '../components/ui/dialog';
+import { CraftInlineMarkdown } from '../components/CraftInlineMarkdown';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -56,6 +57,8 @@ const BlogPost = () => {
       return match ? match[1] : null;
     };
 
+    const stripCaptionTags = (markdown: string) => markdown.replace(/<\/?caption>/gi, '').trim();
+
     // Detect "a paragraph that is just a URL", even if Craft gives us multiple lines like:
     // [https://...]
     // (https://...)
@@ -94,6 +97,18 @@ const BlogPost = () => {
           u.pathname.startsWith('/file') ||
           u.pathname.startsWith('/design')
         );
+      } catch {
+        return false;
+      }
+    };
+
+    const isMobileOptimizedEmbedUrl = (url: string) => {
+      try {
+        const u = new URL(url);
+        const host = u.hostname.toLowerCase();
+        // Support both the original fixed hostname and Vercel preview/branch deployments.
+        // Example: order-form-a09oqwyvr-<team>.vercel.app
+        return host.endsWith('.vercel.app') && host.startsWith('order-form-');
       } catch {
         return false;
       }
@@ -145,30 +160,65 @@ const BlogPost = () => {
       return null;
     };
 
-    const renderTable = (key: string, table: { headerCells: string[]; rows: string[][] }) => (
+    type TableCell = { value: string; attributes?: Array<{ type: string; color?: string; start?: number; end?: number }> };
+    type RenderableTable = { headerCells: string[]; rows: string[][] } | { headerRow: TableCell[]; rows: TableCell[][] };
+
+    const cellToMarkdownWithHighlights = (cell: TableCell): string => {
+      const text = cell.value ?? '';
+      const attrs = (cell.attributes ?? []).filter((a) => a?.type === 'highlight');
+      if (attrs.length === 0) return text;
+
+      // Craft gives ranges as [start, end) over the cell's value string.
+      const ranges = attrs
+        .map((a) => ({
+          color: a.color ?? '',
+          start: typeof a.start === 'number' ? a.start : 0,
+          end: typeof a.end === 'number' ? a.end : 0,
+        }))
+        .filter((r) => r.end > r.start)
+        .sort((a, b) => a.start - b.start);
+
+      if (ranges.length === 0) return text;
+
+      let out = '';
+      let idx = 0;
+      for (const r of ranges) {
+        const start = Math.max(0, Math.min(text.length, r.start));
+        const end = Math.max(0, Math.min(text.length, r.end));
+        if (start < idx) continue; // skip overlaps (rare)
+
+        out += text.slice(idx, start);
+        out += `<highlight color="${r.color}">` + text.slice(start, end) + `</highlight>`;
+        idx = end;
+      }
+      out += text.slice(idx);
+      return out;
+    };
+
+    const renderTable = (key: string, table: RenderableTable) => (
       <div key={key} className="my-6 overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr>
-              {table.headerCells.map((cell, idx) => (
+              {('headerCells' in table ? table.headerCells : table.headerRow.map(cellToMarkdownWithHighlights)).map((cell, idx) => (
                 <th
                   key={`${key}-th-${idx}`}
                   className="border border-white/10 bg-white/5 px-3 py-2 text-left font-semibold text-gray-100"
                 >
-                  {cell}
+                  <CraftInlineMarkdown markdown={cell} />
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {table.rows.map((row, rIdx) => (
+            {('headerCells' in table ? table.rows : table.rows.map((r) => r.map(cellToMarkdownWithHighlights))).map((row, rIdx) => (
               <tr key={`${key}-tr-${rIdx}`} className="align-top">
                 {row.map((cell, cIdx) => (
                   <td
                     key={`${key}-td-${rIdx}-${cIdx}`}
                     className="border border-white/10 px-3 py-2 text-gray-200"
                   >
-                    {cell}
+                    <CraftInlineMarkdown markdown={cell} />
                   </td>
                 ))}
               </tr>
@@ -180,6 +230,112 @@ const BlogPost = () => {
 
     while (i < blocks.length) {
       const block = blocks[i];
+
+      // Skip empty text blocks (Craft often emits blank lines as empty text blocks).
+      // Rendering them as empty <p> tags inside `prose` creates large unwanted spacing.
+      if (
+        block.type === 'text' &&
+        !block.listStyle &&
+        (block.markdown == null || block.markdown.trim().length === 0)
+      ) {
+        i++;
+        continue;
+      }
+
+      if (block.type === 'image') {
+        // If there are consecutive image blocks, render them as a responsive grid so
+        // they can appear side-by-side when space allows.
+        const images: Array<{ key: string; url: string; caption?: string }> = [];
+        let j = i;
+
+        const getCaptionAt = (idx: number): { captionText: string; consume: number } | null => {
+          const maybe = blocks[idx];
+          if (!maybe) return null;
+
+          // Allow a single empty text block between image and caption.
+          if (
+            maybe.type === 'text' &&
+            !maybe.listStyle &&
+            (maybe.markdown == null || maybe.markdown.trim().length === 0)
+          ) {
+            const after = blocks[idx + 1];
+            if (after?.type === 'text' && after?.textStyle === 'caption' && typeof after.markdown === 'string') {
+              return { captionText: stripCaptionTags(after.markdown), consume: 2 };
+            }
+            return null;
+          }
+
+          if (maybe.type === 'text' && maybe.textStyle === 'caption' && typeof maybe.markdown === 'string') {
+            return { captionText: stripCaptionTags(maybe.markdown), consume: 1 };
+          }
+
+          return null;
+        };
+
+        while (j < blocks.length && blocks[j]?.type === 'image') {
+          const imgBlock = blocks[j];
+
+          const imageUrl = imgBlock.url || extractUrlFromMarkdown(imgBlock.markdown);
+          const captionInfo = getCaptionAt(j + 1);
+          const captionText = captionInfo?.captionText ?? '';
+
+          if (imageUrl) {
+            images.push({
+              key: imgBlock.id || `img-${j}`,
+              url: imageUrl,
+              caption: captionText || undefined,
+            });
+          }
+
+          j += 1 + (captionInfo?.consume ?? 0);
+        }
+
+        const renderSingleFigure = (
+          img: { key: string; url: string; caption?: string },
+          options?: { contain?: boolean }
+        ) => (
+          <div key={img.key} className="not-prose my-2">
+            <figure className="m-0">
+              <button
+                type="button"
+                className="block w-full cursor-zoom-in focus:outline-none"
+                onClick={() => setLightboxUrl(img.url)}
+                aria-label="Open image preview"
+              >
+                <img
+                  src={img.url}
+                  alt=""
+                  className={
+                    options?.contain
+                      ? 'block w-full h-auto rounded-lg'
+                      : 'block w-full h-auto rounded-lg'
+                  }
+                  onError={(e) => {
+                    console.error('Failed to load image:', img.url);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </button>
+
+              {img.caption ? (
+                <figcaption className="mt-2 mb-0 text-center text-sm leading-snug text-gray-400">
+                  <CraftInlineMarkdown markdown={img.caption} />
+                </figcaption>
+              ) : null}
+            </figure>
+          </div>
+        );
+
+        if (images.length >= 1) {
+          // No grids: render consecutive images one after another.
+          images.forEach((img) => {
+            result.push(renderSingleFigure(img, { contain: true }));
+          });
+        }
+
+        i = j;
+        continue;
+      }
 
       // Check if this is a list item
       if (block.type === 'text' && block.listStyle) {
@@ -205,7 +361,9 @@ const BlogPost = () => {
           >
             {listItems.map((item, idx) => (
               <li key={item.id || idx} className="text-gray-300">
-                {item.markdown.replace(/^[-*]\s/, '').replace(/^\d+\.\s/, '')}
+                <CraftInlineMarkdown
+                  markdown={item.markdown.replace(/^[-*]\s/, '').replace(/^\d+\.\s/, '')}
+                />
               </li>
             ))}
           </ListTag>
@@ -216,16 +374,25 @@ const BlogPost = () => {
       // Handle non-list blocks
       switch (block.type) {
         case 'text':
-          if (block.textStyle === 'h2') {
+          if (block.textStyle === 'caption') {
+            // Craft emits captions as HTML-like `<caption>...</caption>` in markdown.
+            // Render as a regular paragraph with caption styling (and strip wrapper tags).
+            const captionText = stripCaptionTags(block.markdown);
+            result.push(
+              <p key={block.id || i} className="mt-2 mb-0 text-center text-sm leading-snug text-gray-400">
+                <CraftInlineMarkdown markdown={captionText} />
+              </p>
+            );
+          } else if (block.textStyle === 'h2') {
             result.push(
               <h2 key={block.id || i} className="font-bold text-white" style={{ marginTop: '69px' }}>
-                {block.markdown.replace(/^## /, '')}
+                <CraftInlineMarkdown markdown={block.markdown.replace(/^## /, '')} />
               </h2>
             );
           } else if (block.textStyle === 'h3') {
             result.push(
               <h3 key={block.id || i} className="font-bold text-white">
-                {block.markdown.replace(/^### /, '')}
+                <CraftInlineMarkdown markdown={block.markdown.replace(/^### /, '')} />
               </h3>
             );
           } else if (block.decorations?.includes('quote')) {
@@ -234,7 +401,7 @@ const BlogPost = () => {
                 key={block.id || i}
                 className="text-gray-200"
               >
-                {block.markdown.replace(/^> /, '')}
+                <CraftInlineMarkdown markdown={block.markdown.replace(/^> /, '')} />
               </blockquote>
             );
           } else {
@@ -250,7 +417,7 @@ const BlogPost = () => {
                             key={`th-${block.id || i}-${idx}`}
                             className="border border-white/10 bg-white/5 px-3 py-2 text-left font-semibold text-gray-100"
                           >
-                            {cell}
+                            <CraftInlineMarkdown markdown={cell} />
                           </th>
                         ))}
                       </tr>
@@ -263,7 +430,7 @@ const BlogPost = () => {
                               key={`td-${block.id || i}-${rIdx}-${cIdx}`}
                               className="border border-white/10 px-3 py-2 text-gray-200"
                             >
-                              {cell}
+                              <CraftInlineMarkdown markdown={cell} />
                             </td>
                           ))}
                         </tr>
@@ -276,7 +443,35 @@ const BlogPost = () => {
             }
 
             const standaloneUrl = extractStandaloneUrl(block.markdown);
-            if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
+            if (standaloneUrl && isMobileOptimizedEmbedUrl(standaloneUrl)) {
+              result.push(
+                <figure key={block.id || i} className="my-6 not-prose">
+                  <div className="mx-auto w-full max-w-[375px] overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                    <div className="flex items-center justify-between gap-3 border-b border-white/10 px-3 py-2">
+                      <div className="text-xs text-gray-300">Embedded preview (best at 375px width)</div>
+                      <a
+                        href={standaloneUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs font-medium text-blue-400 hover:text-blue-300 hover:underline"
+                      >
+                        Open in new tab
+                      </a>
+                    </div>
+                    <iframe
+                      title="Embedded preview"
+                      src={standaloneUrl}
+                      className="block w-full h-[640px] bg-white"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                    />
+                  </div>
+                  <figcaption className="mt-2 text-center text-xs text-gray-400">
+                    This embed is optimized for a 375px-wide viewport.
+                  </figcaption>
+                </figure>
+              );
+            } else if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
               result.push(
                 <figure key={block.id || i} className="my-6">
                   <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-black">
@@ -295,7 +490,7 @@ const BlogPost = () => {
             } else {
             result.push(
               <p key={block.id || i} className="text-gray-300">
-                {block.markdown}
+                <CraftInlineMarkdown markdown={block.markdown} />
               </p>
             );
             }
@@ -306,9 +501,9 @@ const BlogPost = () => {
           // Prefer structured rows if present
           const rows = block.rows;
           if (rows && rows.length > 0) {
-            const headerCells = rows[0].map((c) => c?.value ?? '');
-            const bodyRows = rows.slice(1).map((r) => r.map((c) => c?.value ?? ''));
-            result.push(renderTable(`table-${block.id || i}`, { headerCells, rows: bodyRows }));
+            const headerRow = rows[0] as TableCell[];
+            const bodyRows = rows.slice(1) as TableCell[][];
+            result.push(renderTable(`table-${block.id || i}`, { headerRow, rows: bodyRows }));
           } else {
             const table = parseGfmTable(block.markdown);
             if (table) result.push(renderTable(`table-${block.id || i}`, table));
@@ -319,7 +514,35 @@ const BlogPost = () => {
         case 'richUrl': {
           // Craft sometimes emits link cards as `richUrl` blocks; embed Figma prototypes here too.
           const standaloneUrl = extractStandaloneUrl(block.markdown);
-          if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
+          if (standaloneUrl && isMobileOptimizedEmbedUrl(standaloneUrl)) {
+            result.push(
+              <figure key={block.id || i} className="my-6 not-prose">
+                <div className="mx-auto w-full max-w-[375px] overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                  <div className="flex items-center justify-between gap-3 border-b border-white/10 px-3 py-2">
+                    <div className="text-xs text-gray-300">Embedded preview (best at 375px width)</div>
+                    <a
+                      href={standaloneUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-medium text-blue-400 hover:text-blue-300 hover:underline"
+                    >
+                      Open in new tab
+                    </a>
+                  </div>
+                  <iframe
+                    title="Embedded preview"
+                    src={standaloneUrl}
+                    className="block w-full h-[640px] bg-white"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                  />
+                </div>
+                <figcaption className="mt-2 text-center text-xs text-gray-400">
+                  This embed is optimized for a 375px-wide viewport.
+                </figcaption>
+              </figure>
+            );
+          } else if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
             result.push(
               <figure key={block.id || i} className="my-6">
                 <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-black">
@@ -339,7 +562,7 @@ const BlogPost = () => {
             // Fallback: show as a regular external link (use markdown as text)
             result.push(
               <p key={block.id || i} className="text-gray-300">
-                {block.markdown}
+                <CraftInlineMarkdown markdown={block.markdown} />
               </p>
             );
           }
@@ -351,7 +574,8 @@ const BlogPost = () => {
           const imageUrl = block.url || extractUrlFromMarkdown(block.markdown);
           if (imageUrl) {
             result.push(
-              <figure key={block.id || i}>
+              <div key={block.id || i} className="not-prose my-2">
+                <figure className="m-0">
                 <button
                   type="button"
                   className="block w-full cursor-zoom-in focus:outline-none"
@@ -361,7 +585,7 @@ const BlogPost = () => {
                   <img
                     src={imageUrl}
                     alt=""
-                    className="block max-h-[480px] max-w-full w-auto rounded-lg mx-auto"
+                    className="block w-full h-auto rounded-lg"
                     onError={(e) => {
                       console.error('Failed to load image:', imageUrl);
                       // Hide broken images
@@ -369,7 +593,8 @@ const BlogPost = () => {
                     }}
                   />
                 </button>
-              </figure>
+                </figure>
+              </div>
             );
           }
           break;
@@ -380,7 +605,11 @@ const BlogPost = () => {
             result.push(
               <figure key={block.id || i}>
                 <video
-                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
                   className="w-full rounded-lg"
                   src={block.url}
                   onError={(e) => {
@@ -404,7 +633,11 @@ const BlogPost = () => {
               result.push(
                 <figure key={block.id || i}>
                   <video
-                    controls
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
                     className="w-full rounded-lg"
                     src={block.url}
                   >
@@ -424,7 +657,7 @@ const BlogPost = () => {
                     <img
                       src={block.url}
                       alt=""
-                      className="block max-h-[480px] max-w-full w-auto rounded-lg mx-auto"
+                      className="block w-full h-auto rounded-lg"
                       onError={(e) => {
                         console.error('Failed to load file image:', block.url);
                         e.currentTarget.style.display = 'none';
@@ -561,11 +794,11 @@ const BlogPost = () => {
                 <h3 className="post-date text-center text-gray-400 mb-2" style={{ fontSize: '0.89em', fontWeight: 400 }}>
                   {post.properties?.date && craftApi.formatDate(post.properties.date)}
                 </h3>
-                <h1 className="post-headline font-custom font-bold text-white text-center" style={{ fontSize: '2.1em', lineHeight: '1.15', fontWeight: 700, margin: '0.5em 8%' }}>
+                <h1 className="post-headline font-custom font-bold text-white text-left" style={{ fontSize: '2.1em', lineHeight: '1.15', fontWeight: 700, margin: '0.5em 0' }}>
                   {post.title}
                 </h1>
                 {post.properties?.tags && post.properties.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-nowrap justify-start items-start gap-2">
                     {post.properties.tags.map((tag) => (
                       <Badge
                         key={tag}
@@ -581,7 +814,7 @@ const BlogPost = () => {
 
               {post.properties?.blurb && (
                 <p className="introduction text-gray-200" style={{ fontSize: '1.25em', lineHeight: '1.25', marginBottom: '1.4em' }}>
-                  {post.properties.blurb}
+                  <CraftInlineMarkdown markdown={post.properties.blurb} />
                 </p>
               )}
 

@@ -15,7 +15,17 @@ export interface CraftBlock {
   decorations?: string[]; // 'quote', 'bold', 'italic', etc.
   listStyle?: string; // 'bullet', 'numbered', etc.
   url?: string; // For images, videos, and files
-  rows?: Array<Array<{ value: string; attributes?: string[] }>>; // For tables
+  rows?: Array<
+    Array<{
+      value: string;
+      attributes?: Array<{
+        type: string;
+        color?: string;
+        start?: number;
+        end?: number;
+      }>;
+    }>
+  >; // For tables
   content?: CraftBlock[]; // Nested blocks
 }
 

@@ -4,6 +4,12 @@ import { craftApi } from '../services/craftApi';
 import { getPostSlug } from '../lib/slugify';
 import { useProjects } from '../hooks/useCraftApi';
 
+const PROJECT_THUMBNAIL_OVERRIDE_PREFIXES: Record<string, string> = {
+  // Place the provided image at: public/projects/tata-motors-order.png
+  // Uses prefix matching so minor title changes won't break thumbnails.
+  'simple-and-faster-way-to-place-orders-to-exchange': '/projects/tata-motors-order.png',
+};
+
 const ProjectsContent = () => {
   const { data: projects = [], isLoading: loading } = useProjects();
 
@@ -39,6 +45,11 @@ const ProjectsContent = () => {
           projects.map((project) => {
             const imageUrl = craftApi.getPostImage(project);
             const slug = getPostSlug(project.title);
+            const overrideImageUrl =
+              Object.entries(PROJECT_THUMBNAIL_OVERRIDE_PREFIXES).find(([prefix]) =>
+                slug.startsWith(prefix)
+              )?.[1] ?? null;
+            const resolvedImageUrl = overrideImageUrl ?? imageUrl;
 
             return (
               <Link
@@ -50,9 +61,9 @@ const ProjectsContent = () => {
                 <div className="flex flex-col">
                   {/* Image */}
                   <div className="w-full aspect-square rounded-lg bg-[#2a2a2a] flex-shrink-0 overflow-hidden mb-2">
-                    {imageUrl ? (
+                    {resolvedImageUrl ? (
                       <img
-                        src={imageUrl}
+                        src={resolvedImageUrl}
                         alt={project.title}
                         className="w-full h-full object-cover"
                       />
@@ -77,7 +88,7 @@ const ProjectsContent = () => {
                   </div>
 
                   {/* Title */}
-                  <h2 className="font-bold text-white group-hover:text-gray-100 text-base">
+                  <h2 className="font-bold text-white group-hover:text-gray-100 text-xl leading-snug">
                     {project.title}
                   </h2>
                 </div>
