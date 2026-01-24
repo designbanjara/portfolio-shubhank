@@ -14,7 +14,6 @@ import Writing from "./pages/Writing";
 import Projects from "./pages/Projects";
 import BlogPost from "./pages/BlogPost";
 import WritingByTag from "./pages/WritingByTag";
-import Showcase from "./pages/Showcase";
 import { craftApi } from "./services/craftApi";
 import { craftQueryKeys } from "./hooks/useCraftApi";
 
@@ -65,7 +64,6 @@ const App = () => (
           <Route path="/writing" element={<Writing />} />
           <Route path="/writing/tag/:tag" element={<WritingByTag />} />
           <Route path="/writing/:slug" element={<BlogPost />} />
-          <Route path="/showcase" element={<Showcase />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

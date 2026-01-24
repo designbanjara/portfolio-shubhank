@@ -48,21 +48,6 @@ const WritingContent = () => {
     <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-custom font-bold mb-6">Writing</h1>
       <div className="space-y-6">
-        <p className="text-lg text-gray-300">
-          Each article features distinct visual or interaction styles. I use them as a space to explore different design approaches in context.
-        </p>
-
-        {/* Search */}
-        <div className="pt-4">
-          <Input
-            type="text"
-            placeholder="Search posts..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-[#1a1a1a] border-[#333] text-white placeholder:text-gray-500"
-          />
-        </div>
-
         {/* Posts */}
         <div className="space-y-8 mt-8">
           {filteredPosts.length === 0 ? (
@@ -91,22 +76,12 @@ const WritingContent = () => {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-600">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-8 h-8"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                              />
-                            </svg>
-                          </div>
+                          <img
+                            src="/writing/Wave.png"
+                            alt=""
+                            className="w-full h-full object-cover opacity-90"
+                            loading="lazy"
+                          />
                         )}
                       </div>
 

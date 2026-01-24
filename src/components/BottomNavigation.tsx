@@ -17,10 +17,6 @@ const BottomNavigation = () => {
     {
       path: '/writing',
       label: 'Writing'
-    },
-    {
-      path: '/showcase',
-      label: 'Showcase'
     }
   ];
 

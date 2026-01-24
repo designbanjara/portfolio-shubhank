@@ -5,7 +5,6 @@ import {
   HomeIcon, 
   PencilIcon,
   BriefcaseIcon,
-  PhotoIcon,
 } from '@heroicons/react/24/solid';
 
 interface SidebarItemProps {
@@ -24,8 +23,6 @@ const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: Side
   const getImageSrc = () => {
     if (to === '/projects') {
       return isActive ? '/projects-active.png' : '/projects-inactive.png';
-    } else if (to === '/showcase') {
-      return isActive ? '/showcase-active.png' : '/showcase-inactive.png';
     } else if (to === '/writing') {
       return isActive ? '/writing-active.png' : '/writing-inactive.png';
     }
@@ -85,7 +82,6 @@ const Sidebar = () => {
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
           <SidebarItem to="/projects" icon={BriefcaseIcon}>Projects</SidebarItem>
           <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
-          <SidebarItem to="/showcase" icon={PhotoIcon}>Showcase</SidebarItem>
         </SidebarSection>
       </div>
     </div>
