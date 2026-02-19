@@ -1,10 +1,13 @@
 
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useProjectsPasscode } from '@/contexts/ProjectsPasscodeContext';
 
 const BottomNavigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isProjectsUnlocked, requestProjectsUnlock } = useProjectsPasscode();
   const navItems = [
     {
       path: '/',
@@ -34,6 +37,12 @@ const BottomNavigation = () => {
                 key={item.path}
                 to={item.path}
                 className="flex items-center justify-center py-3 w-full rounded-full text-base font-medium transition-colors z-10 relative text-gray-400 hover:text-white mx-[4px]"
+                onClick={(e) => {
+                  if (item.path === '/projects' && !isProjectsUnlocked) {
+                    e.preventDefault();
+                    requestProjectsUnlock(() => navigate(item.path));
+                  }
+                }}
               >
                 {isActive && (
                   <motion.div

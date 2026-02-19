@@ -16,6 +16,8 @@ import BlogPost from "./pages/BlogPost";
 import WritingByTag from "./pages/WritingByTag";
 import { craftApi } from "./services/craftApi";
 import { craftQueryKeys } from "./hooks/useCraftApi";
+import { ProjectsPasscodeProvider, useProjectsPasscode } from "@/contexts/ProjectsPasscodeContext";
+import { ProjectsRouteGuard } from "@/components/ProjectsRouteGuard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +31,7 @@ const queryClient = new QueryClient({
 // Component to prefetch data on app load
 const DataPrefetcher = () => {
   const queryClient = useQueryClient();
+  const { isProjectsUnlocked } = useProjectsPasscode();
   
   useEffect(() => {
     // Prefetch blog posts on first load (tags are derived from posts)
@@ -37,12 +40,13 @@ const DataPrefetcher = () => {
       queryFn: () => craftApi.getBlogPosts(),
     });
 
-    // Prefetch projects on first load
-    queryClient.prefetchQuery({
-      queryKey: craftQueryKeys.projects(),
-      queryFn: () => craftApi.getProjects(),
-    });
-  }, [queryClient]);
+    if (isProjectsUnlocked) {
+      queryClient.prefetchQuery({
+        queryKey: craftQueryKeys.projects(),
+        queryFn: () => craftApi.getProjects(),
+      });
+    }
+  }, [queryClient, isProjectsUnlocked]);
 
   return null;
 };
@@ -53,20 +57,36 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <DataPrefetcher />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/bookmarks" element={<Bookmarks />} />
-          <Route path="/stack" element={<Stack />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:slug" element={<BlogPost />} />
-          <Route path="/writing" element={<Writing />} />
-          <Route path="/writing/tag/:tag" element={<WritingByTag />} />
-          <Route path="/writing/:slug" element={<BlogPost />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <ProjectsPasscodeProvider>
+          <DataPrefetcher />
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/bookmarks" element={<Bookmarks />} />
+            <Route path="/stack" element={<Stack />} />
+            <Route
+              path="/projects"
+              element={
+                <ProjectsRouteGuard>
+                  <Projects />
+                </ProjectsRouteGuard>
+              }
+            />
+            <Route
+              path="/projects/:slug"
+              element={
+                <ProjectsRouteGuard>
+                  <BlogPost />
+                </ProjectsRouteGuard>
+              }
+            />
+            <Route path="/writing" element={<Writing />} />
+            <Route path="/writing/tag/:tag" element={<WritingByTag />} />
+            <Route path="/writing/:slug" element={<BlogPost />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ProjectsPasscodeProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

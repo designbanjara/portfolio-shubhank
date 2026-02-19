@@ -1,11 +1,12 @@
 
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { 
   HomeIcon, 
   PencilIcon,
   BriefcaseIcon,
 } from '@heroicons/react/24/solid';
+import { useProjectsPasscode } from '@/contexts/ProjectsPasscodeContext';
 
 interface SidebarItemProps {
   to: string;
@@ -17,6 +18,8 @@ interface SidebarItemProps {
 
 const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: SidebarItemProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isProjectsUnlocked, requestProjectsUnlock } = useProjectsPasscode();
   const isActive = exact ? location.pathname === to : location.pathname.startsWith(to);
   
   // Determine which image to show based on route
@@ -59,6 +62,12 @@ const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: Side
       to={to}
       className="block mb-1"
       end={exact}
+      onClick={(e) => {
+        if (to === '/projects' && !isProjectsUnlocked) {
+          e.preventDefault();
+          requestProjectsUnlock(() => navigate(to));
+        }
+      }}
     >
       {content}
     </NavLink>
@@ -80,8 +89,8 @@ const Sidebar = () => {
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
-          <SidebarItem to="/projects" icon={BriefcaseIcon}>Projects</SidebarItem>
           <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
+          <SidebarItem to="/projects" icon={BriefcaseIcon}>Projects</SidebarItem>
         </SidebarSection>
       </div>
     </div>

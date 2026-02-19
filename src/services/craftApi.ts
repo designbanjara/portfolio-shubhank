@@ -1,4 +1,24 @@
-const CRAFT_API_BASE = 'https://connect.craft.do/links/8a3DPwLXbQU/api/v1';
+const DEFAULT_CRAFT_API_BASE = 'https://connect.craft.do/links/8a3DPwLXbQU/api/v1';
+
+const craftEnv = ((import.meta as any)?.env ?? {}) as Record<string, string | undefined>;
+
+const CRAFT_BLOG_API_BASE = (craftEnv.VITE_CRAFT_BLOG_API_BASE ?? craftEnv.VITE_CRAFT_API_BASE ?? DEFAULT_CRAFT_API_BASE).trim();
+const CRAFT_PROJECTS_API_BASE = (
+  craftEnv.VITE_CRAFT_PROJECTS_API_BASE ??
+  craftEnv.VITE_CRAFT_API_BASE ??
+  DEFAULT_CRAFT_API_BASE
+).trim();
+
+// Defaults taken from the Craft multi-document connection reference:
+// - Writing is a PAGE block id that contains the Posts collection
+// - Projects is a DOCUMENT id
+const DEFAULT_BLOG_ROOT_ID = 'AB068729-8615-40EB-870A-C69E72A2CADA';
+const DEFAULT_PROJECTS_ROOT_ID = 'f0a67abe-8c5e-ec93-a135-fb5c809113f6';
+
+// Note: Craft /blocks accepts document IDs *and* page/block IDs.
+const CRAFT_BLOG_DOCUMENT_ID = ((craftEnv.VITE_CRAFT_BLOG_DOCUMENT_ID ?? '').trim() || DEFAULT_BLOG_ROOT_ID) || null;
+const CRAFT_PROJECTS_DOCUMENT_ID =
+  ((craftEnv.VITE_CRAFT_PROJECTS_DOCUMENT_ID ?? '').trim() || DEFAULT_PROJECTS_ROOT_ID) || null;
 
 type CraftDocumentsResponse = {
   items: Array<{
@@ -6,6 +26,53 @@ type CraftDocumentsResponse = {
     title: string;
   }>;
 };
+
+const normalize = (s: string | undefined | null) => (s ?? '').trim().toLowerCase();
+
+const isProbablyDeletedTitle = (title: string) => normalize(title).includes('deleted document');
+
+function pickDocument(
+  docs: CraftDocumentsResponse['items'],
+  preferredTitles: string[]
+): { id: string; title: string } | null {
+  const preferred = preferredTitles.map(normalize).filter(Boolean);
+
+  for (const p of preferred) {
+    const hit = docs.find((d) => normalize(d.title) === p);
+    if (hit) return hit;
+  }
+
+  // Fallback: first non-deleted doc
+  const firstUsable = docs.find((d) => !isProbablyDeletedTitle(d.title));
+  return firstUsable ?? null;
+}
+
+function pickCollectionBlock(
+  document: CraftDocument,
+  preferredCollectionNames: string[]
+): CraftDocument['content'][number] | null {
+  const blocks = document.content ?? [];
+  const preferred = preferredCollectionNames.map(normalize).filter(Boolean);
+
+  // Exact (case-insensitive) match on collection name (markdown)
+  for (const p of preferred) {
+    const hit = blocks.find((b) => b.type === 'collection' && normalize(b.markdown) === p);
+    if (hit) return hit;
+  }
+
+  // Fallback: first collection block
+  return blocks.find((b) => b.type === 'collection') ?? null;
+}
+
+function isPublishedValue(value: unknown): boolean {
+  if (value === true) return true;
+  if (typeof value === 'string') {
+    const v = normalize(value);
+    return v === 'true' || v === 'yes' || v === 'published' || v === 'public';
+  }
+  if (typeof value === 'number') return value === 1;
+  return false;
+}
 
 export interface CraftBlock {
   id: string;
@@ -55,9 +122,9 @@ export interface CraftDocument {
 
 export const craftApi = {
   // Fetch the main blog document
-  async getDocument(documentId: string): Promise<CraftDocument> {
+  async getDocument(documentId: string, apiBase: string = DEFAULT_CRAFT_API_BASE): Promise<CraftDocument> {
     const response = await fetch(
-      `${CRAFT_API_BASE}/blocks?id=${documentId}`,
+      `${apiBase}/blocks?id=${documentId}`,
       {
         headers: {
           'Accept': 'application/json',
@@ -75,36 +142,54 @@ export const craftApi = {
   // Get all blog posts from the collection
   async getBlogPosts(): Promise<BlogPost[]> {
     try {
-      // First, get the list of documents
-      const docsResponse = await fetch(`${CRAFT_API_BASE}/documents`, {
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-      
-      if (!docsResponse.ok) {
-        throw new Error('Failed to fetch documents');
+      // If explicitly configured, fetch directly (works even when /documents is restricted).
+      if (CRAFT_BLOG_DOCUMENT_ID) {
+        const document = await craftApi.getDocument(CRAFT_BLOG_DOCUMENT_ID, CRAFT_BLOG_API_BASE);
+        const postsCollection = pickCollectionBlock(document, ['Posts', 'Writings', 'Writing', 'Articles']);
+        if (!postsCollection?.items) return [];
+
+        return postsCollection.items
+          .filter((post) => isPublishedValue((post as any)?.properties?.published))
+          .sort((a, b) => {
+            const dateA = a.properties?.date || '';
+            const dateB = b.properties?.date || '';
+            return dateB.localeCompare(dateA);
+          });
       }
-      
+
+      // Otherwise, list accessible docs and find the *blog* doc by title.
+      const docsResponse = await fetch(`${CRAFT_BLOG_API_BASE}/documents`, {
+        headers: { Accept: 'application/json' },
+      });
+
+      if (!docsResponse.ok) throw new Error('Failed to fetch documents');
+
       const docsData = (await docsResponse.json()) as CraftDocumentsResponse;
-      
-      // Find the "Personal Blog" document
-      const blogDoc = docsData.items.find((doc) => 
-        doc.title === 'Personal Blog'
-      );
-      
+
+      // IMPORTANT: do not fall back to "Projects" here — Writing must not leak projects content.
+      const blogDoc =
+        docsData.items.find((doc) => normalize(doc.title) === normalize('Personal Blog')) ??
+        docsData.items.find((doc) => normalize(doc.title) === normalize('Writing')) ??
+        docsData.items.find((doc) => normalize(doc.title) === normalize('Writings')) ??
+        docsData.items.find((doc) => normalize(doc.title) === normalize('Blog')) ??
+        null;
+
       if (!blogDoc) {
-        console.error('Personal Blog document not found');
+        console.error(
+          'Personal Blog document not accessible via the configured Craft link.',
+          {
+            apiBase: CRAFT_BLOG_API_BASE,
+            availableDocuments: docsData.items.map((d) => d.title),
+            hint: 'Set VITE_CRAFT_BLOG_API_BASE (share link for Personal Blog) or VITE_CRAFT_BLOG_DOCUMENT_ID.',
+          }
+        );
         return [];
       }
+
+      const document = await craftApi.getDocument(blogDoc.id, CRAFT_BLOG_API_BASE);
       
-      // Fetch the blog document content
-      const document = await craftApi.getDocument(blogDoc.id);
-      
-      // Find the Posts collection
-      const postsCollection = document.content?.find(
-        (block) => block.type === 'collection' && block.markdown === 'Posts'
-      );
+      // Find the Posts/Writings collection (or first collection as fallback)
+      const postsCollection = pickCollectionBlock(document, ['Posts', 'Writings', 'Writing', 'Articles']);
       
       if (!postsCollection?.items) {
         return [];
@@ -112,7 +197,7 @@ export const craftApi = {
       
       // Filter for published posts only
       return postsCollection.items
-        .filter((post) => post.properties?.published === true)
+        .filter((post) => isPublishedValue((post as any)?.properties?.published))
         .sort((a, b) => {
           // Sort by date, newest first
           const dateA = a.properties?.date || '';
@@ -128,31 +213,42 @@ export const craftApi = {
   // Get all projects from the collection
   async getProjects(): Promise<BlogPost[]> {
     try {
-      // First, get the list of documents
-      const docsResponse = await fetch(`${CRAFT_API_BASE}/documents`, {
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-      
-      if (!docsResponse.ok) {
-        throw new Error('Failed to fetch documents');
+      if (CRAFT_PROJECTS_DOCUMENT_ID) {
+        const document = await craftApi.getDocument(CRAFT_PROJECTS_DOCUMENT_ID, CRAFT_PROJECTS_API_BASE);
+        const collection = pickCollectionBlock(document, ['Projects']);
+        if (!collection?.items) return [];
+
+        return collection.items
+          .filter((project) => isPublishedValue((project as any)?.properties?.published))
+          .sort((a, b) => {
+            const dateA = a.properties?.date || '';
+            const dateB = b.properties?.date || '';
+            return dateB.localeCompare(dateA);
+          });
       }
-      
+
+      const docsResponse = await fetch(`${CRAFT_PROJECTS_API_BASE}/documents`, {
+        headers: { Accept: 'application/json' },
+      });
+
+      if (!docsResponse.ok) throw new Error('Failed to fetch documents');
+
       const docsData = (await docsResponse.json()) as CraftDocumentsResponse;
-      
-      // Find the "Projects" document
-      const projectsDoc = docsData.items.find((doc) => 
-        doc.title === 'Projects'
-      );
-      
+
+      const projectsDoc =
+        docsData.items.find((doc) => normalize(doc.title) === normalize('Projects')) ??
+        pickDocument(docsData.items, ['Projects']);
+
       if (!projectsDoc) {
-        console.error('Projects document not found');
+        console.error('Projects document not accessible via the configured Craft link.', {
+          apiBase: CRAFT_PROJECTS_API_BASE,
+          availableDocuments: docsData.items.map((d) => d.title),
+          hint: 'Set VITE_CRAFT_PROJECTS_API_BASE (share link for Projects) or VITE_CRAFT_PROJECTS_DOCUMENT_ID.',
+        });
         return [];
       }
-      
-      // Fetch the projects document content
-      const document = await craftApi.getDocument(projectsDoc.id);
+
+      const document = await craftApi.getDocument(projectsDoc.id, CRAFT_PROJECTS_API_BASE);
       
       // Find the Projects collection (prefer one named "Projects", otherwise use first collection)
       const projectsCollection = document.content?.find(
@@ -170,7 +266,7 @@ export const craftApi = {
       
       // Filter for published projects only
       return collection.items
-        .filter((project) => project.properties?.published === true)
+        .filter((project) => isPublishedValue((project as any)?.properties?.published))
         .sort((a, b) => {
           // Sort by date, newest first
           const dateA = a.properties?.date || '';

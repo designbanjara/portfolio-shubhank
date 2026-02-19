@@ -60,6 +60,14 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Craft content (Writing + Projects)
+
+This app reads content from Craft via `connect.craft.do`. Configure the Craft share link(s) using Vite env vars.
+
+- **Example file**: copy `.env.example` → `.env` and fill in values.
+- **Writing**: set `VITE_CRAFT_BLOG_API_BASE` (and optionally `VITE_CRAFT_BLOG_DOCUMENT_ID`) to point to the **“Personal Blog”** document.
+- **Projects**: set `VITE_CRAFT_PROJECTS_API_BASE` (and optionally `VITE_CRAFT_PROJECTS_DOCUMENT_ID`) to point to the **“Projects”** document.
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/8b306bde-70fb-4575-8b52-d8012b9e2d9c) and click on Share -> Publish.

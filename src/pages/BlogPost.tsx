@@ -10,13 +10,17 @@ import { getPostSlug } from '../lib/slugify';
 import { useBlogPosts, useProjects } from '../hooks/useCraftApi';
 import { Dialog, DialogContent } from '../components/ui/dialog';
 import { CraftInlineMarkdown } from '../components/CraftInlineMarkdown';
+import { useProjectsPasscode } from '@/contexts/ProjectsPasscodeContext';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
   const isProjectRoute = location.pathname.startsWith('/projects');
+  const { isProjectsUnlocked } = useProjectsPasscode();
   const { data: allPosts = [], isLoading: loadingPosts } = useBlogPosts();
-  const { data: allProjects = [], isLoading: loadingProjects } = useProjects();
+  const { data: allProjects = [], isLoading: loadingProjects } = useProjects({
+    enabled: isProjectRoute && isProjectsUnlocked,
+  });
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   
   const allItems = isProjectRoute ? allProjects : allPosts;

@@ -70,10 +70,11 @@ export const usePostsByTag = (tag: string | null) => {
 };
 
 // Hook to fetch all projects
-export const useProjects = () => {
+export const useProjects = (options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: craftQueryKeys.projects(),
     queryFn: () => craftApi.getProjects(),
+    enabled: options?.enabled ?? true,
     staleTime: Infinity, // Data never goes stale, only fetched once
     gcTime: Infinity, // Keep in cache forever
   });
