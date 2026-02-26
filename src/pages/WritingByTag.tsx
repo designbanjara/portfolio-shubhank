@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Sidebar from '../components/Sidebar';
@@ -12,6 +12,12 @@ import { useBlogPosts } from '../hooks/useCraftApi';
 const WritingByTag = () => {
   const { tag } = useParams<{ tag: string }>();
   const { data: allPosts = [], isLoading: loading } = useBlogPosts();
+
+  useEffect(() => {
+    if (tag) {
+      document.title = `#${tag} \u2014 Writing \u2014 Shubhank Pawar`;
+    }
+  }, [tag]);
 
   // Filter posts by tag from cached data
   const posts = useMemo(() => {
@@ -28,7 +34,7 @@ const WritingByTag = () => {
         <div className="hidden lg:block">
           <Sidebar />
         </div>
-        <main className="flex-1 lg:ml-56">
+        <main id="main-content" className="flex-1 lg:ml-56">
           <div className="max-w-3xl mx-auto py-10 px-4">
             <Link
               to="/writing"

@@ -14,7 +14,7 @@ const PROJECT_THUMBNAIL_OVERRIDE_PREFIXES: Record<string, string> = {
 };
 
 const ProjectsContent = () => {
-  const { data: projects = [], isLoading: loading } = useProjects();
+  const { data: projects = [], isLoading: loading, isError } = useProjects();
 
   const extractDocTags = (markdown: string): string[] | null => {
     const trimmed = markdown.trim();
@@ -76,14 +76,14 @@ const ProjectsContent = () => {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto py-10 px-4">
+      <div className="max-w-2xl mx-auto py-10 px-6">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-800 rounded w-48 mb-8"></div>
+          <div className="h-8 bg-muted rounded w-48 mb-8"></div>
           <div className="space-y-14">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="pb-14 border-b border-[#333] last:border-b-0 last:pb-0">
-                <div className="w-full h-56 bg-gray-800 rounded-lg mb-4"></div>
-                <div className="h-4 bg-gray-800 rounded w-3/4"></div>
+              <div key={i} className="pb-14 border-b border-border last:border-b-0 last:pb-0">
+                <div className="w-full h-56 bg-muted rounded-lg mb-4"></div>
+                <div className="h-4 bg-muted rounded w-3/4"></div>
               </div>
             ))}
           </div>
@@ -92,14 +92,31 @@ const ProjectsContent = () => {
     );
   }
 
+  if (isError) {
+    return (
+      <div className="max-w-2xl mx-auto py-10 px-6">
+        <h1 className="text-3xl font-custom font-bold mb-6">Projects</h1>
+        <div className="py-8 text-center">
+          <p className="text-muted-foreground mb-4">Could not load projects. Please check your connection.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="text-sm text-primary hover:opacity-80 underline"
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-2xl mx-auto py-10 px-4">
+    <div className="max-w-2xl mx-auto py-10 px-6">
       <h1 className="text-3xl font-custom font-bold mb-6">Projects</h1>
-      
+
       {/* Projects Grid */}
-      <div className="mt-10 divide-y divide-[#333]">
+      <div className="mt-10 divide-y divide-border">
         {projects.length === 0 ? (
-          <p className="text-gray-400 text-center py-8 col-span-1">
+          <p className="text-muted-foreground text-center py-8 col-span-1">
             No projects found.
           </p>
         ) : (
@@ -119,19 +136,21 @@ const ProjectsContent = () => {
                 <Link
                   to={`/projects/${slug}`}
                   state={{ postId: project.id }}
-                  className="block group hover:opacity-80 transition-opacity"
+                  className="block group transition-all duration-200"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
                   <div className="flex flex-col">
                     {/* Image */}
-                    <div className="w-full rounded-lg bg-[#2a2a2a] flex-shrink-0 overflow-hidden mb-4">
+                    <div className="w-full rounded-lg bg-muted flex-shrink-0 overflow-hidden mb-4">
                       {resolvedImageUrl ? (
                         <img
                           src={resolvedImageUrl}
                           alt={project.title}
-                          className="w-full h-auto"
+                          className="w-full h-auto transition-transform duration-300 group-hover:scale-[1.02]"
+                          style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                         />
                       ) : (
-                        <div className="w-full h-56 flex items-center justify-center text-gray-600">
+                        <div className="w-full h-56 flex items-center justify-center text-muted-foreground">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -151,8 +170,8 @@ const ProjectsContent = () => {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-2xl font-custom font-bold text-white group-hover:text-gray-100 leading-tight">
-                      {project.title}
+                    <h2 className="text-xl font-custom font-bold text-foreground leading-tight flex items-center gap-1.5">
+                      <span>{project.title}</span>
                     </h2>
 
                     {/* Tags (from doc content, plus properties) */}
@@ -162,7 +181,7 @@ const ProjectsContent = () => {
                           <Badge
                             key={tag}
                             variant="secondary"
-                            className="bg-[#2a2a2a] text-gray-400 hover:bg-[#333]"
+                            className="bg-muted text-muted-foreground hover:bg-muted/80"
                           >
                             {tag}
                           </Badge>

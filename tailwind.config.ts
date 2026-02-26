@@ -23,6 +23,10 @@ export default {
 			fontFamily: {
 				custom: ['MintGrotesk', 'sans-serif'],
 			},
+			transitionTimingFunction: {
+				smooth: 'cubic-bezier(0.44, 0, 0.56, 1)',
+				spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -68,11 +72,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				portfolio: {
-					dark: '#0d0d0d',
-					sidebar: '#1a1a1a',
-					text: '#ffffff',
-					muted: '#999999',
-					link: '#4a9eff'
+					dark: 'hsl(var(--background))',
+					sidebar: 'hsl(var(--sidebar-background))',
+					text: 'hsl(var(--foreground))',
+					muted: 'hsl(var(--muted-foreground))',
+					link: 'hsl(var(--primary))'
 				}
 			},
 			borderRadius: {

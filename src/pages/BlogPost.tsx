@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import Sidebar from '../components/Sidebar';
@@ -50,6 +50,12 @@ const BlogPost = () => {
   const currentIndex = post ? allItems.findIndex((p) => p.id === post.id) : -1;
   const prevPost = currentIndex > 0 ? allItems[currentIndex - 1] : null;
   const nextPost = currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
+
+  useEffect(() => {
+    if (post) {
+      document.title = `${post.title} \u2014 Shubhank Pawar`;
+    }
+  }, [post]);
 
   const renderContent = (blocks: CraftBlock[]) => {
     const result: React.ReactNode[] = [];
@@ -302,7 +308,7 @@ const BlogPost = () => {
             <figure className="m-0">
               <button
                 type="button"
-                className="block w-full cursor-zoom-in focus:outline-none"
+                className="block w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 onClick={() => setLightboxUrl(img.url)}
                 aria-label="Open image preview"
               >
@@ -582,7 +588,7 @@ const BlogPost = () => {
                 <figure className="m-0">
                 <button
                   type="button"
-                  className="block w-full cursor-zoom-in focus:outline-none"
+                  className="block w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   onClick={() => setLightboxUrl(imageUrl)}
                   aria-label="Open image preview"
                 >
@@ -654,7 +660,7 @@ const BlogPost = () => {
                 <figure key={block.id || i}>
                   <button
                     type="button"
-                    className="block w-full cursor-zoom-in focus:outline-none"
+                    className="block w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     onClick={() => setLightboxUrl(block.url!)}
                     aria-label="Open image preview"
                   >

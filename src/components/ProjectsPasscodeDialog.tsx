@@ -79,6 +79,8 @@ export function ProjectsPasscodeDialog({ open, onOpenChange, onUnlocked }: Proje
           </InputOTP>
 
           <div
+            aria-live="polite"
+            aria-atomic="true"
             className={cn(
               "min-h-5 text-sm",
               error ? "text-destructive" : "text-muted-foreground"

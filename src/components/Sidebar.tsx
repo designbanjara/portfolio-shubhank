@@ -1,12 +1,13 @@
 
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  HomeIcon, 
+import {
+  HomeIcon,
   PencilIcon,
   BriefcaseIcon,
 } from '@heroicons/react/24/solid';
 import { useProjectsPasscode } from '@/contexts/ProjectsPasscodeContext';
+import ThemeToggle from './ThemeToggle';
 
 interface SidebarItemProps {
   to: string;
@@ -21,7 +22,7 @@ const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: Side
   const navigate = useNavigate();
   const { isProjectsUnlocked, requestProjectsUnlock } = useProjectsPasscode();
   const isActive = exact ? location.pathname === to : location.pathname.startsWith(to);
-  
+
   // Determine which image to show based on route
   const getImageSrc = () => {
     if (to === '/projects') {
@@ -33,9 +34,16 @@ const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: Side
   };
 
   const imageSrc = getImageSrc();
-  
+
   const content = (
-    <div className={`flex flex-col items-start gap-1 rounded-md hover:bg-[#333333] ${isActive ? 'text-white' : 'text-gray-300 bg-[#2a2a2a]'}`} style={{ paddingTop: '8px', paddingBottom: '0px', paddingLeft: '12px', paddingRight: '12px', height: '120px', backgroundColor: isActive ? 'rgba(37, 99, 235, 1)' : 'rgba(42, 42, 42, 1)', border: 'none' }}>
+    <div
+      className={`flex flex-col items-start gap-1 rounded-md transition-colors duration-150 ${
+        isActive
+          ? 'bg-blue-600 text-white'
+          : 'bg-[hsl(var(--sidebar-accent))] text-foreground/70 hover:bg-[hsl(var(--sidebar-border))]'
+      }`}
+      style={{ paddingTop: '8px', paddingBottom: '0px', paddingLeft: '12px', paddingRight: '12px', height: '120px' }}
+    >
       <div className="flex items-start gap-1 w-full">
         <Icon className="h-6 w-6" style={{ paddingTop: '4px', paddingBottom: '4px' }} />
         <span className="text-base font-medium">{children}</span>
@@ -76,22 +84,27 @@ const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: Side
 
 const SidebarSection = ({ title, children }: { title?: string; children: React.ReactNode }) => (
   <div className="mt-3 flex flex-col gap-3" style={{ gap: '12px' }}>
-    {title && <div className="px-3 mb-1 text-xs text-gray-500">{title}</div>}
+    {title && <div className="px-3 mb-1 text-xs text-muted-foreground">{title}</div>}
     {children}
   </div>
 );
 
 const Sidebar = () => {
   return (
-    <div className="w-56 bg-portfolio-sidebar border-r border-[#333] fixed h-screen flex flex-col">
+    <div className="w-56 bg-portfolio-sidebar border-r border-border fixed h-screen flex flex-col transition-colors duration-200">
       <div className="p-4 flex-grow mt-0">
-        <div className="font-custom font-bold text-white mb-5 text-lg">Shubhank Pawar</div>
+        <div className="font-custom font-bold text-foreground mb-5 text-lg">Shubhank Pawar</div>
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
           <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
           <SidebarItem to="/projects" icon={BriefcaseIcon}>Projects</SidebarItem>
         </SidebarSection>
+      </div>
+
+      {/* Theme toggle pinned to bottom */}
+      <div className="p-3 border-t border-border">
+        <ThemeToggle />
       </div>
     </div>
   );

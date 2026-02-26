@@ -1,0 +1,9 @@
+{
+  "name": "Portfolio Design System Builder",
+  "id": "portfolio-design-system-builder",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "capabilities": []
+}

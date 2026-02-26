@@ -1,9 +1,13 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import BottomNavigation from '../components/BottomNavigation';
 
 const Stack = () => {
+  useEffect(() => {
+    document.title = 'Stack \u2014 Shubhank Pawar';
+  }, []);
+
   return (
     <div className="min-h-screen bg-portfolio-dark text-white">
       {/* Desktop Sidebar - hidden on mobile */}
@@ -12,7 +16,7 @@ const Stack = () => {
       </div>
       
       {/* Main content - responsive padding without card treatment */}
-      <main className="md:ml-56 pb-20 md:pb-6">
+      <main id="main-content" className="md:ml-56 pb-20 md:pb-6">
         <div className="max-w-3xl mx-auto py-6 md:py-10 px-4">
           <h1 className="text-2xl font-bold">Stack</h1>
           <p className="mt-4">This page would contain information about Brian's technology stack.</p>
