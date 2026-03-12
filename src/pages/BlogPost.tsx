@@ -213,7 +213,7 @@ const BlogPost = () => {
               {('headerCells' in table ? table.headerCells : table.headerRow.map(cellToMarkdownWithHighlights)).map((cell, idx) => (
                 <th
                   key={`${key}-th-${idx}`}
-                  className="border border-white/10 bg-white/5 px-3 py-2 text-left font-semibold text-gray-100"
+                  className="border border-border bg-muted/30 px-3 py-2 text-left font-semibold text-foreground"
                 >
                   <CraftInlineMarkdown markdown={cell} />
                 </th>
@@ -226,7 +226,7 @@ const BlogPost = () => {
                 {row.map((cell, cIdx) => (
                   <td
                     key={`${key}-td-${rIdx}-${cIdx}`}
-                    className="border border-white/10 px-3 py-2 text-gray-200"
+                    className="border border-border px-3 py-2 text-foreground"
                   >
                     <CraftInlineMarkdown markdown={cell} />
                   </td>
@@ -328,7 +328,7 @@ const BlogPost = () => {
               </button>
 
               {img.caption ? (
-                <figcaption className="mt-2 mb-0 text-center text-sm leading-snug text-gray-400">
+                <figcaption className="mt-2 mb-0 text-center text-sm leading-snug text-muted-foreground">
                   <CraftInlineMarkdown markdown={img.caption} />
                 </figcaption>
               ) : null}
@@ -370,7 +370,7 @@ const BlogPost = () => {
             className={`${listType === 'bullet' ? 'list-disc' : 'list-decimal'} pl-6 mb-4 space-y-2`}
           >
             {listItems.map((item, idx) => (
-              <li key={item.id || idx} className="text-gray-300">
+              <li key={item.id || idx} className="text-foreground">
                 <CraftInlineMarkdown
                   markdown={item.markdown.replace(/^[-*]\s/, '').replace(/^\d+\.\s/, '')}
                 />
@@ -389,19 +389,19 @@ const BlogPost = () => {
             // Render as a regular paragraph with caption styling (and strip wrapper tags).
             const captionText = stripCaptionTags(block.markdown);
             result.push(
-              <p key={block.id || i} className="mt-2 mb-0 text-center text-sm leading-snug text-gray-400">
+              <p key={block.id || i} className="mt-2 mb-0 text-center text-sm leading-snug text-muted-foreground">
                 <CraftInlineMarkdown markdown={captionText} />
               </p>
             );
           } else if (block.textStyle === 'h2') {
             result.push(
-              <h2 key={block.id || i} className="font-bold text-white" style={{ marginTop: '69px' }}>
+              <h2 key={block.id || i} className="font-bold text-foreground" style={{ marginTop: '69px' }}>
                 <CraftInlineMarkdown markdown={block.markdown.replace(/^## /, '')} />
               </h2>
             );
           } else if (block.textStyle === 'h3') {
             result.push(
-              <h3 key={block.id || i} className="font-bold text-white">
+              <h3 key={block.id || i} className="font-bold text-foreground">
                 <CraftInlineMarkdown markdown={block.markdown.replace(/^### /, '')} />
               </h3>
             );
@@ -409,7 +409,7 @@ const BlogPost = () => {
             result.push(
               <blockquote
                 key={block.id || i}
-                className="text-gray-200"
+                className="text-foreground"
               >
                 <CraftInlineMarkdown markdown={block.markdown.replace(/^> /, '')} />
               </blockquote>
@@ -425,7 +425,7 @@ const BlogPost = () => {
                         {table.headerCells.map((cell, idx) => (
                           <th
                             key={`th-${block.id || i}-${idx}`}
-                            className="border border-white/10 bg-white/5 px-3 py-2 text-left font-semibold text-gray-100"
+                            className="border border-border bg-muted/30 px-3 py-2 text-left font-semibold text-foreground"
                           >
                             <CraftInlineMarkdown markdown={cell} />
                           </th>
@@ -438,7 +438,7 @@ const BlogPost = () => {
                           {row.map((cell, cIdx) => (
                             <td
                               key={`td-${block.id || i}-${rIdx}-${cIdx}`}
-                              className="border border-white/10 px-3 py-2 text-gray-200"
+                              className="border border-border px-3 py-2 text-foreground"
                             >
                               <CraftInlineMarkdown markdown={cell} />
                             </td>
@@ -456,9 +456,9 @@ const BlogPost = () => {
             if (standaloneUrl && isMobileOptimizedEmbedUrl(standaloneUrl)) {
               result.push(
                 <figure key={block.id || i} className="my-6 not-prose">
-                  <div className="mx-auto w-full max-w-[375px] overflow-hidden rounded-xl border border-white/10 bg-black/20">
-                    <div className="flex items-center justify-between gap-3 border-b border-white/10 px-3 py-2">
-                      <div className="text-xs text-gray-300">Embedded preview (best at 375px width)</div>
+                  <div className="mx-auto w-full max-w-[375px] overflow-hidden rounded-xl border border-border bg-black/10 dark:bg-black/20">
+                    <div className="flex items-center justify-between gap-3 border-b border-border px-3 py-2">
+                      <div className="text-xs text-muted-foreground">Embedded preview (best at 375px width)</div>
                       <a
                         href={standaloneUrl}
                         target="_blank"
@@ -476,7 +476,7 @@ const BlogPost = () => {
                       loading="lazy"
                     />
                   </div>
-                  <figcaption className="mt-2 text-center text-xs text-gray-400">
+                  <figcaption className="mt-2 text-center text-xs text-muted-foreground">
                     This embed is optimized for a 375px-wide viewport.
                   </figcaption>
                 </figure>
@@ -484,7 +484,7 @@ const BlogPost = () => {
             } else if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
               result.push(
                 <figure key={block.id || i} className="my-6">
-                  <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-black">
+                  <div className="w-full overflow-hidden rounded-lg border border-border bg-black">
                     <iframe
                       title="Figma prototype"
                       src={toFigmaEmbedSrc(standaloneUrl)}
@@ -499,7 +499,7 @@ const BlogPost = () => {
               );
             } else {
             result.push(
-              <p key={block.id || i} className="text-gray-300">
+              <p key={block.id || i} className="text-foreground">
                 <CraftInlineMarkdown markdown={block.markdown} />
               </p>
             );
@@ -527,9 +527,9 @@ const BlogPost = () => {
           if (standaloneUrl && isMobileOptimizedEmbedUrl(standaloneUrl)) {
             result.push(
               <figure key={block.id || i} className="my-6 not-prose">
-                <div className="mx-auto w-full max-w-[375px] overflow-hidden rounded-xl border border-white/10 bg-black/20">
-                  <div className="flex items-center justify-between gap-3 border-b border-white/10 px-3 py-2">
-                    <div className="text-xs text-gray-300">Embedded preview (best at 375px width)</div>
+                <div className="mx-auto w-full max-w-[375px] overflow-hidden rounded-xl border border-border bg-black/10 dark:bg-black/20">
+                  <div className="flex items-center justify-between gap-3 border-b border-border px-3 py-2">
+                    <div className="text-xs text-muted-foreground">Embedded preview (best at 375px width)</div>
                     <a
                       href={standaloneUrl}
                       target="_blank"
@@ -547,7 +547,7 @@ const BlogPost = () => {
                     loading="lazy"
                   />
                 </div>
-                <figcaption className="mt-2 text-center text-xs text-gray-400">
+                <figcaption className="mt-2 text-center text-xs text-muted-foreground">
                   This embed is optimized for a 375px-wide viewport.
                 </figcaption>
               </figure>
@@ -555,7 +555,7 @@ const BlogPost = () => {
           } else if (standaloneUrl && isFigmaShareUrl(standaloneUrl)) {
             result.push(
               <figure key={block.id || i} className="my-6">
-                <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-black">
+                <div className="w-full overflow-hidden rounded-lg border border-border bg-black">
                   <iframe
                     title="Figma prototype"
                     src={toFigmaEmbedSrc(standaloneUrl)}
@@ -571,7 +571,7 @@ const BlogPost = () => {
           } else {
             // Fallback: show as a regular external link (use markdown as text)
             result.push(
-              <p key={block.id || i} className="text-gray-300">
+              <p key={block.id || i} className="text-foreground">
                 <CraftInlineMarkdown markdown={block.markdown} />
               </p>
             );
@@ -684,7 +684,7 @@ const BlogPost = () => {
                     href={block.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#2a2a2a] hover:bg-[#333] rounded-lg text-gray-300 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg text-foreground transition-colors"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -736,13 +736,13 @@ const BlogPost = () => {
           <main className="flex-1 lg:ml-56">
             <div className="max-w-[672px] mx-auto py-10 px-4">
               <div className="animate-pulse space-y-4">
-                <div className="h-8 bg-gray-800 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-800 rounded w-1/4"></div>
-                <div className="h-64 bg-gray-800 rounded"></div>
+                <div className="h-8 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-1/4"></div>
+                <div className="h-64 bg-muted rounded"></div>
                 <div className="space-y-2">
-                  <div className="h-4 bg-gray-800 rounded"></div>
-                  <div className="h-4 bg-gray-800 rounded"></div>
-                  <div className="h-4 bg-gray-800 rounded w-5/6"></div>
+                  <div className="h-4 bg-muted rounded"></div>
+                  <div className="h-4 bg-muted rounded"></div>
+                  <div className="h-4 bg-muted rounded w-5/6"></div>
                 </div>
               </div>
             </div>
@@ -765,13 +765,13 @@ const BlogPost = () => {
             <div className="max-w-[672px] mx-auto py-10 px-4">
               <Link
                 to={isProjectRoute ? "/projects" : "/writing"}
-                className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
+                className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
               >
                 <ArrowLeftIcon className="h-4 w-4" />
                 Back to {isProjectRoute ? "Projects" : "Writing"}
               </Link>
-              <h1 className="text-2xl font-bold text-white mb-4">{isProjectRoute ? "Project" : "Post"} not found</h1>
-              <p className="text-gray-400">
+              <h1 className="text-2xl font-bold text-foreground mb-4">{isProjectRoute ? "Project" : "Post"} not found</h1>
+              <p className="text-muted-foreground">
                 The {isProjectRoute ? "project" : "blog post"} you're looking for doesn't exist or hasn't been published yet.
               </p>
             </div>
@@ -793,18 +793,18 @@ const BlogPost = () => {
           <div className="max-w-[672px] mx-auto py-10 px-4">
             <Link
               to={isProjectRoute ? "/projects" : "/writing"}
-              className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
             >
               <ArrowLeftIcon className="h-4 w-4" />
               Back to {isProjectRoute ? "Projects" : "Writing"}
             </Link>
 
-            <article className="prose prose-invert prose-lg max-w-none">
+            <article className="prose dark:prose-invert prose-lg max-w-none">
               <header className="mb-10">
-                <h3 className="post-date text-center text-gray-400 mb-2" style={{ fontSize: '0.89em', fontWeight: 400 }}>
+                <h3 className="post-date text-center text-muted-foreground mb-2 tabular-nums" style={{ fontSize: '0.89em', fontWeight: 400 }}>
                   {post.properties?.date && craftApi.formatDate(post.properties.date)}
                 </h3>
-                <h1 className="post-headline font-custom font-bold text-white text-left" style={{ fontSize: '2.1em', lineHeight: '1.15', fontWeight: 700, margin: '0.5em 0' }}>
+                <h1 className="post-headline font-custom font-bold text-foreground text-left" style={{ fontSize: '2.1em', lineHeight: '1.15', fontWeight: 700, margin: '0.5em 0' }}>
                   {post.title}
                 </h1>
                 {post.properties?.tags && post.properties.tags.length > 0 && (
@@ -813,7 +813,7 @@ const BlogPost = () => {
                       <Badge
                         key={tag}
                         variant="secondary"
-                        className="bg-[#2a2a2a] text-gray-400 hover:bg-[#333]"
+                        className="bg-muted text-muted-foreground hover:bg-muted/80"
                       >
                         {tag}
                       </Badge>
@@ -823,7 +823,7 @@ const BlogPost = () => {
               </header>
 
               {post.properties?.blurb && (
-                <p className="introduction text-gray-200" style={{ fontSize: '1.25em', lineHeight: '1.25', marginBottom: '1.4em' }}>
+                <p className="introduction text-foreground/80" style={{ fontSize: '1.25em', lineHeight: '1.25', marginBottom: '1.4em' }}>
                   <CraftInlineMarkdown markdown={post.properties.blurb} />
                 </p>
               )}
@@ -834,7 +834,7 @@ const BlogPost = () => {
             </article>
 
             <Dialog open={!!lightboxUrl} onOpenChange={(open) => !open && setLightboxUrl(null)}>
-              <DialogContent className="max-w-[96vw] w-[96vw] h-[92vh] p-4 bg-background border border-white/10 flex items-center justify-center overflow-hidden">
+              <DialogContent className="max-w-[96vw] w-[96vw] h-[92vh] p-4 bg-background border border-border flex items-center justify-center overflow-hidden">
                 {lightboxUrl ? (
                   <div className="w-full h-full flex items-center justify-center overflow-hidden">
                     <img
@@ -848,19 +848,19 @@ const BlogPost = () => {
             </Dialog>
 
             {/* Prev/Next Navigation */}
-            <div className="mt-16 pt-8 border-t border-[#333]">
+            <div className="mt-16 pt-8 border-t border-border">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {prevPost && (
                   <Link
                     to={`${isProjectRoute ? "/projects" : "/writing"}/${getPostSlug(prevPost.title)}`}
                     state={{ postId: prevPost.id }}
-                    className="group p-4 rounded-lg border border-[#333] hover:bg-[#1f1f1f] transition-colors"
+                    className="group p-4 rounded-lg border border-border hover:bg-muted/40 transition-colors"
                   >
-                    <div className="flex items-center gap-2 text-sm text-gray-400 mb-2">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                       <ChevronLeftIcon className="h-4 w-4" />
                       Previous
                     </div>
-                    <h3 className="font-bold text-white group-hover:text-gray-100 line-clamp-2">
+                    <h3 className="font-bold text-foreground line-clamp-2">
                       {prevPost.title}
                     </h3>
                   </Link>
@@ -869,13 +869,13 @@ const BlogPost = () => {
                   <Link
                     to={`${isProjectRoute ? "/projects" : "/writing"}/${getPostSlug(nextPost.title)}`}
                     state={{ postId: nextPost.id }}
-                    className="group p-4 rounded-lg border border-[#333] hover:bg-[#1f1f1f] transition-colors md:text-right"
+                    className="group p-4 rounded-lg border border-border hover:bg-muted/40 transition-colors md:text-right"
                   >
-                    <div className="flex items-center justify-end gap-2 text-sm text-gray-400 mb-2">
+                    <div className="flex items-center justify-end gap-2 text-sm text-muted-foreground mb-2">
                       Next
                       <ChevronRightIcon className="h-4 w-4" />
                     </div>
-                    <h3 className="font-bold text-white group-hover:text-gray-100 line-clamp-2">
+                    <h3 className="font-bold text-foreground line-clamp-2">
                       {nextPost.title}
                     </h3>
                   </Link>

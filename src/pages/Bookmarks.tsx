@@ -9,7 +9,7 @@ const Bookmarks = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-portfolio-dark text-white">
+    <div className="min-h-screen bg-portfolio-dark text-foreground">
       {/* Mobile Header - visible only on small screens */}
       <MobileHeader />
       

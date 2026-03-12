@@ -6,7 +6,7 @@ import BottomNavigation from '../components/BottomNavigation';
 
 const Showcase = () => {
   return (
-    <div className="min-h-screen bg-portfolio-dark text-white">
+    <div className="min-h-screen bg-portfolio-dark text-foreground">
       {/* Desktop Sidebar - hidden on mobile */}
       <div className="hidden md:block">
         <Sidebar />

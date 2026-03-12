@@ -1,9 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion, useReducedMotion } from 'framer-motion';
 import { craftApi } from '../services/craftApi';
 import { getPostSlug } from '../lib/slugify';
 import { useProjects } from '../hooks/useCraftApi';
 import { Badge } from './ui/badge';
+
+const listVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.44, 0, 0.56, 1] } },
+};
 
 const PROJECT_THUMBNAIL_OVERRIDE_PREFIXES: Record<string, string> = {
   // Uses prefix matching so minor title changes won't break thumbnails.
@@ -15,6 +26,7 @@ const PROJECT_THUMBNAIL_OVERRIDE_PREFIXES: Record<string, string> = {
 
 const ProjectsContent = () => {
   const { data: projects = [], isLoading: loading, isError } = useProjects();
+  const shouldReduceMotion = useReducedMotion();
 
   const extractDocTags = (markdown: string): string[] | null => {
     const trimmed = markdown.trim();
@@ -114,7 +126,12 @@ const ProjectsContent = () => {
       <h1 className="text-3xl font-custom font-bold mb-6">Projects</h1>
 
       {/* Projects Grid */}
-      <div className="mt-10 divide-y divide-border">
+      <motion.div
+        className="mt-10 divide-y divide-border"
+        variants={shouldReduceMotion ? undefined : listVariants}
+        initial={shouldReduceMotion ? false : 'hidden'}
+        animate="visible"
+      >
         {projects.length === 0 ? (
           <p className="text-muted-foreground text-center py-8 col-span-1">
             No projects found.
@@ -132,7 +149,11 @@ const ProjectsContent = () => {
             const resolvedImageUrl = isLastProject ? '/projects/rzp-tog.png' : (overrideImageUrl ?? imageUrl);
 
             return (
-              <div key={project.id} className={`py-10 ${idx === 0 ? 'pt-0' : ''}`}>
+              <motion.div
+                key={project.id}
+                className={`py-10 ${idx === 0 ? 'pt-0' : ''}`}
+                variants={shouldReduceMotion ? undefined : itemVariants}
+              >
                 <Link
                   to={`/projects/${slug}`}
                   state={{ postId: project.id }}
@@ -190,11 +211,11 @@ const ProjectsContent = () => {
                     )}
                   </div>
                 </Link>
-              </div>
+              </motion.div>
             );
           })
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

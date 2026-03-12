@@ -138,12 +138,12 @@ const WritingContent = () => {
                         <h2 className="font-bold mb-1 text-foreground text-base transition-colors duration-150 flex items-center gap-1">
                           <span>{post.title}</span>
                           <ChevronRightIcon
-                            className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0"
+                            className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0"
                             style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                           />
                         </h2>
                         {post.properties?.date && (
-                          <p className="text-sm text-muted-foreground mb-2">
+                          <p className="text-sm text-muted-foreground mb-2 tabular-nums">
                             {craftApi.formatDate(post.properties.date)}
                           </p>
                         )}

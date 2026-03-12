@@ -43,7 +43,7 @@ const BottomNavigation = () => {
                 {isActive && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-blue-600/20 rounded-full w-full h-full z-[-1]"
+                    className="absolute inset-0 bg-blue-600/20 rounded-[22px] w-full h-full z-[-1]"
                     style={{ boxShadow: '0 0 0 1px rgba(37,99,235,0.25)' }}
                     initial={false}
                     transition={

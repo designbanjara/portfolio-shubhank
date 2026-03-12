@@ -57,9 +57,9 @@ const ShowcaseContent = () => {
   ];
 
   const ShowcaseCard = ({ item }: { item: ShowcaseItem }) => (
-    <Card className="bg-portfolio-dark border border-[#333] hover:border-[#555] transition-colors overflow-hidden">
+    <Card className="bg-background border border-border hover:border-border/60 transition-colors overflow-hidden">
       <CardContent className="p-0">
-        <div className="relative aspect-video overflow-hidden bg-[#0a0a0a]">
+        <div className="relative aspect-video overflow-hidden bg-black/10 dark:bg-[#0a0a0a]">
           {item.media.type === 'image' ? (
             <img
               src={item.media.src}
@@ -76,9 +76,9 @@ const ShowcaseContent = () => {
             />
           )}
         </div>
-        <div className="p-4 bg-portfolio-dark">
-          <h3 className="text-white font-semibold text-xl mb-2">{item.title}</h3>
-          <p className="text-gray-400 text-base">{item.subtext}</p>
+        <div className="p-4 bg-background">
+          <h3 className="text-foreground font-semibold text-xl mb-2">{item.title}</h3>
+          <p className="text-muted-foreground text-base">{item.subtext}</p>
         </div>
       </CardContent>
     </Card>

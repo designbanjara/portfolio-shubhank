@@ -143,6 +143,15 @@
     margin-top: 0;
   }
 
+  img {
+    outline: 1px solid rgba(0, 0, 0, 0.08);
+    outline-offset: -1px;
+  }
+
+  .dark img {
+    outline-color: rgba(255, 255, 255, 0.08);
+  }
+
   /* Reset h3 margins in navigation and listing contexts */
   article.border-b h3,
   .group h3,
