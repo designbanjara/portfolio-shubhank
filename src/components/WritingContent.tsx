@@ -7,6 +7,17 @@ import { Badge } from './ui/badge';
 import { getPostSlug } from '../lib/slugify';
 import { useBlogPosts } from '../hooks/useCraftApi';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { useTheme } from '@/contexts/ThemeContext';
+import { writingThumbnailOverrides, ThumbnailOverride } from '@/config/writingThumbnails';
+
+function resolveOverride(
+  override: ThumbnailOverride | undefined,
+  theme: 'dark' | 'light'
+): string | null {
+  if (!override) return null;
+  if (typeof override === 'string') return override;
+  return theme === 'light' ? override.light : override.dark;
+}
 
 const listVariants = {
   hidden: {},
@@ -31,6 +42,7 @@ const WritingContent = () => {
   const { data: posts = [], isLoading: loading, isError } = useBlogPosts();
   const [searchQuery, setSearchQuery] = useState('');
   const shouldReduceMotion = useReducedMotion();
+  const { theme } = useTheme();
 
   // Filter posts by search query
   const filteredPosts = useMemo(() => {
@@ -98,8 +110,11 @@ const WritingContent = () => {
             </p>
           ) : (
             filteredPosts.map((post) => {
-              const imageUrl = craftApi.getPostImage(post);
               const slug = getPostSlug(post.title);
+              const imageUrl =
+                resolveOverride(writingThumbnailOverrides[slug], theme)
+                ?? craftApi.getPostImage(post)
+                ?? null;
 
               return (
                 <motion.article
@@ -125,7 +140,7 @@ const WritingContent = () => {
                           />
                         ) : (
                           <img
-                            src="/writing/Wave.png"
+                            src={theme === 'light' ? '/writing/Wave-light.png' : '/writing/Wave.png'}
                             alt=""
                             className="w-full h-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-[1.04]"
                             style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}

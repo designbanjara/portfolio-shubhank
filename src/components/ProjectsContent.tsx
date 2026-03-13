@@ -5,6 +5,8 @@ import { craftApi } from '../services/craftApi';
 import { getPostSlug } from '../lib/slugify';
 import { useProjects } from '../hooks/useCraftApi';
 import { Badge } from './ui/badge';
+import { useTheme } from '@/contexts/ThemeContext';
+import { projectThumbnailOverrides, ThumbnailOverride } from '@/config/projectThumbnails';
 
 const listVariants = {
   hidden: {},
@@ -16,17 +18,16 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.44, 0, 0.56, 1] } },
 };
 
-const PROJECT_THUMBNAIL_OVERRIDE_PREFIXES: Record<string, string> = {
-  // Uses prefix matching so minor title changes won't break thumbnails.
-  // Place images in `public/projects/` and reference via `/projects/<file>`.
-  'simple-and-faster-way-to-place-orders-to-exchange': '/projects/tata-motors-order.png',
-  'automating-investments-through-sips': '/projects/Stock-sip.png',
-  'revamping-the-ticket-creation-experience': '/projects/rzp-care.png',
-};
+function resolveOverride(override: ThumbnailOverride | undefined, theme: 'dark' | 'light'): string | null {
+  if (!override) return null;
+  if (typeof override === 'string') return override;
+  return theme === 'light' ? override.light : override.dark;
+}
 
 const ProjectsContent = () => {
   const { data: projects = [], isLoading: loading, isError } = useProjects();
   const shouldReduceMotion = useReducedMotion();
+  const { theme } = useTheme();
 
   const extractDocTags = (markdown: string): string[] | null => {
     const trimmed = markdown.trim();
@@ -141,12 +142,9 @@ const ProjectsContent = () => {
             const imageUrl = craftApi.getPostImage(project);
             const slug = getPostSlug(project.title);
             const tags = getTagsForProject(project);
-            const overrideImageUrl =
-              Object.entries(PROJECT_THUMBNAIL_OVERRIDE_PREFIXES).find(([prefix]) =>
-                slug.startsWith(prefix)
-              )?.[1] ?? null;
-            const isLastProject = idx === projects.length - 1;
-            const resolvedImageUrl = isLastProject ? '/projects/rzp-tog.png' : (overrideImageUrl ?? imageUrl);
+            const resolvedImageUrl =
+              resolveOverride(projectThumbnailOverrides[slug], theme as 'dark' | 'light')
+              ?? imageUrl;
 
             return (
               <motion.div

@@ -10,6 +10,7 @@ import { getPostSlug } from '../lib/slugify';
 import { useBlogPosts, useProjects } from '../hooks/useCraftApi';
 import { Dialog, DialogContent } from '../components/ui/dialog';
 import { CraftInlineMarkdown } from '../components/CraftInlineMarkdown';
+import RichLinkCard from '../components/RichLinkCard';
 import { useProjectsPasscode } from '@/contexts/ProjectsPasscodeContext';
 
 const BlogPost = () => {
@@ -568,8 +569,15 @@ const BlogPost = () => {
                 </div>
               </figure>
             );
+          } else if (standaloneUrl) {
+            // Standalone URL with no special embed — render as rich link preview card
+            result.push(
+              <div key={block.id || i} className="my-4 not-prose">
+                <RichLinkCard url={standaloneUrl} />
+              </div>
+            );
           } else {
-            // Fallback: show as a regular external link (use markdown as text)
+            // Link with custom label text — keep as inline prose link
             result.push(
               <p key={block.id || i} className="text-foreground">
                 <CraftInlineMarkdown markdown={block.markdown} />

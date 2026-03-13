@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { cn } from "@/lib/utils";
 import { getProjectsPasscodeLength, setProjectsUnlocked, verifyProjectsPasscode } from "@/lib/projectsPasscode";
@@ -46,7 +45,7 @@ export function ProjectsPasscodeDialog({ open, onOpenChange, onUnlocked }: Proje
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md rounded-xl border-border">
         <DialogHeader>
           <DialogTitle>Passcode required</DialogTitle>
           <DialogDescription>
@@ -73,7 +72,7 @@ export function ProjectsPasscodeDialog({ open, onOpenChange, onUnlocked }: Proje
           >
             <InputOTPGroup>
               {Array.from({ length }).map((_, idx) => (
-                <InputOTPSlot key={idx} index={idx} />
+                <InputOTPSlot key={idx} index={idx} className="border-border" />
               ))}
             </InputOTPGroup>
           </InputOTP>
@@ -91,16 +90,20 @@ export function ProjectsPasscodeDialog({ open, onOpenChange, onUnlocked }: Proje
         </div>
 
         <DialogFooter className="gap-2">
-          <Button
+          <button
             type="button"
-            variant="secondary"
             onClick={() => onOpenChange(false)}
+            className="font-custom font-bold rounded-xl px-4 py-2 text-sm bg-muted hover:bg-muted/80 text-foreground transition-colors"
           >
             Cancel
-          </Button>
-          <Button type="button" onClick={tryUnlock}>
+          </button>
+          <button
+            type="button"
+            onClick={tryUnlock}
+            className="font-custom font-bold rounded-xl px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+          >
             Unlock
-          </Button>
+          </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

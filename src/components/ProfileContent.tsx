@@ -32,7 +32,7 @@ const ProfileContent = () => {
         initial={shouldReduceMotion ? false : 'hidden'}
         animate="visible"
       >
-        Shubhank Pawar
+        Hello
       </motion.h1>
 
       <motion.div
@@ -45,7 +45,7 @@ const ProfileContent = () => {
           className="text-base max-w-[60ch]"
           variants={shouldReduceMotion ? undefined : itemVariants}
         >
-          Hey, I'm Shubhank. I'm a digital designer, based out of Bangalore, India.
+          I'm Shubhank. I'm a digital designer, based out of Bangalore, India.
           I'm currently designing products at{' '}
           <a href="https://www.phonepe.com/" target="_blank" rel="noopener noreferrer">
             PhonePe
