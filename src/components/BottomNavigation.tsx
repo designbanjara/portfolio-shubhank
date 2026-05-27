@@ -14,9 +14,10 @@ const BottomNavigation = () => {
   const { theme, toggle } = useTheme();
 
   const navItems = [
-    { path: '/',        label: 'Home'     },
-    { path: '/projects', label: 'Projects' },
-    { path: '/writing',  label: 'Writing'  },
+    { path: '/',           label: 'Home'       },
+    { path: '/projects',   label: 'Projects'   },
+    { path: '/writing',    label: 'Writing'    },
+    { path: '/playground', label: 'Playground' },
   ];
 
   return (

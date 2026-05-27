@@ -6,8 +6,14 @@ import {
   PencilIcon,
   BriefcaseIcon,
 } from '@heroicons/react/24/solid';
+import MdiIcon from '@mdi/react';
+import { mdiWidgets } from '@mdi/js';
 import { useProjectsPasscode } from '@/contexts/ProjectsPasscodeContext';
 import ThemeToggle from './ThemeToggle';
+
+const WidgetsIcon = ({ className }: { className?: string }) => (
+  <MdiIcon path={mdiWidgets} className={className} size="20px" />
+);
 
 interface SidebarItemProps {
   to: string;
@@ -79,6 +85,7 @@ const Sidebar = () => {
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
           <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
           <SidebarItem to="/projects" icon={BriefcaseIcon}>Projects</SidebarItem>
+          <SidebarItem to="/playground" icon={WidgetsIcon}>Playground</SidebarItem>
         </SidebarSection>
       </div>
 

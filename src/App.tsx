@@ -13,6 +13,8 @@ import Stack from "./pages/Stack";
 import NotFound from "./pages/NotFound";
 import Writing from "./pages/Writing";
 import Projects from "./pages/Projects";
+import Playground from "./pages/Playground";
+import BellandurTraffic from "./pages/BellandurTraffic";
 import BlogPost from "./pages/BlogPost";
 import WritingByTag from "./pages/WritingByTag";
 import { craftApi } from "./services/craftApi";
@@ -83,6 +85,8 @@ const App = () => (
                 </ProjectsRouteGuard>
               }
             />
+            <Route path="/playground" element={<Playground />} />
+            <Route path="/playground/bellandur-traffic" element={<BellandurTraffic />} />
             <Route path="/writing" element={<Writing />} />
             <Route path="/writing/tag/:tag" element={<WritingByTag />} />
             <Route path="/writing/:slug" element={<BlogPost />} />
