@@ -83,9 +83,11 @@ const Sidebar = () => {
 
         <SidebarSection>
           <SidebarItem to="/" icon={HomeIcon} exact>Home</SidebarItem>
-          <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem>
+          {/* WRITING TAB DISABLED — uncomment to re-enable: */}
+          {/* <SidebarItem to="/writing" icon={PencilIcon}>Writing</SidebarItem> */}
           <SidebarItem to="/projects" icon={BriefcaseIcon}>Projects</SidebarItem>
-          <SidebarItem to="/playground" icon={WidgetsIcon}>Playground</SidebarItem>
+          {/* PLAYGROUND TAB DISABLED — uncomment to re-enable: */}
+          {/* <SidebarItem to="/playground" icon={WidgetsIcon}>Playground</SidebarItem> */}
         </SidebarSection>
       </div>
 

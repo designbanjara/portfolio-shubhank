@@ -5,6 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useProjectsPasscode } from "@/contexts/ProjectsPasscodeContext";
 
 export function ProjectsRouteGuard({ children }: { children: React.ReactNode }) {
+  // PASSCODE DISABLED — to re-enable, remove this early return and uncomment the block below
+  return <>{children}</>;
+
+  /* RE-ENABLE PASSCODE: delete the two lines above and uncomment this block:
+
   const location = useLocation();
   const navigate = useNavigate();
   const { isProjectsUnlocked, requestProjectsUnlock } = useProjectsPasscode();
@@ -40,5 +45,7 @@ export function ProjectsRouteGuard({ children }: { children: React.ReactNode }) 
       </div>
     </div>
   );
+
+  */
 }
 

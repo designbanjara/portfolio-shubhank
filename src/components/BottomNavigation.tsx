@@ -16,8 +16,10 @@ const BottomNavigation = () => {
   const navItems = [
     { path: '/',           label: 'Home'       },
     { path: '/projects',   label: 'Projects'   },
-    { path: '/writing',    label: 'Writing'    },
-    { path: '/playground', label: 'Playground' },
+    // WRITING TAB DISABLED — uncomment to re-enable:
+    // { path: '/writing',    label: 'Writing'    },
+    // PLAYGROUND TAB DISABLED — uncomment to re-enable:
+    // { path: '/playground', label: 'Playground' },
   ];
 
   return (

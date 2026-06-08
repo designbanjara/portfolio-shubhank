@@ -144,12 +144,12 @@
   }
 
   img {
-    outline: 1px solid rgba(0, 0, 0, 0.08);
-    outline-offset: -1px;
+    /* outline: 1px solid rgba(0, 0, 0, 0.08); */  /* IMAGE BORDER DISABLED — uncomment to re-enable */
+    /* outline-offset: -1px; */
   }
 
   .dark img {
-    outline-color: rgba(255, 255, 255, 0.08);
+    /* outline-color: rgba(255, 255, 255, 0.08); */  /* IMAGE BORDER DISABLED — uncomment to re-enable */
   }
 
   /* Reset h3 margins in navigation and listing contexts */
