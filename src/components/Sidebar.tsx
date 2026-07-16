@@ -57,10 +57,11 @@ const SidebarItem = ({ to, icon: Icon, children, external, exact = false }: Side
       className="block"
       end={exact}
       onClick={(e) => {
-        if (to === '/projects' && !isProjectsUnlocked) {
-          e.preventDefault();
-          requestProjectsUnlock(() => navigate(to));
-        }
+        // PASSCODE DISABLED — uncomment to re-enable:
+        // if (to === '/projects' && !isProjectsUnlocked) {
+        //   e.preventDefault();
+        //   requestProjectsUnlock(() => navigate(to));
+        // }
       }}
     >
       {content}

@@ -37,10 +37,11 @@ const BottomNavigation = () => {
                 to={item.path}
                 className="flex items-center justify-center py-3 w-full rounded-full text-base font-medium transition-colors z-10 relative text-muted-foreground hover:text-foreground mx-[4px]"
                 onClick={(e) => {
-                  if (item.path === '/projects' && !isProjectsUnlocked) {
-                    e.preventDefault();
-                    requestProjectsUnlock(() => navigate(item.path));
-                  }
+                  // PASSCODE DISABLED — uncomment to re-enable:
+                  // if (item.path === '/projects' && !isProjectsUnlocked) {
+                  //   e.preventDefault();
+                  //   requestProjectsUnlock(() => navigate(item.path));
+                  // }
                 }}
               >
                 {isActive && (

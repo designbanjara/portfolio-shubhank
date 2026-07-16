@@ -43,12 +43,11 @@ const DataPrefetcher = () => {
       queryFn: () => craftApi.getBlogPosts(),
     });
 
-    if (isProjectsUnlocked) {
-      queryClient.prefetchQuery({
-        queryKey: craftQueryKeys.projects(),
-        queryFn: () => craftApi.getProjects(),
-      });
-    }
+    // PASSCODE DISABLED — to re-enable, wrap this prefetch in: if (isProjectsUnlocked) { ... }
+    queryClient.prefetchQuery({
+      queryKey: craftQueryKeys.projects(),
+      queryFn: () => craftApi.getProjects(),
+    });
   }, [queryClient, isProjectsUnlocked]);
 
   return null;

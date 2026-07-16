@@ -20,7 +20,8 @@ const BlogPost = () => {
   const { isProjectsUnlocked } = useProjectsPasscode();
   const { data: allPosts = [], isLoading: loadingPosts } = useBlogPosts();
   const { data: allProjects = [], isLoading: loadingProjects } = useProjects({
-    enabled: isProjectRoute && isProjectsUnlocked,
+    // PASSCODE DISABLED — to re-enable, use: enabled: isProjectRoute && isProjectsUnlocked,
+    enabled: isProjectRoute,
   });
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   
