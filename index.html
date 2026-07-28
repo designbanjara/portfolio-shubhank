@@ -25,6 +25,18 @@
   <meta name="twitter:description" content="Personal website of Shubhank Pawar - Designer">
   <link rel="icon" type="image/png" href="https://storage.googleapis.com/gpt-engineer-file-uploads/GuVRRZA13UPN7lNUQHqcLpxFU0o2/uploads/1769101166852-werki-logo.png">
   <script>
+    // Apply theme before first paint. Dark unless the visitor chose light.
+    (function () {
+      try {
+        if (localStorage.getItem('theme') !== 'light') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  <script>
     // Restore path from GitHub Pages 404 redirect
     (function(l) {
       if (l.search[1] === '/') {

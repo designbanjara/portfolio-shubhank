@@ -17,8 +17,8 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     // 1. Respect stored preference
     const stored = localStorage.getItem('theme') as Theme | null;
     if (stored === 'light' || stored === 'dark') return stored;
-    // 2. Fall back to system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // 2. Default to dark on first visit, regardless of system preference
+    return 'dark';
   });
 
   useEffect(() => {

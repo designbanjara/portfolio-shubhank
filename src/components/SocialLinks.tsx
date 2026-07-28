@@ -4,7 +4,6 @@ import { Separator } from './ui/separator';
 import {
   EnvelopeIcon,
   ChevronRightIcon,
-  NewspaperIcon,
 } from '@heroicons/react/24/solid';
 import LinkedinIcon from './icons/LinkedinIcon';
 import XIcon from './icons/XIcon';
@@ -52,14 +51,6 @@ const SocialLinks = () => {
       <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} href="https://www.linkedin.com/in/shubhank-pawar-51139194/" />
       <Separator className="my-1 opacity-[0.12]" />
       <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} href="mailto:pawarshubhank@gmail.com" />
-      <Separator className="my-1 opacity-[0.12]" />
-      <SocialLink
-        name="Newsletter"
-        action="Subscribe"
-        icon={NewspaperIcon}
-        href="https://designbanjara.substack.com/"
-        subtext="Redirects to Substack"
-      />
     </div>
   );
 };
