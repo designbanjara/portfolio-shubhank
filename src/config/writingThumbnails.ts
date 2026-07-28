@@ -20,6 +20,10 @@
 export type ThumbnailOverride = string | { dark: string; light: string };
 
 export const writingThumbnailOverrides: Record<string, ThumbnailOverride> = {
+  'skill-collection': {
+    dark:  '/writing/skill-collection.png',
+    light: '/writing/skill-collection-light.png',
+  },
   'to-creatives-in-corporate': {
     dark:  '/writing/to-creatives-in-corporate.png',
     light: '/writing/to-creatives-in-corporate-light.png',
