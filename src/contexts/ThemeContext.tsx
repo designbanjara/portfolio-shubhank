@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { track } from '@/lib/analytics';
 
 type Theme = 'light' | 'dark';
 
@@ -30,6 +31,13 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Which theme visitors actually land on — recorded once per page load,
+  // not on every toggle, so the split reflects real usage.
+  useEffect(() => {
+    track('theme_used', { theme });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'));
 

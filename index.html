@@ -24,6 +24,16 @@
   <meta property="og:description" content="Personal website of Shubhank Pawar - Designer">
   <meta name="twitter:description" content="Personal website of Shubhank Pawar - Designer">
   <link rel="icon" type="image/png" href="https://storage.googleapis.com/gpt-engineer-file-uploads/GuVRRZA13UPN7lNUQHqcLpxFU0o2/uploads/1769101166852-werki-logo.png">
+  <!--
+    Umami analytics — cookieless, no persistent visitor ID, so no consent
+    banner is required. data-domains limits collection to production, so
+    local dev and preview builds never pollute the data.
+    The website ID is public by design — it ships in this tag — so it is not
+    a secret and needs no build-time env var.
+  -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="98b5e894-ad19-46fc-8e6f-ba056350967e"
+          data-domains="www.shubhankpawar.com"></script>
   <script>
     // Apply theme before first paint. Dark unless the visitor chose light.
     (function () {

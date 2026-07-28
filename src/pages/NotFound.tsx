@@ -1,9 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from "react-router-dom";
+import { track } from "@/lib/analytics";
 
 const NotFound = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    track('page_not_found', { path: location.pathname });
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-portfolio-dark text-foreground">

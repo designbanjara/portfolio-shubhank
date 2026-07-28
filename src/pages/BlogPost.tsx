@@ -12,6 +12,7 @@ import { Dialog, DialogContent } from '../components/ui/dialog';
 import { CraftInlineMarkdown } from '../components/CraftInlineMarkdown';
 import RichLinkCard from '../components/RichLinkCard';
 import { useProjectsPasscode } from '@/contexts/ProjectsPasscodeContext';
+import { track } from '@/lib/analytics';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -58,6 +59,38 @@ const BlogPost = () => {
       document.title = `${post.title} \u2014 Shubhank Pawar`;
     }
   }, [post]);
+
+  // Scroll depth — distinguishes a real read from a bounce. Each milestone
+  // fires at most once per article.
+  useEffect(() => {
+    if (!post) return;
+
+    const reached = new Set<number>();
+    const milestones = [25, 50, 75, 100];
+
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      // Short articles that fit on screen count as fully read.
+      const percent = scrollable <= 0
+        ? 100
+        : ((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight) * 100;
+
+      for (const milestone of milestones) {
+        if (percent >= milestone && !reached.has(milestone)) {
+          reached.add(milestone);
+          track('scroll_depth', {
+            depth: milestone,
+            title: post.title,
+            type: isProjectRoute ? 'project' : 'writing',
+          });
+        }
+      }
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [post, isProjectRoute]);
 
   const renderContent = (blocks: CraftBlock[]) => {
     const result: React.ReactNode[] = [];

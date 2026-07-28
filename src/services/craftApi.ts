@@ -1,3 +1,5 @@
+import { track } from '@/lib/analytics';
+
 const DEFAULT_CRAFT_API_BASE = 'https://connect.craft.do/links/8a3DPwLXbQU/api/v1';
 
 const craftEnv = ((import.meta as any)?.env ?? {}) as Record<string, string | undefined>;
@@ -206,6 +208,7 @@ export const craftApi = {
         });
     } catch (error) {
       console.error('Error fetching blog posts:', error);
+      track('api_error', { source: 'blog_posts', message: String(error).slice(0, 100) });
       return [];
     }
   },
@@ -275,6 +278,7 @@ export const craftApi = {
         });
     } catch (error) {
       console.error('Error fetching projects:', error);
+      track('api_error', { source: 'projects', message: String(error).slice(0, 100) });
       return [];
     }
   },

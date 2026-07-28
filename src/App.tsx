@@ -21,6 +21,7 @@ import { craftApi } from "./services/craftApi";
 import { craftQueryKeys } from "./hooks/useCraftApi";
 import { ProjectsPasscodeProvider, useProjectsPasscode } from "@/contexts/ProjectsPasscodeContext";
 import { ProjectsRouteGuard } from "@/components/ProjectsRouteGuard";
+import { initAnalytics } from "@/lib/analytics";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,6 +31,15 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Wires up analytics once, and surfaces the ?notrack=1 device opt-out.
+const Analytics = () => {
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
+  return null;
+};
 
 // Component to prefetch data on app load
 const DataPrefetcher = () => {
@@ -62,6 +72,7 @@ const App = () => (
       <BrowserRouter>
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:outline-none">Skip to content</a>
         <ProjectsPasscodeProvider>
+          <Analytics />
           <DataPrefetcher />
           <ScrollToTop />
           <Routes>
