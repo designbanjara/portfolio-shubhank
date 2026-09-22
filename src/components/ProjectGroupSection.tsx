@@ -1,4 +1,4 @@
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import ProjectCarousel, { CarouselCard } from './ProjectCarousel';
@@ -8,7 +8,8 @@ interface ProjectGroupSectionProps {
   company: string;
   description?: string;
   cards: CarouselCard[];
-  defaultOpen?: boolean;
+  open: boolean;
+  onToggle: () => void;
 }
 
 /**
@@ -24,27 +25,32 @@ const ProjectGroupSection = ({
   company,
   description,
   cards,
-  defaultOpen = false,
+  open,
+  onToggle,
 }: ProjectGroupSectionProps) => {
-  const [open, setOpen] = useState(defaultOpen);
   const [overflow, setOverflow] = useState<'hidden' | 'visible'>(
-    defaultOpen ? 'visible' : 'hidden'
+    open ? 'visible' : 'hidden'
   );
   const shouldReduceMotion = useReducedMotion();
   const panelId = `${useId()}-panel`;
+  const isFirstRender = useRef(true);
 
-  const toggle = () => {
-    // Clip during the transition so the carousel cannot spill out of a
-    // half-open panel; onAnimationComplete releases it again.
+  // Clip while the height is animating so the carousel cannot spill out of a
+  // half-open panel; onAnimationComplete releases it again. Skipped on mount,
+  // where a group that starts open has no animation to wait for.
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     setOverflow('hidden');
-    setOpen((value) => !value);
-  };
+  }, [open]);
 
   return (
     <section aria-labelledby={`group-${id}`}>
       <button
         type="button"
-        onClick={toggle}
+        onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
         className="group flex w-full items-start gap-4 text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

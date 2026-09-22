@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { craftApi } from '../services/craftApi';
 import { getPostSlug } from '../lib/slugify';
@@ -30,6 +30,9 @@ function resolveOverride(
 
 const ProjectsContent = () => {
   const { data: projects = [], isLoading: loading, isError } = useProjects();
+  // null until the visitor touches a group: groups arrive asynchronously, so
+  // "first one open" is resolved at render rather than in initial state.
+  const [openIds, setOpenIds] = useState<string[] | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const { theme } = useTheme();
 
@@ -127,6 +130,17 @@ const ProjectsContent = () => {
     );
   }
 
+  // The first group stays open until the visitor decides otherwise.
+  const openGroupIds = openIds ?? (groups.length ? [groups[0].id] : []);
+
+  const toggleGroup = (id: string) => {
+    setOpenIds(
+      openGroupIds.includes(id)
+        ? openGroupIds.filter((openId) => openId !== id)
+        : [...openGroupIds, id]
+    );
+  };
+
   return (
     <div>
       <h2 id="projects-heading" className="text-3xl font-custom font-bold mb-6">Work</h2>
@@ -135,26 +149,34 @@ const ProjectsContent = () => {
         <p className="text-muted-foreground py-8">No projects found.</p>
       ) : (
         <motion.div
-          className="mt-10 space-y-16"
+          className="mt-10"
           variants={shouldReduceMotion ? undefined : groupVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
         >
-          {groups.map((group, index) => (
-            <motion.div
-              key={group.id}
-              variants={shouldReduceMotion ? undefined : itemVariants}
-            >
-              <ProjectGroupSection
-                id={group.id}
-                company={group.company}
-                description={group.description}
-                cards={group.cards}
-                // The first group opens by default; the rest start collapsed.
-                defaultOpen={index === 0}
-              />
-            </motion.div>
-          ))}
+          {groups.map((group, index) => {
+            const open = openGroupIds.includes(group.id);
+            const isLast = index === groups.length - 1;
+
+            return (
+              <motion.div
+                key={group.id}
+                variants={shouldReduceMotion ? undefined : itemVariants}
+                // A collapsed group is only a heading, so it does not need the
+                // breathing room an open one does.
+                className={isLast ? undefined : open ? 'mb-16' : 'mb-6'}
+              >
+                <ProjectGroupSection
+                  id={group.id}
+                  company={group.company}
+                  description={group.description}
+                  cards={group.cards}
+                  open={open}
+                  onToggle={() => toggleGroup(group.id)}
+                />
+              </motion.div>
+            );
+          })}
         </motion.div>
       )}
     </div>
