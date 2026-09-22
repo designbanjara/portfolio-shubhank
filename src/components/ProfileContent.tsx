@@ -18,7 +18,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: DURATION.slow, ease: EASE.out },
+    transition: { duration: DURATION.slow, ease: EASE.outQuart },
   },
 };
 

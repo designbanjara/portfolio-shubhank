@@ -23,9 +23,27 @@ export default {
 			fontFamily: {
 				custom: ['MintGrotesk', 'sans-serif'],
 			},
+			// Mirrors the --ease-* custom properties in index.css. Referencing the
+			// variables keeps one definition rather than two copies to drift apart.
 			transitionTimingFunction: {
-				smooth: 'cubic-bezier(0.44, 0, 0.56, 1)',
-				spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+				'in-quad': 'var(--ease-in-quad)',
+				'in-cubic': 'var(--ease-in-cubic)',
+				'in-quart': 'var(--ease-in-quart)',
+				'in-quint': 'var(--ease-in-quint)',
+				'in-expo': 'var(--ease-in-expo)',
+				'in-circ': 'var(--ease-in-circ)',
+				'out-quad': 'var(--ease-out-quad)',
+				'out-cubic': 'var(--ease-out-cubic)',
+				'out-quart': 'var(--ease-out-quart)',
+				'out-quint': 'var(--ease-out-quint)',
+				'out-expo': 'var(--ease-out-expo)',
+				'out-circ': 'var(--ease-out-circ)',
+				'in-out-quad': 'var(--ease-in-out-quad)',
+				'in-out-cubic': 'var(--ease-in-out-cubic)',
+				'in-out-quart': 'var(--ease-in-out-quart)',
+				'in-out-quint': 'var(--ease-in-out-quint)',
+				'in-out-expo': 'var(--ease-in-out-expo)',
+				'in-out-circ': 'var(--ease-in-out-circ)',
 			},
 			colors: {
 				border: 'hsl(var(--border))',

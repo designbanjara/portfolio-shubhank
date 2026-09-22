@@ -47,7 +47,7 @@ const CardInner: React.FC<{ item: PlaygroundItem }> = ({ item }) => (
         <img
           src={item.image}
           alt={item.title}
-          className="w-full h-auto transition-transform duration-300 group-hover:scale-[1.02] ease-smooth"
+          className="w-full h-auto transition-transform duration-300 group-hover:scale-[1.02] ease-out-cubic"
         />
       ) : (
         <div className="w-full h-56 flex items-center justify-center text-muted-foreground">
@@ -92,7 +92,7 @@ const PlaygroundContent = () => {
             {item.href ? (
               <Link
                 to={item.href}
-                className="block group transition-all duration-200 ease-smooth"
+                className="block group transition-all duration-200 ease-out-cubic"
               >
                 <CardInner item={item} />
               </Link>

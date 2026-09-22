@@ -157,7 +157,7 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
                     height={card.size.height}
                     loading="lazy"
                     draggable={false}
-                    className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.03] ease-smooth"
+                    className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.03] ease-out-cubic"
                   />
                 ) : (
                   <div
@@ -206,7 +206,7 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
           onClick={() => page(-1)}
           disabled={!canScrollPrev}
           aria-label={`Previous ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-smooth"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-out-quad"
         >
           <ChevronLeftIcon className="h-4 w-4" />
         </button>
@@ -215,7 +215,7 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
           onClick={() => page(1)}
           disabled={!canScrollNext}
           aria-label={`Next ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-smooth"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-out-quad"
         >
           <ChevronRightIcon className="h-4 w-4" />
         </button>

@@ -42,8 +42,8 @@ const ProjectGroupSection = ({
   const panelTransition = shouldReduceMotion
     ? { duration: 0 }
     : open
-      ? { duration: DURATION.slow, ease: EASE.out }
-      : { duration: DURATION.base, ease: EASE.smooth };
+      ? { duration: DURATION.slow, ease: EASE.outQuart }
+      : { duration: DURATION.base, ease: EASE.inQuad };
 
   // Clip while the height is animating so the carousel cannot spill out of a
   // half-open panel; onAnimationComplete releases it again. Skipped on mount,
@@ -63,7 +63,7 @@ const ProjectGroupSection = ({
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
-        className="group block w-full text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ease-smooth"
+        className="group block w-full text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ease-out-quad"
       >
         <span
           id={`group-${id}`}
@@ -81,7 +81,7 @@ const ProjectGroupSection = ({
             transition={
               shouldReduceMotion
                 ? { duration: 0 }
-                : { duration: DURATION.base, ease: EASE.smooth }
+                : { duration: DURATION.base, ease: EASE.inOutQuad }
             }
           >
             <ChevronRightIcon className="h-4 w-4" />

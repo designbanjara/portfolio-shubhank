@@ -23,7 +23,7 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
           bg-portfolio-sidebar border border-border shadow-sm
           text-muted-foreground hover:text-foreground
           transition-colors duration-150
-         ease-smooth"
+         ease-out-quad"
       >
         <Icon className="h-4 w-4" />
       </button>
@@ -39,7 +39,7 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
         text-[#888] dark:text-[#666]
         hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5
         transition-colors duration-150
-       ease-smooth"
+       ease-out-quad"
     >
       <Icon className="h-4 w-4 flex-shrink-0" />
       <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
