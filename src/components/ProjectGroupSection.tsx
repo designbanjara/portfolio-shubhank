@@ -2,6 +2,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import ProjectCarousel, { CarouselCard } from './ProjectCarousel';
+import { EASE, DURATION } from '@/lib/motion';
 
 interface ProjectGroupSectionProps {
   id: string;
@@ -35,6 +36,15 @@ const ProjectGroupSection = ({
   const panelId = `${useId()}-panel`;
   const isFirstRender = useRef(true);
 
+  // Opening decelerates into place over the longer duration; closing is
+  // quicker and symmetrical. An exit that takes as long as its entrance reads
+  // as sluggish, because nobody is waiting to look at what is leaving.
+  const panelTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : open
+      ? { duration: DURATION.slow, ease: EASE.out }
+      : { duration: DURATION.base, ease: EASE.smooth };
+
   // Clip while the height is animating so the carousel cannot spill out of a
   // half-open panel; onAnimationComplete releases it again. Skipped on mount,
   // where a group that starts open has no animation to wait for.
@@ -53,8 +63,7 @@ const ProjectGroupSection = ({
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
-        className="group block w-full text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+        className="group block w-full text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ease-smooth"
       >
         <span
           id={`group-${id}`}
@@ -72,7 +81,7 @@ const ProjectGroupSection = ({
             transition={
               shouldReduceMotion
                 ? { duration: 0 }
-                : { duration: 0.3, ease: [0.44, 0, 0.56, 1] }
+                : { duration: DURATION.base, ease: EASE.smooth }
             }
           >
             <ChevronRightIcon className="h-4 w-4" />
@@ -88,12 +97,11 @@ const ProjectGroupSection = ({
       <motion.div
         id={panelId}
         initial={false}
-        animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-        transition={
-          shouldReduceMotion
-            ? { duration: 0 }
-            : { duration: 0.4, ease: [0.44, 0, 0.56, 1] }
-        }
+        animate={{
+          height: open ? 'auto' : 0,
+          opacity: open ? 1 : 0,
+        }}
+        transition={panelTransition}
         onAnimationComplete={() => {
           if (open) setOverflow('visible');
         }}

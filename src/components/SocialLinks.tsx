@@ -22,8 +22,7 @@ const SocialLink = ({ name, action, icon: Icon, href, subtext }: SocialLinkProps
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex justify-between items-center py-2.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150 rounded-lg px-3 -mx-3 cursor-pointer group"
-      style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+      className="flex justify-between items-center py-2.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150 rounded-lg px-3 -mx-3 cursor-pointer group ease-smooth"
     >
       <div className="text-foreground flex items-center gap-2.5">
         <Icon className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-150" />

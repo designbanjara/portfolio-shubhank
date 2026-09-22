@@ -9,6 +9,7 @@ import { useBlogPosts } from '../hooks/useCraftApi';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { useTheme } from '@/contexts/ThemeContext';
 import { writingThumbnailOverrides, ThumbnailOverride } from '@/config/writingThumbnails';
+import { EASE, DURATION, STAGGER } from '@/lib/motion';
 
 function resolveOverride(
   override: ThumbnailOverride | undefined,
@@ -23,7 +24,7 @@ const listVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.05,
+      staggerChildren: STAGGER,
       delayChildren: 0.05,
     },
   },
@@ -34,7 +35,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.35, ease: [0.44, 0, 0.56, 1] },
+    transition: { duration: DURATION.base, ease: EASE.out },
   },
 };
 
@@ -125,8 +126,7 @@ const WritingContent = () => {
                   <Link
                     to={`/writing/${slug}`}
                     state={{ postId: post.id }}
-                    className="block group hover:bg-black/[0.04] dark:hover:bg-white/[0.03] p-3 -m-3 rounded-lg transition-colors duration-150"
-                    style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                    className="block group hover:bg-black/[0.04] dark:hover:bg-white/[0.03] p-3 -m-3 rounded-lg transition-colors duration-150 ease-smooth"
                   >
                     <div className="flex gap-4">
                       {/* Thumbnail */}
@@ -135,15 +135,13 @@ const WritingContent = () => {
                           <img
                             src={imageUrl}
                             alt={post.title}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-                            style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04] ease-smooth"
                           />
                         ) : (
                           <img
                             src={theme === 'light' ? '/writing/Wave-light.png' : '/writing/Wave.png'}
                             alt=""
-                            className="w-full h-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-[1.04]"
-                            style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                            className="w-full h-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-[1.04] ease-smooth"
                             loading="lazy"
                           />
                         )}
@@ -153,8 +151,7 @@ const WritingContent = () => {
                         <h3 className="font-bold mb-1 text-foreground text-base transition-colors duration-150 flex items-center gap-1">
                           <span>{post.title}</span>
                           <ChevronRightIcon
-                            className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0"
-                            style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                            className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0 ease-smooth"
                           />
                         </h3>
                         {post.properties?.date && (
@@ -196,8 +193,8 @@ const WritingContent = () => {
           href="https://designbanjara.substack.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-wrap justify-between items-center py-3 h-full hover:bg-black/[0.04] dark:hover:bg-white/5 transition-colors duration-200 rounded-lg px-3 -mx-3 cursor-pointer group gap-1"
-          style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)', verticalAlign: 'middle' }}
+          className="flex flex-wrap justify-between items-center py-3 h-full hover:bg-black/[0.04] dark:hover:bg-white/5 transition-colors duration-200 ease-smooth rounded-lg px-3 -mx-3 cursor-pointer group gap-1"
+          style={{ verticalAlign: 'middle' }}
         >
           <div className="text-foreground flex items-center gap-2">
             <div className="flex flex-col">
@@ -206,8 +203,7 @@ const WritingContent = () => {
             </div>
           </div>
           <div
-            className="text-white bg-blue-600 hover:bg-blue-500 py-2 px-5 rounded-xl transition-colors duration-150 flex items-center font-custom text-base"
-            style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+            className="text-white bg-blue-600 hover:bg-blue-500 py-2 px-5 rounded-xl transition-colors duration-150 flex items-center font-custom text-base ease-smooth"
           >
             Subscribe
             <ChevronRightIcon className="h-4 w-4 ml-1" />

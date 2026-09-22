@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { craftApi } from '../services/craftApi';
+import { EASE, DURATION, STAGGER } from '@/lib/motion';
 import { getPostSlug } from '../lib/slugify';
 import { useProjects } from '../hooks/useCraftApi';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -11,12 +12,12 @@ import ProjectGroupSection from './ProjectGroupSection';
 
 const groupVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.04 } },
+  visible: { transition: { staggerChildren: STAGGER, delayChildren: 0.04 } },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 8 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.44, 0, 0.56, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: DURATION.base, ease: EASE.out } },
 };
 
 function resolveOverride(

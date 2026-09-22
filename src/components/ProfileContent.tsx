@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SocialLinks from './SocialLinks';
+import { EASE, DURATION, STAGGER } from '@/lib/motion';
 
 const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.07,
+      staggerChildren: STAGGER,
       delayChildren: 0,
     },
   },
@@ -17,7 +18,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: [0.44, 0, 0.56, 1] },
+    transition: { duration: DURATION.slow, ease: EASE.out },
   },
 };
 

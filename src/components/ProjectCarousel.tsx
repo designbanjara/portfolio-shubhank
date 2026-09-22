@@ -48,9 +48,14 @@ interface ProjectCarouselProps {
  * Deliberately built on native overflow scrolling plus CSS scroll snapping
  * rather than a JS transform track — the same approach Apple uses on their
  * product pages. Native scrolling is what gives real trackpad and touch
- * momentum; a JS track can only ever approximate it. The paddle buttons then
- * drive the same scroller with scrollTo({ behavior: 'smooth' }), so mouse
- * users get one-card steps without a second, competing animation model.
+ * momentum; a JS track can only ever approximate it. The paddles drive the
+ * same scroller with scrollTo({ behavior: 'smooth' }).
+ *
+ * The paddle scroll is deliberately NOT tweened by Framer. Writing scrollLeft
+ * frame by frame makes mandatory snapping re-snap on every write, so the tween
+ * only works if snapping is switched off for its duration and restored after —
+ * a hack that trades a reliable, snap-aware scroll for a custom easing curve.
+ * The browser's own smooth scroll coordinates with snapping for free.
  */
 const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
   const scrollerRef = useRef<HTMLUListElement>(null);
@@ -152,8 +157,7 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
                     height={card.size.height}
                     loading="lazy"
                     draggable={false}
-                    className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                    className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.03] ease-smooth"
                   />
                 ) : (
                   <div
@@ -202,8 +206,7 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
           onClick={() => page(-1)}
           disabled={!canScrollPrev}
           aria-label={`Previous ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
-          style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-smooth"
         >
           <ChevronLeftIcon className="h-4 w-4" />
         </button>
@@ -212,8 +215,7 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
           onClick={() => page(1)}
           disabled={!canScrollNext}
           aria-label={`Next ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
-          style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-smooth"
         >
           <ChevronRightIcon className="h-4 w-4" />
         </button>
