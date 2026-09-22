@@ -9,7 +9,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-portfolio-dark text-foreground">
+    <div className="min-h-screen overflow-x-clip bg-portfolio-dark text-foreground">
       <main id="main-content" className="max-w-2xl mx-auto px-6 py-14 md:py-20">
         <section id="hello" aria-labelledby="hello-heading" className="scroll-mt-16">
           <ProfileContent />

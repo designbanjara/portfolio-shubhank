@@ -330,3 +330,21 @@
     background-color: color(display-p3 1 0.4157 0);
   }
 }
+
+@layer utilities {
+  /* Carousels run full-bleed but keep their first card aligned to the text
+     column: half the viewport, minus half of max-w-2xl (21rem), plus the
+     container's own 1.5rem padding. */
+  .carousel-gutter {
+    --carousel-gutter: max(1.5rem, calc(50vw - 19.5rem));
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
