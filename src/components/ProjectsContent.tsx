@@ -133,12 +133,10 @@ const ProjectsContent = () => {
   // The first group stays open until the visitor decides otherwise.
   const openGroupIds = openIds ?? (groups.length ? [groups[0].id] : []);
 
+  // Exclusive: opening a group closes any other. Clicking the open one closes
+  // it, so all-collapsed is still reachable.
   const toggleGroup = (id: string) => {
-    setOpenIds(
-      openGroupIds.includes(id)
-        ? openGroupIds.filter((openId) => openId !== id)
-        : [...openGroupIds, id]
-    );
+    setOpenIds(openGroupIds.includes(id) ? [] : [id]);
   };
 
   return (
