@@ -109,7 +109,7 @@ const ProjectGroupSection = ({
         style={{ overflow }}
       >
         <div className="pt-6">
-          <ProjectCarousel cards={cards} label={`${company} projects`} />
+          <ProjectCarousel cards={cards} label={`${company} projects`} active={open} />
         </div>
       </motion.div>
     </section>

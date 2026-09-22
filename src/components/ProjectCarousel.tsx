@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { EASE, DURATION, STAGGER } from '@/lib/motion';
 
 export interface CarouselCard {
   id: string;
@@ -40,7 +41,26 @@ interface ProjectCarouselProps {
   cards: CarouselCard[];
   /** Announced to screen readers, e.g. "PhonePe Invest projects". */
   label: string;
+  /** False while the group is collapsed; flipping it true deals the cards in. */
+  active?: boolean;
 }
+
+// The cards arrive from the right, in reading order, so the row resolves the
+// way it will be scrolled. delayChildren lets the panel start opening first,
+// so the cards land into a space that already exists rather than racing it.
+const rowVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: STAGGER, delayChildren: 0.12 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, x: 24 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: DURATION.base, ease: EASE.outCubic },
+  },
+};
 
 /**
  * Horizontal project carousel.
@@ -57,7 +77,7 @@ interface ProjectCarouselProps {
  * a hack that trades a reliable, snap-aware scroll for a custom easing curve.
  * The browser's own smooth scroll coordinates with snapping for free.
  */
-const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
+const ProjectCarousel = ({ cards, label, active = true }: ProjectCarouselProps) => {
   const scrollerRef = useRef<HTMLUListElement>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -134,9 +154,12 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
       {/* Full-bleed: cards stay aligned to the text column but run off the
           right edge, as in the design. */}
       <div className="ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]">
-        <ul
+        <motion.ul
           ref={scrollerRef}
           aria-label={label}
+          variants={shouldReduceMotion ? undefined : rowVariants}
+          initial={shouldReduceMotion ? false : 'hidden'}
+          animate={shouldReduceMotion ? undefined : active ? 'visible' : 'hidden'}
           className="
             no-scrollbar m-0 flex list-none gap-6 overflow-x-auto overscroll-x-contain
             snap-x snap-mandatory
@@ -177,7 +200,12 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
             );
 
             return (
-              <li key={card.id} data-carousel-item className="snap-start shrink-0 list-none">
+              <motion.li
+                key={card.id}
+                data-carousel-item
+                className="snap-start shrink-0 list-none"
+                variants={shouldReduceMotion ? undefined : cardVariants}
+              >
                 {card.slug ? (
                   <Link
                     to={`/projects/${card.slug}`}
@@ -192,10 +220,10 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
                     {caption}
                   </div>
                 )}
-              </li>
+              </motion.li>
             );
           })}
-        </ul>
+        </motion.ul>
       </div>
 
       {/* Paddles: pointer affordance only. Keyboard users tab through the
