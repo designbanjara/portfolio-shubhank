@@ -100,7 +100,7 @@ const WritingContent = () => {
       <div className="space-y-6">
         {/* Posts */}
         <motion.div
-          className="space-y-8 mt-8"
+          className="space-y-1 mt-8"
           variants={shouldReduceMotion ? undefined : listVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
@@ -120,7 +120,7 @@ const WritingContent = () => {
               return (
                 <motion.article
                   key={post.id}
-                  className="border-b border-border pb-6"
+                  className=""
                   variants={shouldReduceMotion ? undefined : itemVariants}
                 >
                   <Link
@@ -128,9 +128,9 @@ const WritingContent = () => {
                     state={{ postId: post.id }}
                     className="block group hover:bg-black/[0.04] dark:hover:bg-white/[0.03] p-3 -m-3 rounded-lg transition-colors duration-150 ease-out-quad"
                   >
-                    <div className="flex gap-4">
+                    <div className="flex items-center gap-3">
                       {/* Thumbnail */}
-                      <div className="w-20 h-20 rounded-lg bg-muted flex-shrink-0 overflow-hidden">
+                      <div className="w-12 h-12 rounded-lg bg-muted flex-shrink-0 overflow-hidden">
                         {imageUrl ? (
                           <img
                             src={imageUrl}
@@ -148,20 +148,15 @@ const WritingContent = () => {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold mb-1 text-foreground text-base transition-colors duration-150 flex items-center gap-1">
+                        <h3 className="font-bold text-foreground text-base transition-colors duration-150 flex items-center gap-1">
                           <span>{post.title}</span>
                           <ChevronRightIcon
                             className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0 ease-out-cubic"
                           />
                         </h3>
                         {post.properties?.date && (
-                          <p className="text-sm text-muted-foreground mb-2 tabular-nums">
+                          <p className="text-sm text-muted-foreground tabular-nums">
                             {craftApi.formatDate(post.properties.date)}
-                          </p>
-                        )}
-                        {post.properties?.blurb && (
-                          <p className="text-muted-foreground text-sm line-clamp-2">
-                            {post.properties.blurb}
                           </p>
                         )}
                         {post.properties?.tags && post.properties.tags.length > 0 && (
