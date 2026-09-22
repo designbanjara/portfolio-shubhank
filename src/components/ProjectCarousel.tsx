@@ -5,12 +5,35 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 export interface CarouselCard {
   id: string;
-  slug: string;
-  /** Bold lead-in, where the design sets one. */
-  lead?: string;
-  /** Caption body. */
-  caption?: string;
+  /** Caption, with *bold* runs marked. */
+  caption: string;
   imageUrl?: string | null;
+  /** Intrinsic art size — the card takes its width from this ratio. */
+  size: { width: number; height: number };
+  /** Omitted when there is no project page to open. */
+  slug?: string;
+}
+
+/**
+ * Splits a caption on *asterisk* runs. The design bolds a phrase that can sit
+ * anywhere in the sentence, not just at the start, so this is a marker rather
+ * than a separate lead-in field.
+ */
+function renderCaption(caption: string) {
+  return caption
+    .split(/(\*[^*]+\*)/g)
+    .filter(Boolean)
+    .map((part, i) =>
+      part.startsWith('*') && part.endsWith('*') ? (
+        <strong key={i} className="font-bold text-foreground">
+          {part.slice(1, -1)}
+        </strong>
+      ) : (
+        // A span, not React.Fragment: the lovable-tagger plugin injects a
+        // data-lov-id onto every JSX node and Fragment rejects extra props.
+        <span key={i}>{part}</span>
+      )
+    );
 }
 
 interface ProjectCarouselProps {
@@ -115,41 +138,56 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
             px-[var(--carousel-gutter)] scroll-px-[var(--carousel-gutter)]
           "
         >
-          {cards.map((card) => (
-            <li
-              key={card.id}
-              data-carousel-item
-              className="snap-start shrink-0 list-none w-[280px] sm:w-[340px] lg:w-[380px]"
-            >
-              <Link
-                to={`/projects/${card.slug}`}
-                state={{ postId: card.id }}
-                className="group block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
-              >
-                <div className="h-[260px] sm:h-[300px] w-full overflow-hidden rounded-2xl bg-muted">
-                  {card.imageUrl ? (
-                    <img
-                      src={card.imageUrl}
-                      alt=""
-                      loading="lazy"
-                      draggable={false}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
-                    />
-                  ) : (
-                    <div className="h-full w-full" />
-                  )}
-                </div>
+          {cards.map((card) => {
+            const art = (
+              <div className="h-[240px] sm:h-[300px] overflow-hidden rounded-2xl bg-muted">
+                {card.imageUrl ? (
+                  <img
+                    src={card.imageUrl}
+                    alt=""
+                    width={card.size.width}
+                    height={card.size.height}
+                    loading="lazy"
+                    draggable={false}
+                    className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                  />
+                ) : (
+                  <div
+                    className="h-full"
+                    style={{ aspectRatio: `${card.size.width} / ${card.size.height}` }}
+                  />
+                )}
+              </div>
+            );
 
-                <p className="mt-4 text-base leading-snug text-muted-foreground">
-                  {card.lead && (
-                    <span className="font-bold text-foreground">{card.lead} </span>
-                  )}
-                  {card.caption}
-                </p>
-              </Link>
-            </li>
-          ))}
+            // w-0 min-w-full keeps the caption from widening the card: the
+            // card's width comes from the art, and the text wraps inside it.
+            const caption = (
+              <p className="mt-4 w-0 min-w-full text-base leading-snug text-muted-foreground">
+                {renderCaption(card.caption)}
+              </p>
+            );
+
+            return (
+              <li key={card.id} data-carousel-item className="snap-start shrink-0 list-none">
+                {card.slug ? (
+                  <Link
+                    to={`/projects/${card.slug}`}
+                    className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+                  >
+                    {art}
+                    {caption}
+                  </Link>
+                ) : (
+                  <div className="group block">
+                    {art}
+                    {caption}
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
 

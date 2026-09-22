@@ -32,64 +32,53 @@ const ProjectsContent = () => {
   const shouldReduceMotion = useReducedMotion();
   const { theme } = useTheme();
 
-  // Fold the flat Craft project list into the company groups from config.
-  // Card copy comes from the design; Craft only supplies the link target, the
-  // image fallback, and the copy for projects no group claims.
+  // The carousel is config-driven: captions and art come from the design.
+  // Craft only decides whether a card's project page exists to link to, and
+  // supplies any published project the design does not cover.
   const groups = useMemo(() => {
-    const byslug = new Map<string, (typeof projects)[number]>();
+    const bySlug = new Map<string, (typeof projects)[number]>();
     for (const project of projects) {
-      byslug.set(getPostSlug(project.title), project);
+      bySlug.set(getPostSlug(project.title), project);
     }
-
-    const imageFor = (slug: string, project?: (typeof projects)[number]) =>
-      resolveOverride(projectThumbnailOverrides[slug], theme as 'dark' | 'light')
-      ?? (project ? craftApi.getPostImage(project) : null);
 
     const claimed = new Set<string>();
 
-    const built = projectGroups
-      .map((group) => {
-        const cards: CarouselCard[] = group.cards
-          .map((card) => {
-            const project = byslug.get(card.slug);
-            if (!project) return null;
-            claimed.add(card.slug);
-            // Craft blurbs are written to follow the project title, so a card
-            // with no design copy keeps the title as its bold lead-in rather
-            // than starting mid-sentence.
-            const hasDesignCopy = Boolean(card.caption);
-            return {
-              id: project.id,
-              slug: card.slug,
-              lead: hasDesignCopy ? card.lead : card.lead ?? project.title,
-              caption: hasDesignCopy
-                ? card.caption
-                : project.properties?.blurb ?? undefined,
-              imageUrl: resolveOverride(card.image, theme as 'dark' | 'light')
-                ?? imageFor(card.slug, project),
-            };
-          })
-          .filter((card): card is CarouselCard => card !== null);
+    const built = projectGroups.map((group) => ({
+      id: group.id,
+      company: group.company,
+      description: group.description,
+      cards: group.cards.map<CarouselCard>((card) => {
+        if (card.slug) claimed.add(card.slug);
+        return {
+          id: card.id,
+          caption: card.caption,
+          size: card.size,
+          imageUrl: theme === 'light' ? card.image.light : card.image.dark,
+          // The slug is static config, so a card keeps its link even if the
+          // Craft fetch is slow or fails. Cards with no project page simply
+          // omit a slug and render unlinked.
+          slug: card.slug,
+        };
+      }),
+    }));
 
-        return { id: group.id, company: group.company, description: group.description, cards };
-      })
-      .filter((group) => group.cards.length > 0);
-
-    const leftovers: CarouselCard[] = [...byslug.entries()]
+    const leftovers = [...bySlug.entries()]
       .filter(([slug]) => !claimed.has(slug))
-      .map(([slug, project]) => ({
+      .map<CarouselCard>(([slug, project]) => ({
         id: project.id,
         slug,
-        lead: project.title,
-        caption: project.properties?.blurb,
-        imageUrl: imageFor(slug, project),
+        caption: `*${project.title}* ${project.properties?.blurb ?? ''}`.trim(),
+        size: { width: 1488, height: 1200 },
+        imageUrl:
+          resolveOverride(projectThumbnailOverrides[slug], theme as 'dark' | 'light')
+          ?? craftApi.getPostImage(project),
       }));
 
     if (leftovers.length) {
       built.push({ ...fallbackGroup, cards: leftovers });
     }
 
-    return built;
+    return built.filter((group) => group.cards.length > 0);
   }, [projects, theme]);
 
   if (loading) {
