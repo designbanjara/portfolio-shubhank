@@ -6,7 +6,8 @@ import { useProjects } from '../hooks/useCraftApi';
 import { useTheme } from '@/contexts/ThemeContext';
 import { projectThumbnailOverrides, ThumbnailOverride } from '@/config/projectThumbnails';
 import { projectGroups, fallbackGroup } from '@/config/projectGroups';
-import ProjectCarousel, { CarouselCard } from './ProjectCarousel';
+import { CarouselCard } from './ProjectCarousel';
+import ProjectGroupSection from './ProjectGroupSection';
 
 const groupVariants = {
   hidden: {},
@@ -139,28 +140,20 @@ const ProjectsContent = () => {
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
         >
-          {groups.map((group) => (
-            <motion.section
+          {groups.map((group, index) => (
+            <motion.div
               key={group.id}
-              aria-labelledby={`group-${group.id}`}
               variants={shouldReduceMotion ? undefined : itemVariants}
             >
-              <h3
-                id={`group-${group.id}`}
-                className="text-xl font-custom font-bold text-foreground"
-              >
-                {group.company}
-              </h3>
-              {group.description && (
-                <p className="mt-2 max-w-[60ch] text-base text-muted-foreground">
-                  {group.description}
-                </p>
-              )}
-
-              <div className="mt-6">
-                <ProjectCarousel cards={group.cards} label={`${group.company} projects`} />
-              </div>
-            </motion.section>
+              <ProjectGroupSection
+                id={group.id}
+                company={group.company}
+                description={group.description}
+                cards={group.cards}
+                // The first group opens by default; the rest start collapsed.
+                defaultOpen={index === 0}
+              />
+            </motion.div>
           ))}
         </motion.div>
       )}
