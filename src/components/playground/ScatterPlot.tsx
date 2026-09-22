@@ -32,7 +32,7 @@ const ScatterPlot: React.FC = () => {
       const MUTED = dark ? '#666' : '#999';
       const GRID  = dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
       const PRI   = dark ? '#4da6ff' : '#1a7fdf';
-      const FONT  = '9px Inter,sans-serif';
+      const FONT  = '9px "Instrument Sans",sans-serif';
 
       ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
@@ -100,7 +100,7 @@ const ScatterPlot: React.FC = () => {
         if (!t) return;
         const tx = parseTime(t.start), px = Math.min(xAt(tx), W - pR - 8), py = yAt(t.dur);
         ctx.fillStyle = t.dur > 55 ? '#D44338' : '#2E9B7A';
-        ctx.font = '8px Inter,sans-serif';
+        ctx.font = '8px "Instrument Sans",sans-serif';
         ctx.textAlign = side === 'left' ? 'right' : 'left';
         ctx.fillText(label, side === 'left' ? px - 7 : px + 7, py + 3);
       });

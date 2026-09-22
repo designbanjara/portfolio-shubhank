@@ -57,7 +57,7 @@ const LivelineChart: React.FC = () => {
       if (!ctx) return;
       const W = wrap.clientWidth, H = wrap.clientHeight;
       const pL = 40, pR = 14, pT = 16, pB = 28;
-      const FONT = '9px Inter,system-ui,sans-serif';
+      const FONT = '9px "Instrument Sans",system-ui,sans-serif';
       const dark = isDarkRef.current;
 
       const COL_BG    = dark ? '#141414' : '#ffffff';
@@ -150,7 +150,7 @@ const LivelineChart: React.FC = () => {
 
       ctx.beginPath(); ctx.arc(lx, liveY, 4, 0, Math.PI * 2);
       ctx.fillStyle = dc; ctx.shadowBlur = 8; ctx.shadowColor = dc; ctx.fill(); ctx.shadowBlur = 0;
-      ctx.font = 'bold 10px Inter,sans-serif';
+      ctx.font = 'bold 10px "Instrument Sans",sans-serif';
       const lbl = Math.round(lerpY) + ' min', lw = ctx.measureText(lbl).width;
       const overflows = lx + 8 + lw > W - pR;
       ctx.fillStyle = dc; ctx.textAlign = overflows ? 'right' : 'left';
@@ -172,7 +172,7 @@ const LivelineChart: React.FC = () => {
         ctx.beginPath(); ctx.arc(px, py, 3.5, 0, Math.PI * 2); ctx.fillStyle = COL_FG; ctx.fill();
         const d = new Date(pt.date + 'T00:00:00');
         const tipLabel = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', weekday: 'short' }) + ' · ' + pt.dur + ' min';
-        ctx.font = 'bold 10px Inter,sans-serif';
+        ctx.font = 'bold 10px "Instrument Sans",sans-serif';
         const tw = ctx.measureText(tipLabel).width + 14, th = 20;
         let tx = px + 8, ty = py - 26;
         if (tx + tw > W - pR) tx = px - tw - 4;
