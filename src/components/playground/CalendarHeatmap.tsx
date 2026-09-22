@@ -58,7 +58,7 @@ const CalendarHeatmap: React.FC = () => {
       const WKEND  = dark ? '#1c1c1c' : '#f0f0f0';
       const EMPTY  = dark ? '#1f1f1f' : '#ebebeb';
       const BORDER = dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-      const FONT   = '8px "Instrument Sans",sans-serif';
+      const FONT   = '8px Inter,sans-serif';
 
       ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
@@ -96,7 +96,7 @@ const CalendarHeatmap: React.FC = () => {
             const v = lookup[iso];
             ctx.fillStyle = durColor(v); ctx.fill();
             if (cw > 18) {
-              ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.font = '6.5px "Instrument Sans",sans-serif'; ctx.textAlign = 'center';
+              ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.font = '6.5px Inter,sans-serif'; ctx.textAlign = 'center';
               ctx.fillText(String(v), x + cw / 2, y + ch / 2 + 2.5);
             }
           } else if (covidDates.has(iso)) {
