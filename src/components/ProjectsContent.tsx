@@ -33,43 +33,60 @@ const ProjectsContent = () => {
   const { theme } = useTheme();
 
   // Fold the flat Craft project list into the company groups from config.
-  // Anything unclaimed falls through to a trailing group rather than vanishing.
+  // Card copy comes from the design; Craft only supplies the link target, the
+  // image fallback, and the copy for projects no group claims.
   const groups = useMemo(() => {
-    const cards = new Map<string, CarouselCard>();
-
+    const byslug = new Map<string, (typeof projects)[number]>();
     for (const project of projects) {
-      const slug = getPostSlug(project.title);
-      cards.set(slug, {
-        id: project.id,
-        slug,
-        title: project.title,
-        blurb: project.properties?.blurb,
-        imageUrl:
-          resolveOverride(projectThumbnailOverrides[slug], theme as 'dark' | 'light')
-          ?? craftApi.getPostImage(project),
-      });
+      byslug.set(getPostSlug(project.title), project);
     }
 
+    const imageFor = (slug: string, project?: (typeof projects)[number]) =>
+      resolveOverride(projectThumbnailOverrides[slug], theme as 'dark' | 'light')
+      ?? (project ? craftApi.getPostImage(project) : null);
+
     const claimed = new Set<string>();
+
     const built = projectGroups
       .map((group) => {
-        const items = group.slugs
-          .map((slug) => {
-            const card = cards.get(slug);
-            if (card) claimed.add(slug);
-            return card;
+        const cards: CarouselCard[] = group.cards
+          .map((card) => {
+            const project = byslug.get(card.slug);
+            if (!project) return null;
+            claimed.add(card.slug);
+            // Craft blurbs are written to follow the project title, so a card
+            // with no design copy keeps the title as its bold lead-in rather
+            // than starting mid-sentence.
+            const hasDesignCopy = Boolean(card.caption);
+            return {
+              id: project.id,
+              slug: card.slug,
+              lead: hasDesignCopy ? card.lead : card.lead ?? project.title,
+              caption: hasDesignCopy
+                ? card.caption
+                : project.properties?.blurb ?? undefined,
+              imageUrl: resolveOverride(card.image, theme as 'dark' | 'light')
+                ?? imageFor(card.slug, project),
+            };
           })
-          .filter((card): card is CarouselCard => Boolean(card));
-        return { ...group, cards: items };
+          .filter((card): card is CarouselCard => card !== null);
+
+        return { id: group.id, company: group.company, description: group.description, cards };
       })
       .filter((group) => group.cards.length > 0);
 
-    const leftovers = [...cards.entries()]
+    const leftovers: CarouselCard[] = [...byslug.entries()]
       .filter(([slug]) => !claimed.has(slug))
-      .map(([, card]) => card);
+      .map(([slug, project]) => ({
+        id: project.id,
+        slug,
+        lead: project.title,
+        caption: project.properties?.blurb,
+        imageUrl: imageFor(slug, project),
+      }));
 
     if (leftovers.length) {
-      built.push({ ...fallbackGroup, slugs: [], cards: leftovers });
+      built.push({ ...fallbackGroup, cards: leftovers });
     }
 
     return built;

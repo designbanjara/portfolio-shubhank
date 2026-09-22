@@ -6,8 +6,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 export interface CarouselCard {
   id: string;
   slug: string;
-  title: string;
-  blurb?: string;
+  /** Bold lead-in, where the design sets one. */
+  lead?: string;
+  /** Caption body. */
+  caption?: string;
   imageUrl?: string | null;
 }
 
@@ -139,11 +141,11 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
                   )}
                 </div>
 
-                <p className="mt-4 text-base leading-snug">
-                  <span className="font-bold text-foreground">{card.title}</span>
-                  {card.blurb && (
-                    <span className="text-muted-foreground"> {card.blurb}</span>
+                <p className="mt-4 text-base leading-snug text-muted-foreground">
+                  {card.lead && (
+                    <span className="font-bold text-foreground">{card.lead} </span>
                   )}
+                  {card.caption}
                 </p>
               </Link>
             </li>
