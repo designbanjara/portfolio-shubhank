@@ -18,7 +18,7 @@ const Index = () => {
         <section
           id="projects"
           aria-labelledby="projects-heading"
-          className="scroll-mt-16 mt-24 pt-16 border-t border-border"
+          className="scroll-mt-16 mt-16"
         >
           <ProjectsContent />
         </section>
@@ -26,7 +26,7 @@ const Index = () => {
         <section
           id="writing"
           aria-labelledby="writing-heading"
-          className="scroll-mt-16 mt-24 pt-16 border-t border-border"
+          className="scroll-mt-16 mt-16"
         >
           <WritingContent />
         </section>
