@@ -140,7 +140,7 @@ const ProjectCarousel = ({ cards, label }: ProjectCarouselProps) => {
         >
           {cards.map((card) => {
             const art = (
-              <div className="h-[240px] sm:h-[300px] overflow-hidden rounded-2xl bg-muted">
+              <div className="h-[288px] sm:h-[360px] overflow-hidden rounded-2xl bg-muted">
                 {card.imageUrl ? (
                   <img
                     src={card.imageUrl}
