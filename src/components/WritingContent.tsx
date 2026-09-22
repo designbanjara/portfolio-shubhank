@@ -97,10 +97,11 @@ const WritingContent = () => {
         {searchQuery ? `${filteredPosts.length} ${filteredPosts.length === 1 ? 'post' : 'posts'} found` : ''}
       </div>
 
-      <div className="space-y-6">
+      {/* The list reads as one panel rather than loose rows. */}
+      <div className="mt-8 rounded-2xl bg-muted/50 p-5 sm:p-7">
         {/* Posts */}
         <motion.div
-          className="space-y-1 mt-8"
+          className="space-y-1"
           variants={shouldReduceMotion ? undefined : listVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
@@ -148,17 +149,21 @@ const WritingContent = () => {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-foreground text-base transition-colors duration-150 flex items-center gap-1">
-                          <span>{post.title}</span>
-                          <ChevronRightIcon
-                            className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0 ease-out-cubic"
-                          />
-                        </h3>
-                        {post.properties?.date && (
-                          <p className="text-sm text-muted-foreground tabular-nums">
-                            {craftApi.formatDate(post.properties.date)}
-                          </p>
-                        )}
+                        {/* Title and date on one line, so each row is a single
+                            band of text beside its icon. */}
+                        <div className="flex items-baseline justify-between gap-4">
+                          <h3 className="font-bold text-foreground text-base transition-colors duration-150 flex items-baseline gap-1 min-w-0">
+                            <span className="truncate">{post.title}</span>
+                            <ChevronRightIcon
+                              className="h-3.5 w-3.5 self-center opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0 ease-out-cubic"
+                            />
+                          </h3>
+                          {post.properties?.date && (
+                            <p className="flex-shrink-0 text-sm text-muted-foreground tabular-nums">
+                              {craftApi.formatDate(post.properties.date)}
+                            </p>
+                          )}
+                        </div>
                         {post.properties?.tags && post.properties.tags.length > 0 && (
                           <div className="flex flex-wrap gap-1 mt-2">
                             {post.properties.tags.map((tag) => (
@@ -182,29 +187,6 @@ const WritingContent = () => {
         </motion.div>
       </div>
 
-      {/* Newsletter Footer */}
-      <div className="mt-10 pt-1 pb-1">
-        <a
-          href="https://designbanjara.substack.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-wrap justify-between items-center py-3 h-full hover:bg-black/[0.04] dark:hover:bg-white/5 transition-colors duration-200 ease-out-quad rounded-lg px-3 -mx-3 cursor-pointer group gap-1"
-          style={{ verticalAlign: 'middle' }}
-        >
-          <div className="text-foreground flex items-center gap-2">
-            <div className="flex flex-col">
-              <span>Get updates by subscribing to my newsletter</span>
-              <span className="text-sm text-muted-foreground mt-0.5">Redirects to Substack</span>
-            </div>
-          </div>
-          <div
-            className="text-white bg-blue-600 hover:bg-blue-500 py-2 px-5 rounded-xl transition-colors duration-150 flex items-center font-custom text-base ease-out-quad"
-          >
-            Subscribe
-            <ChevronRightIcon className="h-4 w-4 ml-1" />
-          </div>
-        </a>
-      </div>
     </div>
   );
 };
