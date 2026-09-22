@@ -1,6 +1,5 @@
 
 import React, { useEffect } from 'react';
-import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
 
 const Bookmarks = () => {
@@ -13,13 +12,9 @@ const Bookmarks = () => {
       {/* Mobile Header - visible only on small screens */}
       <MobileHeader />
       
-      {/* Desktop Sidebar - hidden on mobile */}
-      <div className="hidden md:block">
-        <Sidebar />
-      </div>
       
       {/* Main content - responsive padding */}
-      <main id="main-content" className="md:ml-56">
+      <main id="main-content">
         <div className="p-4 md:p-8">
           <h1 className="text-2xl font-bold">Bookmarks</h1>
           <p className="mt-4">This page would contain Brian's bookmarked content.</p>

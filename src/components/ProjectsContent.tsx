@@ -89,7 +89,7 @@ const ProjectsContent = () => {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto py-10 px-6">
+      <div>
         <div className="animate-pulse">
           <div className="h-8 bg-muted rounded w-48 mb-8"></div>
           <div className="space-y-14">
@@ -107,8 +107,8 @@ const ProjectsContent = () => {
 
   if (isError) {
     return (
-      <div className="max-w-2xl mx-auto py-10 px-6">
-        <h1 className="text-3xl font-custom font-bold mb-6">Projects</h1>
+      <div>
+        <h2 id="projects-heading" className="text-3xl font-custom font-bold mb-6">Projects</h2>
         <div className="py-8 text-center">
           <p className="text-muted-foreground mb-4">Could not load projects. Please check your connection.</p>
           <button
@@ -123,8 +123,8 @@ const ProjectsContent = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-10 px-6">
-      <h1 className="text-3xl font-custom font-bold mb-6">Projects</h1>
+    <div>
+      <h2 id="projects-heading" className="text-3xl font-custom font-bold mb-6">Projects</h2>
 
       {/* Projects Grid */}
       <motion.div
@@ -189,9 +189,9 @@ const ProjectsContent = () => {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-xl font-custom font-bold text-foreground leading-tight flex items-center gap-1.5">
+                    <h3 className="text-xl font-custom font-bold text-foreground leading-tight flex items-center gap-1.5">
                       <span>{project.title}</span>
-                    </h2>
+                    </h3>
 
                     {/* Tags (from doc content, plus properties) */}
                     {tags.length > 0 && (

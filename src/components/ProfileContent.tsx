@@ -25,8 +25,9 @@ const ProfileContent = () => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="max-w-2xl mx-auto py-10 px-6">
+    <div>
       <motion.h1
+        id="hello-heading"
         className="text-3xl font-custom font-bold mb-6"
         variants={shouldReduceMotion ? undefined : itemVariants}
         initial={shouldReduceMotion ? false : 'hidden'}

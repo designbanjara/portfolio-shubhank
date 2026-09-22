@@ -58,7 +58,7 @@ const WritingContent = () => {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto py-10 px-6">
+      <div>
         <div className="animate-pulse space-y-8">
           <div className="h-8 bg-muted rounded w-48"></div>
           <div className="h-4 bg-muted rounded w-full"></div>
@@ -74,8 +74,8 @@ const WritingContent = () => {
 
   if (isError) {
     return (
-      <div className="max-w-2xl mx-auto py-10 px-6">
-        <h1 className="text-3xl font-custom font-bold mb-6">Writing</h1>
+      <div>
+        <h2 id="writing-heading" className="text-3xl font-custom font-bold mb-6">Writing</h2>
         <div className="py-8 text-center">
           <p className="text-muted-foreground mb-4">Could not load posts. Please check your connection.</p>
           <button
@@ -90,8 +90,8 @@ const WritingContent = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-10 px-6">
-      <h1 className="text-3xl font-custom font-bold mb-6">Writing</h1>
+    <div>
+      <h2 id="writing-heading" className="text-3xl font-custom font-bold mb-6">Writing</h2>
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {searchQuery ? `${filteredPosts.length} ${filteredPosts.length === 1 ? 'post' : 'posts'} found` : ''}
       </div>
@@ -150,13 +150,13 @@ const WritingContent = () => {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h2 className="font-bold mb-1 text-foreground text-base transition-colors duration-150 flex items-center gap-1">
+                        <h3 className="font-bold mb-1 text-foreground text-base transition-colors duration-150 flex items-center gap-1">
                           <span>{post.title}</span>
                           <ChevronRightIcon
                             className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0"
                             style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                           />
-                        </h2>
+                        </h3>
                         {post.properties?.date && (
                           <p className="text-sm text-muted-foreground mb-2 tabular-nums">
                             {craftApi.formatDate(post.properties.date)}

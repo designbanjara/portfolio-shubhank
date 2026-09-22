@@ -1,9 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
-import BottomNavigation from '../components/BottomNavigation';
 import { craftApi, BlogPost } from '../services/craftApi';
 import { Badge } from '../components/ui/badge';
 import { getPostSlug } from '../lib/slugify';
@@ -31,10 +29,7 @@ const WritingByTag = () => {
     <div className="min-h-screen bg-portfolio-dark text-foreground">
       <MobileHeader />
       <div className="flex">
-        <div className="hidden lg:block">
-          <Sidebar />
-        </div>
-        <main id="main-content" className="flex-1 lg:ml-56">
+        <main id="main-content" className="flex-1">
           <div className="max-w-3xl mx-auto py-10 px-4">
             <Link
               to="/writing"
@@ -158,7 +153,6 @@ const WritingByTag = () => {
           </div>
         </main>
       </div>
-      <BottomNavigation />
     </div>
   );
 };

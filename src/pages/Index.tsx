@@ -1,29 +1,36 @@
-
 import React, { useEffect } from 'react';
-import Sidebar from '../components/Sidebar';
 import ProfileContent from '../components/ProfileContent';
-import MobileHeader from '../components/MobileHeader';
-import BottomNavigation from '../components/BottomNavigation';
+import ProjectsContent from '../components/ProjectsContent';
+import WritingContent from '../components/WritingContent';
 
 const Index = () => {
   useEffect(() => {
-    document.title = 'Shubhank Pawar \u2014 Designer';
+    document.title = 'Shubhank Pawar — Designer';
   }, []);
 
   return (
     <div className="min-h-screen bg-portfolio-dark text-foreground">
-      {/* Desktop Sidebar - hidden on mobile */}
-      <div className="hidden md:block">
-        <Sidebar />
-      </div>
-      
-      {/* Main content - responsive padding without card treatment */}
-      <main id="main-content" className="md:ml-56 pb-20 md:pb-6">
-        <ProfileContent />
-      </main>
+      <main id="main-content" className="max-w-2xl mx-auto px-6 py-14 md:py-20">
+        <section id="hello" aria-labelledby="hello-heading" className="scroll-mt-16">
+          <ProfileContent />
+        </section>
 
-      {/* Bottom navigation for mobile */}
-      <BottomNavigation />
+        <section
+          id="projects"
+          aria-labelledby="projects-heading"
+          className="scroll-mt-16 mt-24 pt-16 border-t border-border"
+        >
+          <ProjectsContent />
+        </section>
+
+        <section
+          id="writing"
+          aria-labelledby="writing-heading"
+          className="scroll-mt-16 mt-24 pt-16 border-t border-border"
+        >
+          <WritingContent />
+        </section>
+      </main>
     </div>
   );
 };

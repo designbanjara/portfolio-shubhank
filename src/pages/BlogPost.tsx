@@ -1,9 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
-import BottomNavigation from '../components/BottomNavigation';
 import { craftApi, CraftBlock } from '../services/craftApi';
 import { Badge } from '../components/ui/badge';
 import { getPostSlug } from '../lib/slugify';
@@ -772,10 +770,7 @@ const BlogPost = () => {
       <div className="min-h-screen bg-background text-foreground">
         <MobileHeader />
         <div className="flex">
-          <div className="hidden lg:block">
-            <Sidebar />
-          </div>
-          <main className="flex-1 lg:ml-56">
+          <main className="flex-1">
             <div className="max-w-[672px] mx-auto py-10 px-4">
               <div className="animate-pulse space-y-4">
                 <div className="h-8 bg-muted rounded w-3/4"></div>
@@ -790,7 +785,6 @@ const BlogPost = () => {
             </div>
           </main>
         </div>
-        <BottomNavigation />
       </div>
     );
   }
@@ -800,10 +794,7 @@ const BlogPost = () => {
       <div className="min-h-screen bg-background text-foreground">
         <MobileHeader />
         <div className="flex">
-          <div className="hidden lg:block">
-            <Sidebar />
-          </div>
-          <main className="flex-1 lg:ml-56">
+          <main className="flex-1">
             <div className="max-w-[672px] mx-auto py-10 px-4">
               <Link
                 to={isProjectRoute ? "/projects" : "/writing"}
@@ -819,7 +810,6 @@ const BlogPost = () => {
             </div>
           </main>
         </div>
-        <BottomNavigation />
       </div>
     );
   }
@@ -828,10 +818,7 @@ const BlogPost = () => {
     <div className="min-h-screen bg-background text-foreground">
       <MobileHeader />
       <div className="flex">
-        <div className="hidden lg:block">
-          <Sidebar />
-        </div>
-        <main className="flex-1 lg:ml-56">
+        <main className="flex-1">
           <div className="max-w-[672px] mx-auto py-10 px-4">
             <Link
               to={isProjectRoute ? "/projects" : "/writing"}
@@ -927,7 +914,6 @@ const BlogPost = () => {
           </div>
         </main>
       </div>
-      <BottomNavigation />
     </div>
   );
 };

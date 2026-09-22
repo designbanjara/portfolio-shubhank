@@ -4,15 +4,14 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import FloatingThemeToggle from "@/components/FloatingThemeToggle";
 import Index from "./pages/Index";
 import Bookmarks from "./pages/Bookmarks";
 import Stack from "./pages/Stack";
 import NotFound from "./pages/NotFound";
-import Writing from "./pages/Writing";
-import Projects from "./pages/Projects";
 import Playground from "./pages/Playground";
 import BellandurTraffic from "./pages/BellandurTraffic";
 import BlogPost from "./pages/BlogPost";
@@ -75,18 +74,13 @@ const App = () => (
           <Analytics />
           <DataPrefetcher />
           <ScrollToTop />
+          <FloatingThemeToggle />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/bookmarks" element={<Bookmarks />} />
             <Route path="/stack" element={<Stack />} />
-            <Route
-              path="/projects"
-              element={
-                <ProjectsRouteGuard>
-                  <Projects />
-                </ProjectsRouteGuard>
-              }
-            />
+            {/* Projects and Writing are sections of the single page now */}
+            <Route path="/projects" element={<Navigate to="/#projects" replace />} />
             <Route
               path="/projects/:slug"
               element={
@@ -97,7 +91,7 @@ const App = () => (
             />
             <Route path="/playground" element={<Playground />} />
             <Route path="/playground/bellandur-traffic" element={<BellandurTraffic />} />
-            <Route path="/writing" element={<Writing />} />
+            <Route path="/writing" element={<Navigate to="/#writing" replace />} />
             <Route path="/writing/tag/:tag" element={<WritingByTag />} />
             <Route path="/writing/:slug" element={<BlogPost />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
