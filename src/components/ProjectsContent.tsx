@@ -92,8 +92,14 @@ const ProjectsContent = () => {
                 <div className="h-5 w-40 rounded bg-muted mb-3" />
                 <div className="h-4 w-full rounded bg-muted mb-6" />
                 <div className="flex gap-6">
-                  <div className="h-[360px] w-[456px] shrink-0 rounded-2xl bg-muted" />
-                  <div className="h-[360px] w-[456px] shrink-0 rounded-2xl bg-muted" />
+                  <div
+                    className="aspect-[1820/1200] shrink-0 rounded-2xl bg-muted"
+                    style={{ height: 'var(--carousel-card-h)' }}
+                  />
+                  <div
+                    className="aspect-[1820/1200] shrink-0 rounded-2xl bg-muted"
+                    style={{ height: 'var(--carousel-card-h)' }}
+                  />
                 </div>
               </div>
             ))}

@@ -332,6 +332,22 @@
 }
 
 @layer utilities {
+  /* Carousel art height follows the viewport so the cards fill a laptop
+     screen without overflowing a short one. Cards take their width from this
+     height and the art's own ratio, so the ceiling also stops a wide card
+     from growing past a comfortable reading width. vh rather than dvh: dvh
+     changes as mobile browser chrome hides, which would resize the whole row
+     mid-scroll. */
+  :root {
+    --carousel-card-h: clamp(280px, 42vh, 380px);
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --carousel-card-h: clamp(360px, 58vh, 640px);
+    }
+  }
+
   /* Carousels run full-bleed but keep their first card aligned to the text
      column: half the viewport, minus half of max-w-2xl (21rem), plus the
      container's own 1.5rem padding. */
