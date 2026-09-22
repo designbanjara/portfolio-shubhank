@@ -101,7 +101,7 @@ const WritingContent = () => {
       <div className="mt-8 rounded-2xl bg-muted/50 p-5 sm:p-7">
         {/* Posts */}
         <motion.div
-          className="space-y-1"
+          className="divide-y divide-dashed divide-border/70"
           variants={shouldReduceMotion ? undefined : listVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
@@ -127,7 +127,7 @@ const WritingContent = () => {
                   <Link
                     to={`/writing/${slug}`}
                     state={{ postId: post.id }}
-                    className="block group hover:bg-black/[0.04] dark:hover:bg-white/[0.03] p-3 -m-3 rounded-lg transition-colors duration-150 ease-out-quad"
+                    className="block group hover:bg-black/[0.04] dark:hover:bg-white/[0.03] p-3 -mx-3 my-1 rounded-lg transition-colors duration-150 ease-out-quad"
                   >
                     <div className="flex items-center gap-3">
                       {/* Thumbnail */}
