@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import ProjectCarousel, { CarouselCard } from './ProjectCarousel';
 
 interface ProjectGroupSectionProps {
@@ -53,36 +53,36 @@ const ProjectGroupSection = ({
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
-        className="group flex w-full items-start gap-4 text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="group block w-full text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
       >
-        <span className="min-w-0 flex-1">
-          <span
-            id={`group-${id}`}
-            className="block text-xl font-custom font-bold text-foreground"
-          >
-            {company}
-          </span>
-          {description && (
-            <span className="mt-2 block max-w-[60ch] text-base text-muted-foreground">
-              {description}
-            </span>
-          )}
-        </span>
-
-        <motion.span
-          aria-hidden="true"
-          className="mt-1 flex h-7 w-7 flex-none items-center justify-center rounded-full border border-border text-muted-foreground group-hover:text-foreground"
-          initial={false}
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={
-            shouldReduceMotion
-              ? { duration: 0 }
-              : { duration: 0.3, ease: [0.44, 0, 0.56, 1] }
-          }
+        <span
+          id={`group-${id}`}
+          className="flex items-center gap-1 text-xl font-custom font-bold text-foreground"
         >
-          <ChevronDownIcon className="h-4 w-4" />
-        </motion.span>
+          {company}
+          {/* Same chevron and inline placement as a Writing post title. It
+              rotates to a quarter turn when open, so it reads as state rather
+              than as a link arrow. */}
+          <motion.span
+            aria-hidden="true"
+            className="flex flex-shrink-0 items-center"
+            initial={false}
+            animate={{ rotate: open ? 90 : 0 }}
+            transition={
+              shouldReduceMotion
+                ? { duration: 0 }
+                : { duration: 0.3, ease: [0.44, 0, 0.56, 1] }
+            }
+          >
+            <ChevronRightIcon className="h-4 w-4" />
+          </motion.span>
+        </span>
+        {description && (
+          <span className="mt-2 block max-w-[60ch] text-base text-muted-foreground">
+            {description}
+          </span>
+        )}
       </button>
 
       <motion.div
