@@ -63,6 +63,7 @@ const ProjectGroupSection = ({
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
+        data-no-press-scale
         className="group block w-full text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ease-out-quad"
       >
         <span

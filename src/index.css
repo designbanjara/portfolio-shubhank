@@ -332,7 +332,10 @@
       opacity          150ms var(--ease-out-quad);
   }
 
-  button:active:not(:disabled) {
+  /* Opt out with data-no-press-scale: the dip reads well on a small control,
+     but not on a wide block like an accordion heading, where scaling shifts a
+     large surface and the text visibly reflows. */
+  button:active:not(:disabled):not([data-no-press-scale]) {
     transform: scale(0.97);
   }
 
