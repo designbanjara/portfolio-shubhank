@@ -60,7 +60,12 @@ const cardVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: DURATION.base, ease: EASE.outCubic },
+    transition: {
+      // The rise settles quickly; the fade is what makes the card feel like
+      // it arrives rather than blinks on, so it runs longer and more evenly.
+      y: { duration: DURATION.base, ease: EASE.outCubic },
+      opacity: { duration: DURATION.slow, ease: EASE.inOutQuad },
+    },
   },
 };
 

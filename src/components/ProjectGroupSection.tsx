@@ -36,14 +36,24 @@ const ProjectGroupSection = ({
   const panelId = `${useId()}-panel`;
   const isFirstRender = useRef(true);
 
-  // Opening decelerates into place over the longer duration; closing is
-  // quicker and symmetrical. An exit that takes as long as its entrance reads
-  // as sluggish, because nobody is waiting to look at what is leaving.
+  // Height and opacity get separate timings. Sharing one was the problem:
+  // out-quart reaches most of its value in the first quarter of the duration,
+  // which is right for the height settling open but made the content opaque
+  // almost immediately, so it read as popping in rather than fading.
+  // Opacity therefore ramps on in-out-quad, which spends real time in the
+  // middle, and trails the height slightly so the panel opens into itself.
   const panelTransition = shouldReduceMotion
     ? { duration: 0 }
     : open
-      ? { duration: DURATION.slow, ease: EASE.outQuart }
-      : { duration: DURATION.base, ease: EASE.inQuad };
+      ? {
+          height: { duration: DURATION.slow, ease: EASE.outQuart },
+          opacity: { duration: DURATION.slow, ease: EASE.inOutQuad, delay: 0.08 },
+        }
+      : {
+          height: { duration: DURATION.base, ease: EASE.inQuad },
+          // Fading out ahead of the collapse hides the content reflowing.
+          opacity: { duration: DURATION.fast, ease: EASE.inQuad },
+        };
 
   // Clip while the height is animating so the carousel cannot spill out of a
   // half-open panel; onAnimationComplete releases it again. Skipped on mount,
