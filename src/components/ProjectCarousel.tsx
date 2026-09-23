@@ -45,19 +45,21 @@ interface ProjectCarouselProps {
   active?: boolean;
 }
 
-// The cards arrive from the right, in reading order, so the row resolves the
-// way it will be scrolled. delayChildren lets the panel start opening first,
-// so the cards land into a space that already exists rather than racing it.
+// Cards rise into place in reading order. The movement is vertical on purpose:
+// the li is the scroll-snap target, so translating it horizontally moves its
+// snap position and leaves the row resting that many pixels scrolled in.
+// delayChildren lets the panel start opening first, so the cards land into a
+// space that already exists rather than racing it.
 const rowVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: STAGGER, delayChildren: 0.12 } },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, x: 24 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: { duration: DURATION.base, ease: EASE.outCubic },
   },
 };
@@ -90,6 +92,15 @@ const ProjectCarousel = ({ cards, label, active = true }: ProjectCarouselProps) 
     setCanScrollPrev(el.scrollLeft > 1);
     setCanScrollNext(el.scrollLeft < max - 1);
   }, []);
+
+  // Opening a group should always present its first card, whatever the row was
+  // left scrolled to last time.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el || !active) return;
+    el.scrollLeft = 0;
+    syncPaddles();
+  }, [active, syncPaddles]);
 
   useEffect(() => {
     const el = scrollerRef.current;
