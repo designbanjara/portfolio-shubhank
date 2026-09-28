@@ -117,7 +117,7 @@ const ProjectsContent = () => {
   if (isError) {
     return (
       <div>
-        <h2 id="projects-heading" className="text-xl font-custom font-bold mb-6">Work</h2>
+        <h2 id="projects-heading" className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3">Work</h2>
         <div className="py-8 text-center">
           <p className="text-muted-foreground mb-4">Could not load projects. Please check your connection.</p>
           <button
@@ -142,7 +142,7 @@ const ProjectsContent = () => {
 
   return (
     <div>
-      <h2 id="projects-heading" className="text-xl font-custom font-bold mb-6">Work</h2>
+      <h2 id="projects-heading" className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3">Work</h2>
 
       {groups.length === 0 ? (
         <p className="text-muted-foreground py-8">No projects found.</p>
