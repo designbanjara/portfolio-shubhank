@@ -152,7 +152,7 @@ const WritingContent = () => {
                         {/* Title and date on one line, so each row is a single
                             band of text beside its icon. */}
                         <div className="flex items-center justify-between gap-4">
-                          <h3 className="font-bold text-foreground text-base transition-colors duration-150 flex items-center gap-1 min-w-0">
+                          <h3 className="font-medium text-foreground text-base transition-colors duration-150 flex items-center gap-1 min-w-0">
                             <span className="truncate">{post.title}</span>
                             <ChevronRightIcon
                               className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0 ease-out-cubic"

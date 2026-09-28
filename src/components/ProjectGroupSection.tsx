@@ -78,7 +78,7 @@ const ProjectGroupSection = ({
       >
         <span
           id={`group-${id}`}
-          className="flex items-center gap-1 text-lg font-custom font-bold text-foreground"
+          className="flex items-center gap-1 text-base font-medium text-foreground"
         >
           {company}
           {/* Same chevron and inline placement as a Writing post title. It
