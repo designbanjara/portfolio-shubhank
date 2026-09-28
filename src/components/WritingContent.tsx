@@ -159,7 +159,7 @@ const WritingContent = () => {
                             />
                           </h3>
                           {post.properties?.date && (
-                            <p className="mb-0 flex-shrink-0 text-sm text-muted-foreground tabular-nums">
+                            <p className="mb-0 flex-shrink-0 text-base text-muted-foreground tabular-nums">
                               {craftApi.formatDate(post.properties.date)}
                             </p>
                           )}

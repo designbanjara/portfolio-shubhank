@@ -27,15 +27,15 @@ const SocialLink = ({ name, action, icon: Icon, href, subtext }: SocialLinkProps
       <div className="text-foreground flex items-center gap-2.5">
         <Icon className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-150" />
         <div className="flex flex-col min-w-0">
-          <span className="text-sm font-medium">{name}</span>
+          <span className="text-base font-medium">{name}</span>
           {subtext && (
             <span className="text-xs text-muted-foreground">{subtext}</span>
           )}
         </div>
       </div>
-      <div className="text-muted-foreground group-hover:text-foreground transition-colors duration-150 flex items-center text-sm">
+      <div className="text-muted-foreground group-hover:text-foreground transition-colors duration-150 flex items-center text-base">
         {action}
-        <ChevronRightIcon className="h-3 w-3 ml-0.5" />
+        <ChevronRightIcon className="h-3.5 w-3.5 ml-0.5" />
       </div>
     </a>
   );
