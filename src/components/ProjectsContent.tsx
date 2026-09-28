@@ -148,21 +148,21 @@ const ProjectsContent = () => {
         <p className="text-muted-foreground py-8">No projects found.</p>
       ) : (
         <motion.div
+          className="divide-y divide-border"
           variants={shouldReduceMotion ? undefined : groupVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
         >
-          {groups.map((group, index) => {
+          {groups.map((group) => {
             const open = openGroupIds.includes(group.id);
-            const isLast = index === groups.length - 1;
 
             return (
               <motion.div
                 key={group.id}
                 variants={shouldReduceMotion ? undefined : itemVariants}
-                // A collapsed group is only a heading, so it does not need the
-                // breathing room an open one does.
-                className={isLast ? undefined : open ? 'mb-16' : 'mb-6'}
+                // Even padding either side of the rule, trimmed at the ends so
+                // the first and last groups sit flush with the section.
+                className="py-4 first:pt-0 last:pb-0"
               >
                 <ProjectGroupSection
                   id={group.id}
