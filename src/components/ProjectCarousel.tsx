@@ -26,7 +26,7 @@ function renderCaption(caption: string) {
     .filter(Boolean)
     .map((part, i) =>
       part.startsWith('*') && part.endsWith('*') ? (
-        <strong key={i} className="font-bold text-foreground">
+        <strong key={i} className="font-medium text-foreground">
           {part.slice(1, -1)}
         </strong>
       ) : (

@@ -104,6 +104,7 @@ const WritingContent = () => {
             return (
               <motion.article
                 key={post.id}
+                className="py-1 first:pt-0 last:pb-0"
                 variants={shouldReduceMotion ? undefined : itemVariants}
               >
                 <Link

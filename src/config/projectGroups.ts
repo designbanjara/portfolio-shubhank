@@ -64,7 +64,7 @@ export const projectGroups: ProjectGroup[] = [
         id: 'portfolio-optimiser',
         slug: 'wip-portfolio-optimiser',
         caption:
-          'Take a look at Portfolio Optimizer. One of the first brokers who identify whats wrong and fix portfolio in a seamless flow',
+          'Take a look at *Portfolio Optimizer*. One of the first brokers who identify whats wrong and fix portfolio in a seamless flow',
         image: { dark: '/projects/Optimiser-dark.png', light: '/projects/Optimiser-light.png' },
         size: { width: 1820, height: 1200 },
       },
@@ -80,14 +80,14 @@ export const projectGroups: ProjectGroup[] = [
         id: 'care-revamp',
         slug: 'revamping-the-ticket-creation-experience',
         caption:
-          'Care revamp reduced 30% tickets on self-serve features and simplified the ticket creation experience',
+          '*Care revamp* reduced 30% tickets on self-serve features and simplified the ticket creation experience',
         image: { dark: '/projects/rzp-care-dark.png', light: '/projects/rzp-care-light.png' },
         size: { width: 1820, height: 1200 },
       },
       {
         id: 'rzp-app',
         slug: 'failed-experiment-accept-payments-from-phone-through-cards',
-        caption: 'Mobile app re-design to accommodate new ways to accept payments',
+        caption: '*Mobile app* re-design to accommodate new ways to accept payments',
         image: { dark: '/projects/rzp-app-dark.png', light: '/projects/rzp-app-light.png' },
         size: { width: 1488, height: 1200 },
       },
