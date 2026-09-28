@@ -148,7 +148,7 @@ const ProjectsContent = () => {
         <p className="text-muted-foreground py-8">No projects found.</p>
       ) : (
         <motion.div
-          className="divide-y divide-border"
+          className="divide-y divide-border/[0.12]"
           variants={shouldReduceMotion ? undefined : groupVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
