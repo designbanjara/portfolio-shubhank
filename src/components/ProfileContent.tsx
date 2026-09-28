@@ -61,14 +61,8 @@ const ProfileContent = () => {
           Before PhonePe, I spent couple of years designing at{' '}
           <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer">
             Razorpay
-          </a>. Majorly working on their mobile app and merchant experience.
-        </motion.p>
-
-        <motion.p
-          className="text-base max-w-[60ch]"
-          variants={shouldReduceMotion ? undefined : itemVariants}
-        >
-          I have also designed experiences for social media, HR-tech and mobility domains.
+          </a>. I have also designed experiences for social media, HR-tech and
+          mobility domains.
         </motion.p>
 
         <motion.p

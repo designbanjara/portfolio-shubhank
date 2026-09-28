@@ -76,7 +76,7 @@ const WritingContent = () => {
   if (isError) {
     return (
       <div>
-        <h2 id="writing-heading" className="text-3xl font-custom font-bold mb-6">Writing</h2>
+        <h2 id="writing-heading" className="text-xl font-custom font-bold mb-6">Writing</h2>
         <div className="py-8 text-center">
           <p className="text-muted-foreground mb-4">Could not load posts. Please check your connection.</p>
           <button
@@ -92,7 +92,7 @@ const WritingContent = () => {
 
   return (
     <div>
-      <h2 id="writing-heading" className="text-3xl font-custom font-bold mb-6">Writing</h2>
+      <h2 id="writing-heading" className="text-xl font-custom font-bold mb-6">Writing</h2>
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {searchQuery ? `${filteredPosts.length} ${filteredPosts.length === 1 ? 'post' : 'posts'} found` : ''}
       </div>
