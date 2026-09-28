@@ -131,8 +131,8 @@ const ProjectsContent = () => {
     );
   }
 
-  // The first group stays open until the visitor decides otherwise.
-  const openGroupIds = openIds ?? (groups.length ? [groups[0].id] : []);
+  // Every group starts collapsed; openIds stays null until the first click.
+  const openGroupIds = openIds ?? [];
 
   // Exclusive: opening a group closes any other. Clicking the open one closes
   // it, so all-collapsed is still reachable.
@@ -148,7 +148,7 @@ const ProjectsContent = () => {
         <p className="text-muted-foreground py-8">No projects found.</p>
       ) : (
         <motion.div
-          className="divide-y divide-border/[0.12]"
+          className=""
           variants={shouldReduceMotion ? undefined : groupVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
@@ -162,7 +162,7 @@ const ProjectsContent = () => {
                 variants={shouldReduceMotion ? undefined : itemVariants}
                 // Even padding either side of the rule, trimmed at the ends so
                 // the first and last groups sit flush with the section.
-                className="py-4 first:pt-0 last:pb-0"
+                className="py-1 first:pt-0 last:pb-0"
               >
                 <ProjectGroupSection
                   id={group.id}
