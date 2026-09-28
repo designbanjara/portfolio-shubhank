@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import ProfileContent from '../components/ProfileContent';
 import ProjectsContent from '../components/ProjectsContent';
 import WritingContent from '../components/WritingContent';
+import SocialLinks from '../components/SocialLinks';
 
 const Index = () => {
   useEffect(() => {
@@ -29,6 +30,14 @@ const Index = () => {
           className="scroll-mt-16 mt-16"
         >
           <WritingContent />
+        </section>
+
+        <section
+          id="connect"
+          aria-labelledby="connect-heading"
+          className="scroll-mt-16 mt-16"
+        >
+          <SocialLinks />
         </section>
       </main>
     </div>

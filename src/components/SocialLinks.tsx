@@ -1,22 +1,15 @@
-
 import React from 'react';
 import { Separator } from './ui/separator';
-import {
-  EnvelopeIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/24/solid';
-import LinkedinIcon from './icons/LinkedinIcon';
-import XIcon from './icons/XIcon';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
 interface SocialLinkProps {
   name: string;
   action: string;
-  icon: React.ElementType;
   href: string;
   subtext?: string;
 }
 
-const SocialLink = ({ name, action, icon: Icon, href, subtext }: SocialLinkProps) => {
+const SocialLink = ({ name, action, href, subtext }: SocialLinkProps) => {
   return (
     <a
       href={href}
@@ -24,14 +17,9 @@ const SocialLink = ({ name, action, icon: Icon, href, subtext }: SocialLinkProps
       rel="noopener noreferrer"
       className="flex justify-between items-center py-2.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150 rounded-lg px-3 -mx-3 cursor-pointer group ease-out-quad"
     >
-      <div className="text-foreground flex items-center gap-2.5">
-        <Icon className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-150" />
-        <div className="flex flex-col min-w-0">
-          <span className="text-base font-medium">{name}</span>
-          {subtext && (
-            <span className="text-xs text-muted-foreground">{subtext}</span>
-          )}
-        </div>
+      <div className="flex flex-col min-w-0 text-foreground">
+        <span className="text-base font-medium">{name}</span>
+        {subtext && <span className="text-xs text-muted-foreground">{subtext}</span>}
       </div>
       <div className="text-muted-foreground group-hover:text-foreground transition-colors duration-150 flex items-center text-base">
         {action}
@@ -43,13 +31,22 @@ const SocialLink = ({ name, action, icon: Icon, href, subtext }: SocialLinkProps
 
 const SocialLinks = () => {
   return (
-    <div className="mt-10">
-      <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3 px-0">Connect</p>
-      <SocialLink name="X" action="Follow" icon={XIcon} href="https://x.com/designbanjara" />
+    <div>
+      <p
+        id="connect-heading"
+        className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3"
+      >
+        Connect
+      </p>
+      <SocialLink name="X" action="Follow" href="https://x.com/designbanjara" />
       <Separator className="my-1 opacity-[0.12]" />
-      <SocialLink name="LinkedIn" action="Follow" icon={LinkedinIcon} href="https://www.linkedin.com/in/shubhank-pawar-51139194/" />
+      <SocialLink
+        name="LinkedIn"
+        action="Follow"
+        href="https://www.linkedin.com/in/shubhank-pawar-51139194/"
+      />
       <Separator className="my-1 opacity-[0.12]" />
-      <SocialLink name="Mail" action="Contact" icon={EnvelopeIcon} href="mailto:pawarshubhank@gmail.com" />
+      <SocialLink name="Mail" action="Contact" href="mailto:pawarshubhank@gmail.com" />
     </div>
   );
 };

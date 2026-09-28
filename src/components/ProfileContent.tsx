@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import SocialLinks from './SocialLinks';
 import { EASE, DURATION, STAGGER } from '@/lib/motion';
 
 const containerVariants = {
@@ -71,10 +70,6 @@ const ProfileContent = () => {
         >
           I plan to write honestly about Design, AI in Design, and the industry in India.
         </motion.p>
-
-        <motion.div variants={shouldReduceMotion ? undefined : itemVariants}>
-          <SocialLinks />
-        </motion.div>
       </motion.div>
     </div>
   );
