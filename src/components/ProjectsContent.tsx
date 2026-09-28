@@ -148,7 +148,6 @@ const ProjectsContent = () => {
         <p className="text-muted-foreground py-8">No projects found.</p>
       ) : (
         <motion.div
-          className="mt-10"
           variants={shouldReduceMotion ? undefined : groupVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"

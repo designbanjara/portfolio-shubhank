@@ -98,7 +98,7 @@ const WritingContent = () => {
       </div>
 
       {/* The list reads as one panel rather than loose rows. */}
-      <div className="mt-8 rounded-2xl bg-muted/50 p-5 sm:p-7">
+      <div className="rounded-2xl bg-muted/50 p-5 sm:p-7">
         {/* Posts */}
         <motion.div
           className="divide-y divide-dashed divide-border/70"
