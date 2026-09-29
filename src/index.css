@@ -387,6 +387,12 @@
     --carousel-gutter: 0px;
   }
 
+  /* Inside the highlights modal the art is sized from the space left over, so
+     the captions and paddles stay on screen without the panel scrolling. */
+  .carousel-in-modal {
+    --carousel-card-h: clamp(180px, calc(100vh - 430px), 560px);
+  }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

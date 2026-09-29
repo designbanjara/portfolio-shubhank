@@ -40,7 +40,8 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
 
         <DialogPrimitive.Content
           className="
-            fixed inset-3 sm:inset-6 z-50 overflow-y-auto overflow-x-hidden
+            fixed inset-3 sm:inset-6 z-50 flex flex-col justify-center
+            overflow-y-auto overflow-x-hidden
             rounded-2xl bg-background shadow-2xl
             focus:outline-none
             data-[state=open]:animate-in data-[state=closed]:animate-out
@@ -58,7 +59,7 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
           {highlights && (
             /* px sets the inset the carousel aligns to; the row then runs off
                the panel's right edge, as it does on the page. */
-            <div className="px-6 py-14 sm:px-10 sm:py-16">
+            <div className="px-6 py-10 sm:px-10">
               <DialogPrimitive.Title className="text-2xl font-custom font-bold text-foreground">
                 {highlights.title}
               </DialogPrimitive.Title>
@@ -68,7 +69,7 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
 
               {/* Pull the row out to the panel's right edge so cards run off
                   it, as they do on the page. */}
-              <div className="mt-10 -mr-6 sm:-mr-10">
+              <div className="carousel-in-modal mt-6 -mr-6 sm:-mr-10">
                 <ProjectCarousel
                   cards={cards}
                   label={`${highlights.title} cards`}
