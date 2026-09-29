@@ -17,7 +17,7 @@ interface ProjectRowProps {
 const ProjectRow = ({ card }: ProjectRowProps) => {
   const content = (
     <div className="flex items-center gap-4">
-      <div className="h-[calc(3*1.375rem)] flex-none overflow-hidden rounded-lg bg-muted">
+      <div className="h-[calc(3*1.375rem)] flex-none overflow-hidden rounded-lg">
         {card.imageUrl && (
           <img
             src={card.imageUrl}
