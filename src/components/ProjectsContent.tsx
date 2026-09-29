@@ -58,7 +58,7 @@ const ProjectsContent = () => {
         id="projects-heading"
         className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3"
       >
-        Work
+        Selected work
       </h2>
 
       <motion.div

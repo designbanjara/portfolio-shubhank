@@ -153,12 +153,6 @@ export const projectGroups: ProjectGroup[] = [
         image: { dark: '/projects/rzp-care-dark.png', light: '/projects/rzp-care-light.png' },
         size: { width: 1820, height: 1200 },
       },
-      {
-        id: 'rzp-app',
-        caption: '*Mobile app* re-design to accommodate new ways to accept payments',
-        image: { dark: '/projects/rzp-app-dark.png', light: '/projects/rzp-app-light.png' },
-        size: { width: 1488, height: 1200 },
-      },
     ],
   },
 ];

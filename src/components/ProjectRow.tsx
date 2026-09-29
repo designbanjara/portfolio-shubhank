@@ -36,7 +36,7 @@ const ProjectRow = ({ card }: ProjectRowProps) => {
         )}
       </div>
 
-      <p className="flex-1 text-base leading-snug text-muted-foreground">
+      <p className="mb-0 flex-1 text-base leading-snug text-muted-foreground">
         {renderCaption(card.caption)}
       </p>
     </div>
@@ -51,7 +51,12 @@ const ProjectRow = ({ card }: ProjectRowProps) => {
       type="button"
       onClick={card.onSelect}
       data-no-press-scale
-      className="group block w-full rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+      className="
+        group block w-full rounded-xl p-2 -m-2 text-left
+        transition-colors duration-150 ease-out-quad
+        hover:bg-black/[0.04] dark:hover:bg-white/[0.04]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+      "
     >
       {content}
     </button>
