@@ -1,14 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { craftApi } from '../services/craftApi';
-import { EASE, DURATION, STAGGER } from '@/lib/motion';
-import { getPostSlug } from '../lib/slugify';
-import { useProjects } from '../hooks/useCraftApi';
 import { useTheme } from '@/contexts/ThemeContext';
-import { projectThumbnailOverrides, ThumbnailOverride } from '@/config/projectThumbnails';
-import { projectGroups, fallbackGroup } from '@/config/projectGroups';
+import { projectGroups, Highlights } from '@/config/projectGroups';
 import { CarouselCard } from './ProjectCarousel';
 import ProjectGroupSection from './ProjectGroupSection';
+import ProjectHighlightsModal from './ProjectHighlightsModal';
+import { EASE, DURATION, STAGGER } from '@/lib/motion';
 
 const groupVariants = {
   hidden: {},
@@ -20,116 +17,38 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: DURATION.base, ease: EASE.outCubic } },
 };
 
-function resolveOverride(
-  override: ThumbnailOverride | undefined,
-  theme: 'dark' | 'light'
-): string | null {
-  if (!override) return null;
-  if (typeof override === 'string') return override;
-  return theme === 'light' ? override.light : override.dark;
-}
-
+/**
+ * The Work section.
+ *
+ * Entirely config-driven: the groups, their cards, the copy and the art all
+ * come from projectGroups.ts, and a card opens its highlights in a modal
+ * rather than navigating to a Craft page. Nothing here waits on a fetch, so
+ * there is no loading or error state to show.
+ */
 const ProjectsContent = () => {
-  const { data: projects = [], isLoading: loading, isError } = useProjects();
-  // null until the visitor touches a group: groups arrive asynchronously, so
-  // "first one open" is resolved at render rather than in initial state.
-  const [openIds, setOpenIds] = useState<string[] | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const { theme } = useTheme();
+  const [openIds, setOpenIds] = useState<string[] | null>(null);
+  // The project whose highlights are showing, if any.
+  const [highlights, setHighlights] = useState<Highlights | null>(null);
 
-  // The carousel is config-driven: captions and art come from the design.
-  // Craft only decides whether a card's project page exists to link to, and
-  // supplies any published project the design does not cover.
-  const groups = useMemo(() => {
-    const bySlug = new Map<string, (typeof projects)[number]>();
-    for (const project of projects) {
-      bySlug.set(getPostSlug(project.title), project);
-    }
-
-    const claimed = new Set<string>();
-
-    const built = projectGroups.map((group) => ({
-      id: group.id,
-      company: group.company,
-      description: group.description,
-      cards: group.cards.map<CarouselCard>((card) => {
-        if (card.slug) claimed.add(card.slug);
-        return {
+  const groups = useMemo(
+    () =>
+      projectGroups.map((group) => ({
+        id: group.id,
+        company: group.company,
+        description: group.description,
+        cards: group.cards.map<CarouselCard>((card) => ({
           id: card.id,
           caption: card.caption,
           size: card.size,
           imageUrl: theme === 'light' ? card.image.light : card.image.dark,
-          // The slug is static config, so a card keeps its link even if the
-          // Craft fetch is slow or fails. Cards with no project page simply
-          // omit a slug and render unlinked.
-          slug: card.slug,
-        };
-      }),
-    }));
-
-    const leftovers = [...bySlug.entries()]
-      .filter(([slug]) => !claimed.has(slug))
-      .map<CarouselCard>(([slug, project]) => ({
-        id: project.id,
-        slug,
-        caption: `*${project.title}* ${project.properties?.blurb ?? ''}`.trim(),
-        size: { width: 1488, height: 1200 },
-        imageUrl:
-          resolveOverride(projectThumbnailOverrides[slug], theme as 'dark' | 'light')
-          ?? craftApi.getPostImage(project),
-      }));
-
-    if (leftovers.length) {
-      built.push({ ...fallbackGroup, cards: leftovers });
-    }
-
-    return built.filter((group) => group.cards.length > 0);
-  }, [projects, theme]);
-
-  if (loading) {
-    return (
-      <div>
-        <div className="animate-pulse">
-          <div className="h-8 w-48 rounded bg-muted mb-8" />
-          <div className="space-y-12">
-            {[1, 2].map((i) => (
-              <div key={i}>
-                <div className="h-5 w-40 rounded bg-muted mb-3" />
-                <div className="h-4 w-full rounded bg-muted mb-6" />
-                <div className="flex gap-6">
-                  <div
-                    className="aspect-[1820/1200] shrink-0 rounded-2xl bg-muted"
-                    style={{ height: 'var(--carousel-card-h)' }}
-                  />
-                  <div
-                    className="aspect-[1820/1200] shrink-0 rounded-2xl bg-muted"
-                    style={{ height: 'var(--carousel-card-h)' }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div>
-        <h2 id="projects-heading" className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3">Work</h2>
-        <div className="py-8 text-center">
-          <p className="text-muted-foreground mb-4">Could not load projects. Please check your connection.</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="text-sm text-primary hover:opacity-80 underline"
-          >
-            Try again
-          </button>
-        </div>
-      </div>
-    );
-  }
+          // Only a card with highlights is interactive.
+          onSelect: card.highlights ? () => setHighlights(card.highlights ?? null) : undefined,
+        })),
+      })),
+    [theme]
+  );
 
   // Every group starts collapsed; openIds stays null until the first click.
   const openGroupIds = openIds ?? [];
@@ -142,41 +61,37 @@ const ProjectsContent = () => {
 
   return (
     <div>
-      <h2 id="projects-heading" className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3">Work</h2>
+      <h2
+        id="projects-heading"
+        className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3"
+      >
+        Work
+      </h2>
 
-      {groups.length === 0 ? (
-        <p className="text-muted-foreground py-8">No projects found.</p>
-      ) : (
-        <motion.div
-          className=""
-          variants={shouldReduceMotion ? undefined : groupVariants}
-          initial={shouldReduceMotion ? false : 'hidden'}
-          animate="visible"
-        >
-          {groups.map((group) => {
-            const open = openGroupIds.includes(group.id);
+      <motion.div
+        variants={shouldReduceMotion ? undefined : groupVariants}
+        initial={shouldReduceMotion ? false : 'hidden'}
+        animate="visible"
+      >
+        {groups.map((group) => (
+          <motion.div
+            key={group.id}
+            variants={shouldReduceMotion ? undefined : itemVariants}
+            className="py-1 first:pt-0 last:pb-0"
+          >
+            <ProjectGroupSection
+              id={group.id}
+              company={group.company}
+              description={group.description}
+              cards={group.cards}
+              open={openGroupIds.includes(group.id)}
+              onToggle={() => toggleGroup(group.id)}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
 
-            return (
-              <motion.div
-                key={group.id}
-                variants={shouldReduceMotion ? undefined : itemVariants}
-                // Even padding either side of the rule, trimmed at the ends so
-                // the first and last groups sit flush with the section.
-                className="py-1 first:pt-0 last:pb-0"
-              >
-                <ProjectGroupSection
-                  id={group.id}
-                  company={group.company}
-                  description={group.description}
-                  cards={group.cards}
-                  open={open}
-                  onToggle={() => toggleGroup(group.id)}
-                />
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      )}
+      <ProjectHighlightsModal highlights={highlights} onClose={() => setHighlights(null)} />
     </div>
   );
 };

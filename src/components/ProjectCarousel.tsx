@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { EASE, DURATION, STAGGER } from '@/lib/motion';
@@ -11,8 +10,8 @@ export interface CarouselCard {
   imageUrl?: string | null;
   /** Intrinsic art size — the card takes its width from this ratio. */
   size: { width: number; height: number };
-  /** Omitted when there is no project page to open. */
-  slug?: string;
+  /** Omitted when the card has nothing to open; it then renders inert. */
+  onSelect?: () => void;
 }
 
 /**
@@ -43,6 +42,11 @@ interface ProjectCarouselProps {
   label: string;
   /** False while the group is collapsed; flipping it true deals the cards in. */
   active?: boolean;
+  /**
+   * Page carousels break out to the full viewport width; one inside a modal
+   * stays within its container and takes the gutter from it.
+   */
+  bleed?: boolean;
 }
 
 // Cards rise into place in reading order. The movement is vertical on purpose:
@@ -84,7 +88,12 @@ const cardVariants = {
  * a hack that trades a reliable, snap-aware scroll for a custom easing curve.
  * The browser's own smooth scroll coordinates with snapping for free.
  */
-const ProjectCarousel = ({ cards, label, active = true }: ProjectCarouselProps) => {
+const ProjectCarousel = ({
+  cards,
+  label,
+  active = true,
+  bleed = true,
+}: ProjectCarouselProps) => {
   const scrollerRef = useRef<HTMLUListElement>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -166,10 +175,11 @@ const ProjectCarousel = ({ cards, label, active = true }: ProjectCarouselProps) 
   if (!cards.length) return null;
 
   return (
-    <div className="relative carousel-gutter">
-      {/* Full-bleed: cards stay aligned to the text column but run off the
-          right edge, as in the design. */}
-      <div className="ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]">
+    <div className={`relative ${bleed ? 'carousel-gutter' : 'carousel-gutter-contained'}`}>
+      {/* On the page, cards stay aligned to the text column but run off the
+          right edge. Inside a modal the container already provides that
+          alignment, so the row simply fills it. */}
+      <div className={bleed ? 'ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]' : undefined}>
         <motion.ul
           ref={scrollerRef}
           aria-label={label}
@@ -196,6 +206,11 @@ const ProjectCarousel = ({ cards, label, active = true }: ProjectCarouselProps) 
                     height={card.size.height}
                     loading="lazy"
                     draggable={false}
+                    // Art that has not been exported yet leaves the empty
+                    // panel behind rather than a broken-image icon.
+                    onError={(event) => {
+                      event.currentTarget.style.visibility = 'hidden';
+                    }}
                     className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.03] ease-out-cubic"
                   />
                 ) : (
@@ -222,14 +237,16 @@ const ProjectCarousel = ({ cards, label, active = true }: ProjectCarouselProps) 
                 className="snap-start shrink-0 list-none"
                 variants={shouldReduceMotion ? undefined : cardVariants}
               >
-                {card.slug ? (
-                  <Link
-                    to={`/projects/${card.slug}`}
-                    className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+                {card.onSelect ? (
+                  <button
+                    type="button"
+                    onClick={card.onSelect}
+                    data-no-press-scale
+                    className="group block w-full text-left rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                   >
                     {art}
                     {caption}
-                  </Link>
+                  </button>
                 ) : (
                   <div className="group block">
                     {art}

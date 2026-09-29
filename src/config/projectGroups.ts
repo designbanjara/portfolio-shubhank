@@ -13,6 +13,25 @@
  * intrinsic pixel size; the card reserves its width from that ratio so the
  * row does not reflow as images load.
  */
+/** A card inside a project's highlights modal. */
+export interface HighlightCard {
+  id: string;
+  /** Caption, with *bold* runs marked, same as a group card. */
+  caption: string;
+  image: { dark: string; light: string };
+  size: { width: number; height: number };
+}
+
+/**
+ * The full-screen story behind a project. Copy is taken verbatim from the
+ * Figma frame "Order form revamp Highlights" (node 8:2928).
+ */
+export interface Highlights {
+  title: string;
+  description: string;
+  cards: HighlightCard[];
+}
+
 export interface GroupCard {
   /** Stable key, also used for the React list key. */
   id: string;
@@ -21,11 +40,10 @@ export interface GroupCard {
   image: { dark: string; light: string };
   size: { width: number; height: number };
   /**
-   * Project slug to link to, from getPostSlug(project.title). This is the
-   * Craft page's own title, which deliberately differs from the caption
-   * above. Omit when no project page exists — the card then renders unlinked.
+   * Opening the card shows these highlights in a full-screen modal. A card
+   * without them is not interactive.
    */
-  slug?: string;
+  highlights?: Highlights;
 }
 
 export interface ProjectGroup {
@@ -46,15 +64,68 @@ export const projectGroups: ProjectGroup[] = [
     cards: [
       {
         id: 'order-form',
-        slug: 'simple-and-faster-way-to-place-orders-to-exchange',
         caption:
           '*Order form* revamp gave 10% order placement uplift along with adding pro-trader order types.',
         image: { dark: '/projects/Orderform-dark.png', light: '/projects/Orderform-light.png' },
         size: { width: 1488, height: 1200 },
+        highlights: {
+          title: 'Order form revamp Highlights',
+          description:
+            'PhonePe is a leading fin-tech within P2P payments space which has over 600 million registered users. Share.market is a stock-broking app, a new initiative from PhonePe to solve for the untapped 80% of Indians who are yet to open a Demat account.',
+          cards: [
+            {
+              id: 'usability',
+              caption:
+                'Solves major issues raised during Usability testing of the previous order form',
+              image: {
+                dark: '/projects/orderform/usability-dark.png',
+                light: '/projects/orderform/usability-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: 'speed',
+              caption: 'Improved speed of execution from 9 seconds to 3 seconds',
+              image: {
+                dark: '/projects/orderform/speed-dark.png',
+                light: '/projects/orderform/speed-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: 'framework',
+              caption:
+                'New order form adds framework that unlocks all types of orders and instructions, from 3 to 8+',
+              image: {
+                dark: '/projects/orderform/framework-dark.png',
+                light: '/projects/orderform/framework-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: 'ai-prototypes',
+              caption:
+                'AI assisted web prototypes helped close the design with confidence. Use \u201Ci\u201D to explore other approaches',
+              image: {
+                dark: '/projects/orderform/ai-prototypes-dark.png',
+                light: '/projects/orderform/ai-prototypes-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: 'web',
+              caption: 'Similar experience designed for web platform',
+              image: {
+                dark: '/projects/orderform/web-dark.png',
+                light: '/projects/orderform/web-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+          ],
+        },
       },
       {
         id: 'trading-tools',
-        slug: 'wip-trading-tools',
         caption:
           'About 30% of users who trade are using one of the 4 *Tools* to create, analyse and implement trading strategies',
         image: { dark: '/projects/Tradingtools-dark.png', light: '/projects/Tradingtools-light.png' },
@@ -62,7 +133,6 @@ export const projectGroups: ProjectGroup[] = [
       },
       {
         id: 'portfolio-optimiser',
-        slug: 'wip-portfolio-optimiser',
         caption:
           'Take a look at *Portfolio Optimizer*. One of the first brokers who identify whats wrong and fix portfolio in a seamless flow',
         image: { dark: '/projects/Optimiser-dark.png', light: '/projects/Optimiser-light.png' },
@@ -78,7 +148,6 @@ export const projectGroups: ProjectGroup[] = [
     cards: [
       {
         id: 'care-revamp',
-        slug: 'revamping-the-ticket-creation-experience',
         caption:
           '*Care revamp* reduced 30% tickets on self-serve features and simplified the ticket creation experience',
         image: { dark: '/projects/rzp-care-dark.png', light: '/projects/rzp-care-light.png' },
@@ -86,7 +155,6 @@ export const projectGroups: ProjectGroup[] = [
       },
       {
         id: 'rzp-app',
-        slug: 'failed-experiment-accept-payments-from-phone-through-cards',
         caption: '*Mobile app* re-design to accommodate new ways to accept payments',
         image: { dark: '/projects/rzp-app-dark.png', light: '/projects/rzp-app-light.png' },
         size: { width: 1488, height: 1200 },

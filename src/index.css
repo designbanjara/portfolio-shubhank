@@ -381,6 +381,12 @@
     --carousel-gutter: max(1.5rem, calc(50vw - 19.5rem));
   }
 
+  /* A carousel inside a modal takes its gutter from the panel's own padding
+     rather than the viewport, so the first card lines up with the title. */
+  .carousel-gutter-contained {
+    --carousel-gutter: 0px;
+  }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
