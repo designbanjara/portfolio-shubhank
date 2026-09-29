@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { EASE, DURATION, STAGGER } from '@/lib/motion';
+import { renderCaption } from '@/lib/caption';
 
 export interface CarouselCard {
   id: string;
@@ -12,28 +13,6 @@ export interface CarouselCard {
   size: { width: number; height: number };
   /** Omitted when the card has nothing to open; it then renders inert. */
   onSelect?: () => void;
-}
-
-/**
- * Splits a caption on *asterisk* runs. The design bolds a phrase that can sit
- * anywhere in the sentence, not just at the start, so this is a marker rather
- * than a separate lead-in field.
- */
-function renderCaption(caption: string) {
-  return caption
-    .split(/(\*[^*]+\*)/g)
-    .filter(Boolean)
-    .map((part, i) =>
-      part.startsWith('*') && part.endsWith('*') ? (
-        <strong key={i} className="font-medium text-foreground">
-          {part.slice(1, -1)}
-        </strong>
-      ) : (
-        // A span, not React.Fragment: the lovable-tagger plugin injects a
-        // data-lov-id onto every JSX node and Fragment rejects extra props.
-        <span key={i}>{part}</span>
-      )
-    );
 }
 
 interface ProjectCarouselProps {

@@ -24,11 +24,13 @@ const itemVariants = {
  * come from projectGroups.ts, and a card opens its highlights in a modal
  * rather than navigating to a Craft page. Nothing here waits on a fetch, so
  * there is no loading or error state to show.
+ *
+ * Everything is expanded: the page lists every project, and the carousel now
+ * lives only inside the highlights modal.
  */
 const ProjectsContent = () => {
   const shouldReduceMotion = useReducedMotion();
   const { theme } = useTheme();
-  const [openIds, setOpenIds] = useState<string[] | null>(null);
   // The project whose highlights are showing, if any.
   const [highlights, setHighlights] = useState<Highlights | null>(null);
 
@@ -50,15 +52,6 @@ const ProjectsContent = () => {
     [theme]
   );
 
-  // Every group starts collapsed; openIds stays null until the first click.
-  const openGroupIds = openIds ?? [];
-
-  // Exclusive: opening a group closes any other. Clicking the open one closes
-  // it, so all-collapsed is still reachable.
-  const toggleGroup = (id: string) => {
-    setOpenIds(openGroupIds.includes(id) ? [] : [id]);
-  };
-
   return (
     <div>
       <h2
@@ -77,15 +70,13 @@ const ProjectsContent = () => {
           <motion.div
             key={group.id}
             variants={shouldReduceMotion ? undefined : itemVariants}
-            className="py-1 first:pt-0 last:pb-0"
+            className="py-6 first:pt-0 last:pb-0"
           >
             <ProjectGroupSection
               id={group.id}
               company={group.company}
               description={group.description}
               cards={group.cards}
-              open={openGroupIds.includes(group.id)}
-              onToggle={() => toggleGroup(group.id)}
             />
           </motion.div>
         ))}

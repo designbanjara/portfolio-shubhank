@@ -1,129 +1,33 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import ProjectCarousel, { CarouselCard } from './ProjectCarousel';
-import { EASE, DURATION } from '@/lib/motion';
+import React from 'react';
+import { CarouselCard } from './ProjectCarousel';
+import ProjectRow from './ProjectRow';
 
 interface ProjectGroupSectionProps {
   id: string;
   company: string;
   description?: string;
   cards: CarouselCard[];
-  open: boolean;
-  onToggle: () => void;
 }
 
 /**
- * A company group in the Work section, collapsible from its heading.
- *
- * Deliberately not the shadcn/Radix Accordion: that keeps overflow hidden on
- * its content to animate height, which would clip the carousel back to the
- * text column and kill the full-bleed row. Here overflow is hidden only while
- * the height is animating, and released once the panel is open.
+ * A company group on the home page: heading, a line of context, then its
+ * projects listed out. Everything is visible — there is nothing to expand.
  */
-const ProjectGroupSection = ({
-  id,
-  company,
-  description,
-  cards,
-  open,
-  onToggle,
-}: ProjectGroupSectionProps) => {
-  const [overflow, setOverflow] = useState<'hidden' | 'visible'>(
-    open ? 'visible' : 'hidden'
-  );
-  const shouldReduceMotion = useReducedMotion();
-  const panelId = `${useId()}-panel`;
-  const isFirstRender = useRef(true);
+const ProjectGroupSection = ({ id, company, description, cards }: ProjectGroupSectionProps) => (
+  <section aria-labelledby={`group-${id}`}>
+    <h3 id={`group-${id}`} className="text-base font-medium text-foreground">
+      {company}
+    </h3>
+    {description && (
+      <p className="mt-2 max-w-[60ch] text-base text-muted-foreground">{description}</p>
+    )}
 
-  // Height and opacity get separate timings. Sharing one was the problem:
-  // out-quart reaches most of its value in the first quarter of the duration,
-  // which is right for the height settling open but made the content opaque
-  // almost immediately, so it read as popping in rather than fading.
-  // Opacity therefore ramps on in-out-quad, which spends real time in the
-  // middle, and trails the height slightly so the panel opens into itself.
-  const panelTransition = shouldReduceMotion
-    ? { duration: 0 }
-    : open
-      ? {
-          height: { duration: DURATION.slow, ease: EASE.outQuart },
-          opacity: { duration: DURATION.slow, ease: EASE.inOutQuad, delay: 0.08 },
-        }
-      : {
-          height: { duration: DURATION.base, ease: EASE.inQuad },
-          // Fading out ahead of the collapse hides the content reflowing.
-          opacity: { duration: DURATION.fast, ease: EASE.inQuad },
-        };
-
-  // Clip while the height is animating so the carousel cannot spill out of a
-  // half-open panel; onAnimationComplete releases it again. Skipped on mount,
-  // where a group that starts open has no animation to wait for.
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    setOverflow('hidden');
-  }, [open]);
-
-  return (
-    <section aria-labelledby={`group-${id}`}>
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        aria-controls={panelId}
-        data-no-press-scale
-        className="group block w-full text-left rounded-lg -mx-3 px-3 py-2 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ease-out-quad"
-      >
-        <span
-          id={`group-${id}`}
-          className="flex items-center gap-1 text-base font-medium text-foreground"
-        >
-          {company}
-          {/* Same chevron and inline placement as a Writing post title. It
-              rotates to a quarter turn when open, so it reads as state rather
-              than as a link arrow. */}
-          <motion.span
-            aria-hidden="true"
-            className="flex flex-shrink-0 items-center"
-            initial={false}
-            animate={{ rotate: open ? 90 : 0 }}
-            transition={
-              shouldReduceMotion
-                ? { duration: 0 }
-                : { duration: DURATION.base, ease: EASE.inOutQuad }
-            }
-          >
-            <ChevronRightIcon className="h-4 w-4" />
-          </motion.span>
-        </span>
-        {description && (
-          <span className="mt-2 block max-w-[60ch] text-base text-muted-foreground">
-            {description}
-          </span>
-        )}
-      </button>
-
-      <motion.div
-        id={panelId}
-        initial={false}
-        animate={{
-          height: open ? 'auto' : 0,
-          opacity: open ? 1 : 0,
-        }}
-        transition={panelTransition}
-        onAnimationComplete={() => {
-          if (open) setOverflow('visible');
-        }}
-        style={{ overflow }}
-      >
-        <div className="pt-6">
-          <ProjectCarousel cards={cards} label={`${company} projects`} active={open} />
-        </div>
-      </motion.div>
-    </section>
-  );
-};
+    <div className="mt-6 space-y-8">
+      {cards.map((card) => (
+        <ProjectRow key={card.id} card={card} />
+      ))}
+    </div>
+  </section>
+);
 
 export default ProjectGroupSection;
