@@ -9,15 +9,15 @@ interface ProjectRowProps {
 /**
  * A project on the home page: art on the left, caption on the right.
  *
- * The art keeps its own ratio from the intrinsic size, and the width and
- * height attributes reserve the space so the column does not reflow as images
- * load. Stacks on narrow screens, where a 240px image beside text would leave
- * neither enough room.
+ * The art is exactly three lines of caption tall — 3 x 1.375rem, the text-base
+ * leading-snug line height — so it reads as a thumbnail beside the paragraph
+ * rather than a panel the text hangs off. Width follows from the art's own
+ * ratio, and the width/height attributes reserve it before the image loads.
  */
 const ProjectRow = ({ card }: ProjectRowProps) => {
   const content = (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-      <div className="w-full overflow-hidden rounded-xl bg-muted sm:w-[240px] sm:flex-none">
+    <div className="flex items-center gap-4">
+      <div className="h-[calc(3*1.375rem)] flex-none overflow-hidden rounded-lg bg-muted">
         {card.imageUrl && (
           <img
             src={card.imageUrl}
@@ -31,7 +31,7 @@ const ProjectRow = ({ card }: ProjectRowProps) => {
             onError={(event) => {
               event.currentTarget.style.visibility = 'hidden';
             }}
-            className="h-auto w-full object-cover transition-transform duration-500 ease-out-cubic group-hover:scale-[1.03]"
+            className="h-full w-auto max-w-none object-cover transition-transform duration-500 ease-out-cubic group-hover:scale-[1.03]"
           />
         )}
       </div>
