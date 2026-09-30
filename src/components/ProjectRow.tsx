@@ -7,7 +7,7 @@ interface ProjectRowProps {
 }
 
 /**
- * A project on the home page: art on the left, caption on the right.
+ * A project on the home page: art with its caption underneath.
  *
  * The art is a fixed 124px tall; width follows from its own ratio, and the
  * width/height attributes reserve that width before the image loads so the
@@ -15,8 +15,8 @@ interface ProjectRowProps {
  */
 const ProjectRow = ({ card }: ProjectRowProps) => {
   const content = (
-    <div className="flex items-center gap-4">
-      <div className="h-[124px] flex-none overflow-hidden rounded-lg">
+    <div>
+      <div className="h-[124px] w-fit overflow-hidden rounded-lg">
         {card.imageUrl && (
           <img
             src={card.imageUrl}
@@ -35,7 +35,7 @@ const ProjectRow = ({ card }: ProjectRowProps) => {
         )}
       </div>
 
-      <p className="mb-0 flex-1 text-base leading-snug text-muted-foreground">
+      <p className="mb-0 mt-3 text-base leading-snug text-muted-foreground">
         {renderCaption(card.caption)}
       </p>
     </div>
