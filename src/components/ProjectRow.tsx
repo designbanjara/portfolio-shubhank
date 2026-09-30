@@ -7,17 +7,21 @@ interface ProjectRowProps {
 }
 
 /**
- * A project on the home page: art on the left, caption on the right.
+ * A project on the home page: caption on the left, art on the right.
  *
- * The art is exactly three lines of caption tall — 3 x 1.375rem, the text-base
- * leading-snug line height — so it reads as a thumbnail beside the paragraph
- * rather than a panel the text hangs off. Width follows from the art's own
- * ratio, and the width/height attributes reserve it before the image loads.
+ * The art is four lines of caption tall — 4 x 1.375rem, the text-base
+ * leading-snug line height — so it stays tied to the type scale rather than a
+ * loose pixel value. Width follows from the art's own ratio, and the
+ * width/height attributes reserve it before the image loads.
  */
 const ProjectRow = ({ card }: ProjectRowProps) => {
   const content = (
     <div className="flex items-center gap-4">
-      <div className="h-[calc(3*1.375rem)] flex-none overflow-hidden rounded-lg">
+      <p className="mb-0 flex-1 text-base leading-snug text-muted-foreground">
+        {renderCaption(card.caption)}
+      </p>
+
+      <div className="h-[calc(4*1.375rem)] flex-none overflow-hidden rounded-lg">
         {card.imageUrl && (
           <img
             src={card.imageUrl}
@@ -35,10 +39,6 @@ const ProjectRow = ({ card }: ProjectRowProps) => {
           />
         )}
       </div>
-
-      <p className="mb-0 flex-1 text-base leading-snug text-muted-foreground">
-        {renderCaption(card.caption)}
-      </p>
     </div>
   );
 

@@ -67,7 +67,10 @@ export const projectGroups: ProjectGroup[] = [
         caption:
           '*Order form* revamp gave 10% order placement uplift along with adding pro-trader order types.',
         image: { dark: '/projects/Orderform-dark.png', light: '/projects/Orderform-light.png' },
-        size: { width: 1488, height: 1200 },
+        // NOTE: the refreshed light export is 1820x1200; Orderform-dark.png is
+        // still the older 1488x1200 and needs re-exporting to match, or the
+        // card changes width between themes.
+        size: { width: 1820, height: 1200 },
         highlights: {
           title: 'Order form revamp Highlights',
           description:
