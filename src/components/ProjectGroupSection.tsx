@@ -22,7 +22,7 @@ const ProjectGroupSection = ({ id, company, description, cards }: ProjectGroupSe
       <p className="mt-2 max-w-[60ch] text-base text-muted-foreground">{description}</p>
     )}
 
-    <div className="mt-6 space-y-4">
+    <div className="mt-6 space-y-2">
       {cards.map((card) => (
         <ProjectRow key={card.id} card={card} />
       ))}
