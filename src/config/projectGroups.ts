@@ -127,14 +127,14 @@ export const projectGroups: ProjectGroup[] = [
       {
         id: 'trading-tools',
         caption:
-          'About 30% of users who trade are using one of the 4 *Tools* to create, analyse and implement trading strategies',
+          '*Tools* are used by 30% of traders to create, analyse and implement trading strategies',
         image: { dark: '/projects/Tradingtools-dark.png', light: '/projects/Tradingtools-light.png' },
         size: { width: 1820, height: 1200 },
       },
       {
         id: 'portfolio-optimiser',
         caption:
-          'Take a look at *Portfolio Optimizer*. One of the first brokers who identify whats wrong and fix portfolio in a seamless flow',
+          '*Optimizer* fixes ones portfolio to be healthy. It is one of the three pillars for marketing PhonePe invest',
         image: { dark: '/projects/Optimiser-dark.png', light: '/projects/Optimiser-light.png' },
         size: { width: 1820, height: 1200 },
       },
