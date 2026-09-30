@@ -391,6 +391,13 @@
      the captions and paddles stay on screen without the panel scrolling. */
   .carousel-in-modal {
     --carousel-card-h: clamp(180px, calc(100vh - 430px), 560px);
+    --carousel-edge: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .carousel-in-modal {
+      --carousel-edge: 2.5rem;
+    }
   }
 
   .no-scrollbar {

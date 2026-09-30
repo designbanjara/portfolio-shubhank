@@ -168,13 +168,14 @@ const ProjectCarousel = ({
           className="
             no-scrollbar m-0 flex list-none gap-6 overflow-x-auto overscroll-x-contain
             snap-x snap-mandatory
-            px-[var(--carousel-gutter)] scroll-px-[var(--carousel-gutter)]
+            pl-[var(--carousel-gutter)] pr-[calc(var(--carousel-gutter)+4rem)]
+            scroll-px-[var(--carousel-gutter)]
           "
         >
           {cards.map((card) => {
             const art = (
               <div
-                className="overflow-hidden rounded-2xl bg-muted"
+                className="overflow-hidden rounded-2xl"
                 style={{ height: 'var(--carousel-card-h)' }}
               >
                 {card.imageUrl ? (
@@ -240,13 +241,13 @@ const ProjectCarousel = ({
 
       {/* Paddles: pointer affordance only. Keyboard users tab through the
           cards themselves, which scrolls the list natively. */}
-      <div className="my-6 hidden gap-2 md:flex">
+      <div className="my-6 hidden justify-end gap-2 pr-[var(--carousel-edge,0px)] md:flex">
         <button
           type="button"
           onClick={() => page(-1)}
           disabled={!canScrollPrev}
           aria-label={`Previous ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-out-quad"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-30"
         >
           <ChevronLeftIcon className="h-4 w-4" />
         </button>
@@ -255,7 +256,7 @@ const ProjectCarousel = ({
           onClick={() => page(1)}
           disabled={!canScrollNext}
           aria-label={`Next ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-portfolio-sidebar text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ease-out-quad"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-30"
         >
           <ChevronRightIcon className="h-4 w-4" />
         </button>
