@@ -66,10 +66,7 @@ export const projectGroups: ProjectGroup[] = [
         id: 'order-form',
         caption:
           '*Order form* revamp gave 10% order placement uplift along with adding pro-trader order types.',
-        image: { dark: '/projects/Orderform-dark.png', light: '/projects/Orderform-light.png' },
-        // NOTE: the refreshed light export is 1820x1200; Orderform-dark.png is
-        // still the older 1488x1200 and needs re-exporting to match, or the
-        // card changes width between themes.
+        image: { dark: '/projects/Orderform-light.png', light: '/projects/Orderform-light.png' },
         size: { width: 1820, height: 1200 },
         highlights: {
           title: 'Order form revamp Highlights',
@@ -131,14 +128,14 @@ export const projectGroups: ProjectGroup[] = [
         id: 'trading-tools',
         caption:
           'About 30% of users who trade are using one of the 4 *Tools* to create, analyse and implement trading strategies',
-        image: { dark: '/projects/Tradingtools-dark.png', light: '/projects/Tradingtools-light.png' },
+        image: { dark: '/projects/Tradingtools-light.png', light: '/projects/Tradingtools-light.png' },
         size: { width: 1820, height: 1200 },
       },
       {
         id: 'portfolio-optimiser',
         caption:
           'Take a look at *Portfolio Optimizer*. One of the first brokers who identify whats wrong and fix portfolio in a seamless flow',
-        image: { dark: '/projects/Optimiser-dark.png', light: '/projects/Optimiser-light.png' },
+        image: { dark: '/projects/Optimiser-light.png', light: '/projects/Optimiser-light.png' },
         size: { width: 1820, height: 1200 },
       },
     ],
@@ -153,7 +150,7 @@ export const projectGroups: ProjectGroup[] = [
         id: 'care-revamp',
         caption:
           '*Care revamp* reduced 30% tickets on self-serve features and simplified the ticket creation experience',
-        image: { dark: '/projects/rzp-care-dark.png', light: '/projects/rzp-care-light.png' },
+        image: { dark: '/projects/rzp-care-light.png', light: '/projects/rzp-care-light.png' },
         size: { width: 1820, height: 1200 },
       },
     ],

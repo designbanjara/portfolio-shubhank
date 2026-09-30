@@ -23,8 +23,8 @@ const ProjectGroupSection = ({ id, company, description, cards }: ProjectGroupSe
     )}
 
     <div className="mt-6 space-y-2">
-      {cards.map((card) => (
-        <ProjectRow key={card.id} card={card} />
+      {cards.map((card, index) => (
+        <ProjectRow key={card.id} card={card} index={index} />
       ))}
     </div>
   </section>

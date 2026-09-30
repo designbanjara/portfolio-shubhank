@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CarouselCard } from './ProjectCarousel';
 import { renderCaption } from '@/lib/caption';
 
 interface ProjectRowProps {
   card: CarouselCard;
+  /** Position in the group; decides which way the art leans. */
+  index: number;
+}
+
+/**
+ * A per-card tilt that never changes between renders.
+ *
+ * The angle comes from the card's id rather than Math.random, so a card keeps
+ * it across re-renders and theme switches instead of jumping. Magnitude lands
+ * in 2..6 degrees: never past the 6 degree limit, and never 0, which would
+ * leave a card looking accidentally straight.
+ *
+ * Direction alternates by position rather than coming out of the hash too.
+ * Taking both from the hash let every card in a group lean the same way,
+ * which reads as a systematic slant instead of a casual one.
+ */
+function tiltFor(id: string, index: number): number {
+  let hash = 0;
+  for (let i = 0; i < id.length; i += 1) {
+    hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
+  }
+  const magnitude = 2 + (hash % 5);
+  return index % 2 === 0 ? magnitude : -magnitude;
 }
 
 /**
@@ -11,12 +34,22 @@ interface ProjectRowProps {
  *
  * The art is a fixed 124px tall; width follows from its own ratio, and the
  * width/height attributes reserve that width before the image loads so the
- * row does not shift as it arrives.
+ * row does not shift as it arrives. It sits slightly tilted and straightens
+ * when the row is hovered.
  */
-const ProjectRow = ({ card }: ProjectRowProps) => {
+const ProjectRow = ({ card, index }: ProjectRowProps) => {
+  const tilt = useMemo(() => tiltFor(card.id, index), [card.id, index]);
+
   const content = (
     <div className="flex items-center gap-4">
-      <div className="h-[124px] flex-none overflow-hidden rounded-lg">
+      <div
+        style={{ '--tilt': `${tilt}deg` } as React.CSSProperties}
+        className="
+          h-[124px] flex-none overflow-hidden rounded-lg
+          rotate-[var(--tilt)] group-hover:rotate-0
+          transition-transform duration-500 ease-out-cubic motion-reduce:transition-none
+        "
+      >
         {card.imageUrl && (
           <img
             src={card.imageUrl}
@@ -30,7 +63,7 @@ const ProjectRow = ({ card }: ProjectRowProps) => {
             onError={(event) => {
               event.currentTarget.style.visibility = 'hidden';
             }}
-            className="h-full w-auto max-w-none object-cover transition-transform duration-500 ease-out-cubic group-hover:scale-[1.03]"
+            className="h-full w-auto max-w-none object-cover"
           />
         )}
       </div>
