@@ -366,6 +366,9 @@
      mid-scroll. */
   :root {
     --carousel-card-h: clamp(280px, 42vh, 380px);
+    /* A card never fills the viewport: the remainder is what shows the next
+       one and tells the visitor the row scrolls. */
+    --carousel-card-max-w: calc(100vw - 6rem);
   }
 
   @media (min-width: 640px) {
@@ -392,11 +395,14 @@
   .carousel-in-modal {
     --carousel-card-h: clamp(180px, calc(100vh - 430px), 560px);
     --carousel-edge: 1.5rem;
+    /* Panel inset and padding, then a peek. */
+    --carousel-card-max-w: calc(100vw - 7rem);
   }
 
   @media (min-width: 640px) {
     .carousel-in-modal {
       --carousel-edge: 2.5rem;
+      --carousel-card-max-w: calc(100vw - 12rem);
     }
   }
 

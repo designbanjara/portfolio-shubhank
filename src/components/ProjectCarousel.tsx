@@ -173,10 +173,19 @@ const ProjectCarousel = ({
           "
         >
           {cards.map((card) => {
+            // The card is sized by width, not height, so a narrow viewport can
+            // never produce a card wider than the screen. Height comes from the
+            // aspect ratio. --carousel-card-h is the height ceiling, converted
+            // to a width here; --carousel-card-max-w is what the viewport can
+            // actually show while still leaving the next card peeking.
+            const ratio = card.size.width / card.size.height;
             const art = (
               <div
                 className="overflow-hidden rounded-2xl"
-                style={{ height: 'var(--carousel-card-h)' }}
+                style={{
+                  width: `min(calc(var(--carousel-card-h) * ${ratio}), var(--carousel-card-max-w))`,
+                  aspectRatio: `${card.size.width} / ${card.size.height}`,
+                }}
               >
                 {card.imageUrl ? (
                   <img
@@ -191,13 +200,10 @@ const ProjectCarousel = ({
                     onError={(event) => {
                       event.currentTarget.style.visibility = 'hidden';
                     }}
-                    className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.03] ease-out-cubic"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ease-out-cubic"
                   />
                 ) : (
-                  <div
-                    className="h-full"
-                    style={{ aspectRatio: `${card.size.width} / ${card.size.height}` }}
-                  />
+                  <div className="h-full w-full" />
                 )}
               </div>
             );
