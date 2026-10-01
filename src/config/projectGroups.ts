@@ -58,12 +58,18 @@ export interface ProjectGroup {
 /**
  * Modal intros. Shared because the PhonePe projects all open with the same
  * context; keeping one copy means they cannot drift apart.
+ *
+ * The Razorpay figure is Razorpay's own public claim from razorpay.com/about
+ * ("50,00,000+ businesses powering payments with Razorpay"), checked October
+ * 2026. Third-party trackers quote anywhere from 8 to 12 million and disagree
+ * with each other, so the first-party number is the defensible one. It will
+ * date — worth re-checking before any significant update.
  */
 const PHONEPE_INTRO =
   'PhonePe is a leading fin-tech within P2P payments space which has over 600 million registered users. Share.market is a stock-broking app, a new initiative from PhonePe to solve for the untapped 80% of Indians who are yet to open a Demat account.';
 
 const RAZORPAY_INTRO =
-  'Razorpay is India\u2019s leading payment aggregator that provides checkout experiences for end-customers and merchant experience for business owners. (Add current active user base metrics)';
+  'Razorpay is India\u2019s leading payment aggregator that provides checkout experiences for end-customers and merchant experience for business owners, powering payments for over 50,00,000 businesses across India.';
 
 export const projectGroups: ProjectGroup[] = [
   {
