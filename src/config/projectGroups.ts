@@ -55,6 +55,16 @@ export interface ProjectGroup {
   cards: GroupCard[];
 }
 
+/**
+ * Modal intros. Shared because the PhonePe projects all open with the same
+ * context; keeping one copy means they cannot drift apart.
+ */
+const PHONEPE_INTRO =
+  'PhonePe is a leading fin-tech within P2P payments space which has over 600 million registered users. Share.market is a stock-broking app, a new initiative from PhonePe to solve for the untapped 80% of Indians who are yet to open a Demat account.';
+
+const RAZORPAY_INTRO =
+  'Razorpay is India\u2019s leading payment aggregator that provides checkout experiences for end-customers and merchant experience for business owners. (Add current active user base metrics)';
+
 export const projectGroups: ProjectGroup[] = [
   {
     id: 'phonepe',
@@ -70,8 +80,7 @@ export const projectGroups: ProjectGroup[] = [
         size: { width: 1820, height: 1200 },
         highlights: {
           title: 'Order form revamp Highlights',
-          description:
-            'PhonePe is a leading fin-tech within P2P payments space which has over 600 million registered users. Share.market is a stock-broking app, a new initiative from PhonePe to solve for the untapped 80% of Indians who are yet to open a Demat account.',
+          description: PHONEPE_INTRO,
           cards: [
             {
               id: 'usability',
@@ -130,6 +139,62 @@ export const projectGroups: ProjectGroup[] = [
           '*Tools* are used by 30% of traders to create, analyse and implement trading strategies',
         image: { dark: '/projects/Tradingtools-dark.png', light: '/projects/Tradingtools-light.png' },
         size: { width: 1820, height: 1200 },
+        highlights: {
+          title: 'Tools Highlights',
+          description: PHONEPE_INTRO,
+          cards: [
+            {
+              id: '01',
+              caption:
+                'Designed and iterated on multiple tools for trading: Few of them are Strategy builder, OI Analysis, Trading panel',
+              image: {
+                dark: '/projects/trading-tools/01-dark.png',
+                light: '/projects/trading-tools/01-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '02',
+              caption:
+                'Implemented unique interactions for solving complex and information dense use cases',
+              image: {
+                dark: '/projects/trading-tools/02-dark.png',
+                light: '/projects/trading-tools/02-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '03',
+              caption:
+                'Influenced in enhancing subtler experiences compared to competitors like including intraday payoff, brokerage in P/L Analysis',
+              image: {
+                dark: '/projects/trading-tools/03-dark.png',
+                light: '/projects/trading-tools/03-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '04',
+              caption:
+                'Iterated the tools periodically to improve clarity and speed. Reducing steps in bulk orders, Compactness in trading panel etc',
+              image: {
+                dark: '/projects/trading-tools/04-dark.png',
+                light: '/projects/trading-tools/04-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '05',
+              caption:
+                'Similar experiences designed for web platform',
+              image: {
+                dark: '/projects/trading-tools/05-dark.png',
+                light: '/projects/trading-tools/05-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+          ],
+        },
       },
       {
         id: 'portfolio-optimiser',
@@ -137,6 +202,62 @@ export const projectGroups: ProjectGroup[] = [
           '*Optimizer* fixes ones portfolio to be healthy. It is one of the three pillars for marketing PhonePe invest',
         image: { dark: '/projects/Optimiser-dark.png', light: '/projects/Optimiser-light.png' },
         size: { width: 1820, height: 1200 },
+        highlights: {
+          title: 'Optimizer Highlights',
+          description: PHONEPE_INTRO,
+          cards: [
+            {
+              id: '01',
+              caption:
+                'Influenced the product direction heavily by mentioning the constraints and limitations early in the process',
+              image: {
+                dark: '/projects/portfolio-optimiser/01-dark.png',
+                light: '/projects/portfolio-optimiser/01-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '02',
+              caption:
+                'Clarity and auto-select defaults made sure the flow does not feel longer and intimidating',
+              image: {
+                dark: '/projects/portfolio-optimiser/02-dark.png',
+                light: '/projects/portfolio-optimiser/02-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '03',
+              caption:
+                'Metrics added influence and assisted users decision whether to buy or sell a particular stock',
+              image: {
+                dark: '/projects/portfolio-optimiser/03-dark.png',
+                light: '/projects/portfolio-optimiser/03-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '04',
+              caption:
+                'Included heavy compliance requirements like Editing amount and quantity without affecting the majority of flows',
+              image: {
+                dark: '/projects/portfolio-optimiser/04-dark.png',
+                light: '/projects/portfolio-optimiser/04-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '05',
+              caption:
+                'Similar experience designed for web platform',
+              image: {
+                dark: '/projects/portfolio-optimiser/05-dark.png',
+                light: '/projects/portfolio-optimiser/05-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+          ],
+        },
       },
     ],
   },
@@ -152,6 +273,52 @@ export const projectGroups: ProjectGroup[] = [
           '*Care revamp* reduced 30% tickets on self-serve features and simplified the ticket creation experience',
         image: { dark: '/projects/rzp-care-dark.png', light: '/projects/rzp-care-light.png' },
         size: { width: 1820, height: 1200 },
+        highlights: {
+          title: 'Care revamp Highlights',
+          description: RAZORPAY_INTRO,
+          cards: [
+            {
+              id: '01',
+              caption:
+                'About 20% of merchants have interacted with Help section. Solved major issues faced by merchants from data insights and user research calls',
+              image: {
+                dark: '/projects/care-revamp/01-dark.png',
+                light: '/projects/care-revamp/01-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '02',
+              caption:
+                'Solving for comprehension: Condensed 90 topics and sub-topics to 6 Topics and not more than 5 options in each',
+              image: {
+                dark: '/projects/care-revamp/02-dark.png',
+                light: '/projects/care-revamp/02-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '03',
+              caption:
+                'Quick actions are high frequency tickets that can be managed by user without Agent intervention. Open tickets with contextual status keeps track of existing tickets. Solving for Self-serve and duplication',
+              image: {
+                dark: '/projects/care-revamp/03-dark.png',
+                light: '/projects/care-revamp/03-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+            {
+              id: '04',
+              caption:
+                'Each topic is contextual along with timelines, charges breakdowns and statuses. And Merchant can always create ticket from anywhere',
+              image: {
+                dark: '/projects/care-revamp/04-dark.png',
+                light: '/projects/care-revamp/04-light.png',
+              },
+              size: { width: 1820, height: 1200 },
+            },
+          ],
+        },
       },
     ],
   },
