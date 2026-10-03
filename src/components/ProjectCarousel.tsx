@@ -283,7 +283,7 @@ const ProjectCarousel = ({
 
       {/* Paddles: pointer affordance only. Keyboard users tab through the
           cards themselves, which scrolls the list natively. */}
-      <div className="my-6 hidden justify-end gap-2 pr-[var(--carousel-edge,0px)] md:flex">
+      <div className="my-6 hidden justify-end gap-2 pr-[var(--carousel-edge,0px)] sm:flex">
         <button
           type="button"
           onClick={() => page(-1)}
