@@ -42,7 +42,7 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
           className="
             fixed left-3 right-3 sm:left-6 sm:right-6 top-1/2 -translate-y-1/2 z-50
             max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)]
-            overflow-y-auto overflow-x-hidden
+            no-scrollbar overflow-y-auto overflow-x-hidden
             rounded-2xl bg-background shadow-2xl
             focus:outline-none
             data-[state=open]:animate-in data-[state=closed]:animate-out

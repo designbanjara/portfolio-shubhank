@@ -100,7 +100,7 @@ export const projectGroups: ProjectGroup[] = [
             },
             {
               id: 'speed',
-              caption: 'Improved speed of execution from 9 seconds to 3 seconds',
+              caption: 'Reduced time spent on the form from 9 seconds to 6 seconds, while seeing a 10% uplift in orders.',
               image: {
                 dark: '/projects/orderform/speed-dark.png',
                 light: '/projects/orderform/speed-light.png',
@@ -110,7 +110,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: 'framework',
               caption:
-                'New order form adds framework that unlocks all types of orders and instructions, from 3 to 8+',
+                'Designed a framework that unlocks all types of orders and instructions, from 3 to 8+.',
               image: {
                 dark: '/projects/orderform/framework-dark.png',
                 light: '/projects/orderform/framework-light.png',
@@ -120,7 +120,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: 'ai-prototypes',
               caption:
-                'AI assisted web prototypes helped close the design with confidence. Use \u201Ci\u201D to explore other approaches',
+                'AI assisted web prototypes helped close the design with confidence. Quick iterations helped closing the Market - limit switcher within couple of days',
               image: {
                 dark: '/projects/orderform/ai-prototypes-dark.png',
                 light: '/projects/orderform/ai-prototypes-light.png',
@@ -162,7 +162,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: '02',
               caption:
-                'Implemented unique interactions for solving complex and information dense use cases',
+                'Implemented interactions that solve for information dense Futures and Options domain',
               image: {
                 dark: '/projects/trading-tools/02-dark.png',
                 light: '/projects/trading-tools/02-light.png',
@@ -235,7 +235,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: '03',
               caption:
-                'Metrics added influence and assisted users decision whether to buy or sell a particular stock',
+                'Decided on metrics that assisted users with their decision to buy or sell a particular stock',
               image: {
                 dark: '/projects/portfolio-optimiser/03-dark.png',
                 light: '/projects/portfolio-optimiser/03-light.png',
@@ -245,7 +245,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: '04',
               caption:
-                'Included heavy compliance requirements like Editing amount and quantity without affecting the majority of flows',
+                'Later in the design process, included heavy compliance requirements like Editing amount and quantity without affecting the majority of flows',
               image: {
                 dark: '/projects/portfolio-optimiser/04-dark.png',
                 light: '/projects/portfolio-optimiser/04-light.png',
