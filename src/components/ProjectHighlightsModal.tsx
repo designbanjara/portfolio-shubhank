@@ -1,6 +1,6 @@
 import React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import MaterialIcon from './MaterialIcon';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Highlights } from '@/config/projectGroups';
 import ProjectCarousel, { CarouselCard } from './ProjectCarousel';
@@ -40,7 +40,8 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
 
         <DialogPrimitive.Content
           className="
-            fixed inset-3 sm:inset-6 z-50 flex flex-col justify-center
+            fixed left-3 right-3 sm:left-6 sm:right-6 top-1/2 -translate-y-1/2 z-50
+            max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)]
             overflow-y-auto overflow-x-hidden
             rounded-2xl bg-background shadow-2xl
             focus:outline-none
@@ -51,9 +52,9 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
         >
           <DialogPrimitive.Close
             aria-label="Close highlights"
-            className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <XMarkIcon className="h-5 w-5" />
+            <MaterialIcon name="close" className="text-[24px]" />
           </DialogPrimitive.Close>
 
           {highlights && (
@@ -69,7 +70,7 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
 
               {/* Pull the row out to the panel's right edge so cards run off
                   it, as they do on the page. */}
-              <div className="carousel-in-modal mt-6 -mr-6 sm:-mr-10">
+              <div className="carousel-in-modal mt-12 -mr-6 sm:-mr-10">
                 <ProjectCarousel
                   cards={cards}
                   label={`${highlights.title} cards`}

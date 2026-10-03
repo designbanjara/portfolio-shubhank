@@ -1,5 +1,5 @@
 import React from 'react';
-import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import MaterialIcon from './MaterialIcon';
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface ThemeToggleProps {
@@ -10,7 +10,7 @@ interface ThemeToggleProps {
 const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
   const { theme, toggle } = useTheme();
 
-  const Icon = theme === 'dark' ? SunIcon : MoonIcon;
+  const iconName = theme === 'dark' ? 'wb_sunny' : 'dark_mode';
   const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
 
   if (compact) {
@@ -19,13 +19,12 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
         onClick={toggle}
         aria-label={label}
         className="
-          flex items-center justify-center h-9 w-9 rounded-full
-          bg-portfolio-sidebar border border-border shadow-sm
-          text-muted-foreground hover:text-foreground
-          transition-colors duration-150
-         ease-out-quad"
+          flex items-center justify-center h-10 w-10 rounded-full
+          bg-muted text-muted-foreground hover:text-foreground
+          transition-colors duration-150 ease-out-quad
+        "
       >
-        <Icon className="h-4 w-4" />
+        <MaterialIcon name={iconName} className="text-[24px]" />
       </button>
     );
   }
@@ -41,7 +40,7 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
         transition-colors duration-150
        ease-out-quad"
     >
-      <Icon className="h-4 w-4 flex-shrink-0" />
+      <MaterialIcon name={iconName} className="text-[20px] flex-shrink-0" />
       <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
     </button>
   );

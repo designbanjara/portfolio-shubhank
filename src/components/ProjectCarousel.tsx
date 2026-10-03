@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import MaterialIcon from './MaterialIcon';
 import { EASE, DURATION, STAGGER } from '@/lib/motion';
 import { renderCaption } from '@/lib/caption';
 
@@ -77,6 +77,35 @@ const ProjectCarousel = ({
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+
+  // Drag to scroll. Pointer events cover mouse, pen and touch, but touch
+  // already has native panning, so this only takes over for a mouse. Snapping
+  // is suspended for the duration, otherwise the browser fights every frame by
+  // pulling scrollLeft back to the nearest snap point.
+  const drag = useRef<{ startX: number; startScroll: number } | null>(null);
+
+  const onPointerDown = (event: React.PointerEvent<HTMLUListElement>) => {
+    if (event.pointerType === 'touch' || event.button !== 0) return;
+    const el = scrollerRef.current;
+    if (!el || el.scrollWidth <= el.clientWidth) return;
+    drag.current = { startX: event.clientX, startScroll: el.scrollLeft };
+    el.style.scrollSnapType = 'none';
+    el.setPointerCapture(event.pointerId);
+  };
+
+  const onPointerMove = (event: React.PointerEvent<HTMLUListElement>) => {
+    const el = scrollerRef.current;
+    if (!drag.current || !el) return;
+    el.scrollLeft = drag.current.startScroll - (event.clientX - drag.current.startX);
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLUListElement>) => {
+    const el = scrollerRef.current;
+    if (!drag.current || !el) return;
+    drag.current = null;
+    el.style.scrollSnapType = '';
+    if (el.hasPointerCapture(event.pointerId)) el.releasePointerCapture(event.pointerId);
+  };
 
   const syncPaddles = useCallback(() => {
     const el = scrollerRef.current;
@@ -162,13 +191,20 @@ const ProjectCarousel = ({
         <motion.ul
           ref={scrollerRef}
           aria-label={label}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
           variants={shouldReduceMotion ? undefined : rowVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : active ? 'visible' : 'hidden'}
           className="
-            no-scrollbar m-0 flex list-none gap-6 overflow-x-auto overscroll-x-contain
-            snap-x snap-mandatory
-            pl-[var(--carousel-gutter)] pr-[calc(var(--carousel-gutter)+4rem)]
+            no-scrollbar m-0 list-none gap-6
+            flex flex-col
+            sm:flex-row sm:overflow-x-auto sm:overscroll-x-contain
+            sm:snap-x sm:snap-mandatory sm:cursor-grab sm:active:cursor-grabbing
+            pl-[var(--carousel-gutter)] pr-[var(--carousel-gutter)]
+            sm:pr-[calc(var(--carousel-gutter)+4rem)]
             scroll-px-[var(--carousel-gutter)]
           "
         >
@@ -181,11 +217,11 @@ const ProjectCarousel = ({
             const ratio = card.size.width / card.size.height;
             const art = (
               <div
-                className="overflow-hidden rounded-2xl"
+                className="carousel-card-art overflow-hidden rounded-2xl"
                 style={{
-                  width: `min(calc(var(--carousel-card-h) * ${ratio}), var(--carousel-card-max-w))`,
+                  '--card-w': `min(calc(var(--carousel-card-h) * ${ratio}), var(--carousel-card-max-w))`,
                   aspectRatio: `${card.size.width} / ${card.size.height}`,
-                }}
+                } as React.CSSProperties}
               >
                 {card.imageUrl ? (
                   <img
@@ -200,7 +236,7 @@ const ProjectCarousel = ({
                     onError={(event) => {
                       event.currentTarget.style.visibility = 'hidden';
                     }}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ease-out-cubic"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <div className="h-full w-full" />
@@ -220,7 +256,7 @@ const ProjectCarousel = ({
               <motion.li
                 key={card.id}
                 data-carousel-item
-                className="snap-start shrink-0 list-none"
+                className="carousel-card sm:snap-start sm:shrink-0 list-none"
                 variants={shouldReduceMotion ? undefined : cardVariants}
               >
                 {card.onSelect ? (
@@ -253,18 +289,18 @@ const ProjectCarousel = ({
           onClick={() => page(-1)}
           disabled={!canScrollPrev}
           aria-label={`Previous ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-30"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-30"
         >
-          <ChevronLeftIcon className="h-4 w-4" />
+          <MaterialIcon name="chevron_left" className="text-[24px]" />
         </button>
         <button
           type="button"
           onClick={() => page(1)}
           disabled={!canScrollNext}
           aria-label={`Next ${label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-30"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-30"
         >
-          <ChevronRightIcon className="h-4 w-4" />
+          <MaterialIcon name="chevron_right" className="text-[24px]" />
         </button>
       </div>
     </div>
