@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { CarouselCard } from './ProjectCarousel';
 import { renderCaption } from '@/lib/caption';
 
@@ -6,6 +6,10 @@ interface ProjectRowProps {
   card: CarouselCard;
   /** Position in the group; decides which way the art leans. */
   index: number;
+  /** Decided for the whole group, so rows never disagree with each other. */
+  stacked: boolean;
+  /** Reports whether this row's caption would outgrow the art beside it. */
+  onMeasure: (needsStacking: boolean) => void;
 }
 
 /**
@@ -41,15 +45,13 @@ function tiltFor(id: string, index: number): number {
 /** Matches gap-4 between the art and the caption. */
 const ROW_GAP = 16;
 
-const ProjectRow = ({ card, index }: ProjectRowProps) => {
+const ProjectRow = ({ card, index, stacked, onMeasure }: ProjectRowProps) => {
   const tilt = useMemo(() => tiltFor(card.id, index), [card.id, index]);
   const rowRef = useRef<HTMLDivElement>(null);
   const artRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
-  const [stacked, setStacked] = useState(false);
-
-  // Side by side until the caption would stand taller than the art, then the
-  // art goes above and the caption below.
+  // Reports whether the caption would stand taller than the art beside it.
+  // The group decides what to do with that; see ProjectGroupSection.
   //
   // The caption is always measured at the width it would have *beside* the
   // art, whatever the current layout. Measuring it where it sits would make
@@ -63,7 +65,7 @@ const ProjectRow = ({ card, index }: ProjectRowProps) => {
 
     const besideWidth = row.clientWidth - art.offsetWidth - ROW_GAP;
     if (besideWidth <= 0) {
-      setStacked(true);
+      onMeasure(true);
       return;
     }
 
@@ -72,8 +74,8 @@ const ProjectRow = ({ card, index }: ProjectRowProps) => {
     const heightBeside = text.scrollHeight;
     text.style.width = previous;
 
-    setStacked(heightBeside > art.offsetHeight);
-  }, []);
+    onMeasure(heightBeside > art.offsetHeight);
+  }, [onMeasure]);
 
   useLayoutEffect(() => {
     measure();
