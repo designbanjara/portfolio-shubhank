@@ -112,15 +112,15 @@ const WritingContent = () => {
                   state={{ postId: post.id }}
                   className="block group hover:bg-black/[0.04] dark:hover:bg-white/[0.04] py-2.5 px-3 -mx-3 rounded-lg transition-colors duration-150 ease-out-quad"
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <h3 className="font-medium text-foreground text-base transition-colors duration-150 flex items-center gap-1 min-w-0">
-                      <span className="truncate">{post.title}</span>
+                  <div>
+                    <h3 className="font-medium text-foreground text-base transition-colors duration-150 flex items-start gap-1">
+                      <span>{post.title}</span>
                       <ChevronRightIcon
-                        className="h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0 ease-out-cubic"
+                        className="mt-1 h-3.5 w-3.5 opacity-0 blur-sm scale-75 group-hover:opacity-100 group-hover:blur-none group-hover:scale-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150 flex-shrink-0 ease-out-cubic"
                       />
                     </h3>
                     {post.properties?.date && (
-                      <p className="mb-0 flex-shrink-0 text-base text-muted-foreground tabular-nums">
+                      <p className="mb-0 mt-1 text-base text-muted-foreground tabular-nums">
                         {craftApi.formatDate(post.properties.date)}
                       </p>
                     )}

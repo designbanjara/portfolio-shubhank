@@ -852,7 +852,7 @@ const BlogPost = () => {
               </header>
 
               {post.properties?.blurb && (
-                <p className="introduction text-base text-foreground/80" style={{ marginBottom: '1.4em' }}>
+                <p className="introduction text-base text-foreground" style={{ marginBottom: '1.4em' }}>
                   <CraftInlineMarkdown markdown={post.properties.blurb} />
                 </p>
               )}

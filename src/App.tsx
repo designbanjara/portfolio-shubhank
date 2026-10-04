@@ -7,7 +7,6 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { ScrollToTop } from "@/components/ScrollToTop";
-import FloatingThemeToggle from "@/components/FloatingThemeToggle";
 import Index from "./pages/Index";
 import Bookmarks from "./pages/Bookmarks";
 import Stack from "./pages/Stack";
@@ -74,7 +73,6 @@ const App = () => (
           <Analytics />
           <DataPrefetcher />
           <ScrollToTop />
-          <FloatingThemeToggle />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/bookmarks" element={<Bookmarks />} />

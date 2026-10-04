@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { CarouselCard } from './ProjectCarousel';
 import { renderCaption } from '@/lib/caption';
 
@@ -38,12 +38,59 @@ function tiltFor(id: string, index: number): number {
  * row does not shift as it arrives. It sits slightly tilted and straightens
  * when the row is hovered.
  */
+/** Matches gap-4 between the art and the caption. */
+const ROW_GAP = 16;
+
 const ProjectRow = ({ card, index }: ProjectRowProps) => {
   const tilt = useMemo(() => tiltFor(card.id, index), [card.id, index]);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const artRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [stacked, setStacked] = useState(false);
+
+  // Side by side until the caption would stand taller than the art, then the
+  // art goes above and the caption below.
+  //
+  // The caption is always measured at the width it would have *beside* the
+  // art, whatever the current layout. Measuring it where it sits would make
+  // this oscillate: stacking widens the caption, which shortens it, which
+  // would unstack it, and so on.
+  const measure = useCallback(() => {
+    const row = rowRef.current;
+    const art = artRef.current;
+    const text = textRef.current;
+    if (!row || !art || !text) return;
+
+    const besideWidth = row.clientWidth - art.offsetWidth - ROW_GAP;
+    if (besideWidth <= 0) {
+      setStacked(true);
+      return;
+    }
+
+    const previous = text.style.width;
+    text.style.width = `${besideWidth}px`;
+    const heightBeside = text.scrollHeight;
+    text.style.width = previous;
+
+    setStacked(heightBeside > art.offsetHeight);
+  }, []);
+
+  useLayoutEffect(() => {
+    measure();
+    const row = rowRef.current;
+    if (!row) return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(row);
+    return () => observer.disconnect();
+  }, [measure, card.caption]);
 
   const content = (
-    <div className="flex items-center gap-4">
+    <div
+      ref={rowRef}
+      className={`flex gap-4 ${stacked ? 'flex-col items-start' : 'items-center'}`}
+    >
       <div
+        ref={artRef}
         style={{ '--tilt': `${tilt}deg` } as React.CSSProperties}
         className="
           h-[88px] sm:h-[124px] flex-none overflow-hidden rounded-lg
@@ -69,7 +116,10 @@ const ProjectRow = ({ card, index }: ProjectRowProps) => {
         )}
       </div>
 
-      <p className="mb-0 flex-1 text-base leading-snug text-muted-foreground">
+      <p
+        ref={textRef}
+        className={`mb-0 text-base leading-snug text-muted-foreground ${stacked ? 'w-full' : 'flex-1'}`}
+      >
         {renderCaption(card.caption)}
       </p>
     </div>
