@@ -38,6 +38,14 @@ const rowVariants = {
   visible: { transition: { staggerChildren: STAGGER, delayChildren: 0.12 } },
 };
 
+/**
+ * How far the row travels per pixel of pointer movement.
+ *
+ * Below 1 so a drag moves the row less than the hand, which keeps a long
+ * gesture from overshooting several cards at once.
+ */
+const DRAG_FACTOR = 0.6;
+
 const cardVariants = {
   hidden: { opacity: 0, y: 12 },
   visible: {
@@ -96,7 +104,8 @@ const ProjectCarousel = ({
   const onPointerMove = (event: React.PointerEvent<HTMLUListElement>) => {
     const el = scrollerRef.current;
     if (!drag.current || !el) return;
-    el.scrollLeft = drag.current.startScroll - (event.clientX - drag.current.startX);
+    el.scrollLeft =
+      drag.current.startScroll - (event.clientX - drag.current.startX) * DRAG_FACTOR;
   };
 
   const endDrag = (event: React.PointerEvent<HTMLUListElement>) => {
