@@ -41,11 +41,11 @@ const rowVariants = {
 /**
  * How far the row travels per pixel of pointer movement.
  *
- * Above 1 so the row outruns the hand: tracking the pointer one to one meant
- * crossing most of the window to advance a card, which is a lot of dragging
- * for a row this wide.
+ * Well above 1 so the row outruns the hand: tracking the pointer one to one
+ * meant crossing most of the window to advance a single card, which is a lot
+ * of dragging for a row this wide.
  */
-const DRAG_FACTOR = 1.6;
+const DRAG_FACTOR = 2.6;
 
 const cardVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -109,13 +109,65 @@ const ProjectCarousel = ({
       drag.current.startScroll - (event.clientX - drag.current.startX) * DRAG_FACTOR;
   };
 
+  const settleTimer = useRef<number | null>(null);
+
   const endDrag = (event: React.PointerEvent<HTMLUListElement>) => {
     const el = scrollerRef.current;
     if (!drag.current || !el) return;
     drag.current = null;
-    el.style.scrollSnapType = '';
     if (el.hasPointerCapture(event.pointerId)) el.releasePointerCapture(event.pointerId);
+
+    const restoreSnap = () => {
+      el.style.scrollSnapType = '';
+    };
+
+    if (shouldReduceMotion) {
+      restoreSnap();
+      return;
+    }
+
+    // Glide onto the nearest card instead of letting snapping jump there the
+    // instant the button comes up. Snapping stays off until the glide lands,
+    // because it would otherwise drag scrollLeft back on the first frame.
+    const gutter = parseFloat(getComputedStyle(el).scrollPaddingLeft) || 0;
+    const base = el.getBoundingClientRect().left;
+    let nearest: number | null = null;
+    let shortest = Infinity;
+
+    for (const item of el.querySelectorAll<HTMLElement>('[data-carousel-item]')) {
+      const offset = item.getBoundingClientRect().left - base + el.scrollLeft - gutter;
+      const distance = Math.abs(offset - el.scrollLeft);
+      if (distance < shortest) {
+        shortest = distance;
+        nearest = offset;
+      }
+    }
+
+    if (nearest === null) {
+      restoreSnap();
+      return;
+    }
+
+    el.scrollTo({ left: nearest, behavior: 'smooth' });
+
+    if (settleTimer.current !== null) window.clearTimeout(settleTimer.current);
+    // Read once: using `in` inline narrows window to never in the else branch.
+    const supportsScrollEnd = 'onscrollend' in window;
+    if (supportsScrollEnd) {
+      el.addEventListener('scrollend', restoreSnap, { once: true });
+      // Belt and braces: scrollend does not fire if the glide has nowhere to go.
+      settleTimer.current = window.setTimeout(restoreSnap, 900);
+    } else {
+      settleTimer.current = window.setTimeout(restoreSnap, 900);
+    }
   };
+
+  useEffect(
+    () => () => {
+      if (settleTimer.current !== null) window.clearTimeout(settleTimer.current);
+    },
+    []
+  );
 
   const syncPaddles = useCallback(() => {
     const el = scrollerRef.current;
