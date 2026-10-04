@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import { CarouselCard } from './ProjectCarousel';
 import { renderCaption } from '@/lib/caption';
 
@@ -30,67 +30,29 @@ function tiltFor(id: string, index: number): number {
 }
 
 /**
- * A project on the home page: art on the left, caption on the right.
+ * A project on the home page: art beside its caption, stacking to art above
+ * caption on narrow screens.
+ *
+ * The 420px threshold is measured rather than guessed: below roughly 400px the
+ * captions wrap past the 88px art height, so they are better off with the full
+ * width. 420 leaves a little headroom above that edge.
+ *
+ * This is deliberately a media query and not a measurement. Measuring the
+ * caption and storing the result in state meant the layout fed back into the
+ * thing being measured, which could oscillate and did — it blanked the page at
+ * ~405px. A media query cannot oscillate, and because every row shares it, rows
+ * in a group always agree.
  *
  * The art is 88px tall on phones and 124px from sm up; width follows from its
- * own ratio, and the
- * width/height attributes reserve that width before the image loads so the
- * row does not shift as it arrives. It sits slightly tilted and straightens
- * when the row is hovered.
+ * own ratio, and the width/height attributes reserve that width before the
+ * image loads so the row does not shift as it arrives.
  */
-/** Matches gap-4 between the art and the caption. */
-const ROW_GAP = 16;
-
 const ProjectRow = ({ card, index }: ProjectRowProps) => {
   const tilt = useMemo(() => tiltFor(card.id, index), [card.id, index]);
-  const rowRef = useRef<HTMLDivElement>(null);
-  const artRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLParagraphElement>(null);
-  const [stacked, setStacked] = useState(false);
-
-  // Side by side until the caption would stand taller than the art, then the
-  // art goes above and the caption below.
-  //
-  // The caption is always measured at the width it would have *beside* the
-  // art, whatever the current layout. Measuring it where it sits would make
-  // this oscillate: stacking widens the caption, which shortens it, which
-  // would unstack it, and so on.
-  const measure = useCallback(() => {
-    const row = rowRef.current;
-    const art = artRef.current;
-    const text = textRef.current;
-    if (!row || !art || !text) return;
-
-    const besideWidth = row.clientWidth - art.offsetWidth - ROW_GAP;
-    if (besideWidth <= 0) {
-      setStacked(true);
-      return;
-    }
-
-    const previous = text.style.width;
-    text.style.width = `${besideWidth}px`;
-    const heightBeside = text.scrollHeight;
-    text.style.width = previous;
-
-    setStacked(heightBeside > art.offsetHeight);
-  }, []);
-
-  useLayoutEffect(() => {
-    measure();
-    const row = rowRef.current;
-    if (!row) return;
-    const observer = new ResizeObserver(measure);
-    observer.observe(row);
-    return () => observer.disconnect();
-  }, [measure, card.caption]);
 
   const content = (
-    <div
-      ref={rowRef}
-      className={`flex gap-4 ${stacked ? 'flex-col items-start' : 'items-center'}`}
-    >
+    <div className="flex items-center gap-4 max-[420px]:flex-col max-[420px]:items-start">
       <div
-        ref={artRef}
         style={{ '--tilt': `${tilt}deg` } as React.CSSProperties}
         className="
           h-[88px] sm:h-[124px] flex-none overflow-hidden rounded-lg
@@ -111,15 +73,12 @@ const ProjectRow = ({ card, index }: ProjectRowProps) => {
             onError={(event) => {
               event.currentTarget.style.visibility = 'hidden';
             }}
-            className="h-full w-auto max-w-none object-cover"
+            className="h-full w-full object-cover"
           />
         )}
       </div>
 
-      <p
-        ref={textRef}
-        className={`mb-0 text-base leading-snug text-muted-foreground ${stacked ? 'w-full' : 'flex-1'}`}
-      >
+      <p className="mb-0 flex-1 text-base leading-snug text-muted-foreground max-[420px]:w-full">
         {renderCaption(card.caption)}
       </p>
     </div>
