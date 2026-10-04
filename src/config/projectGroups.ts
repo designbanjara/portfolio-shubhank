@@ -296,7 +296,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: '02',
               caption:
-                'Solving for comprehension: Condensed 90 topics and sub-topics to 6 Topics and not more than 5 options in each',
+                'Solving for comprehension: Condensed 90 topics and sub-topics to 6 Topics and not more than 5 sub-options',
               image: {
                 dark: '/projects/care-revamp/02-dark.png',
                 light: '/projects/care-revamp/02-light.png',
@@ -306,7 +306,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: '03',
               caption:
-                'Quick actions are high frequency tickets that can be managed by user without Agent intervention. Open tickets with contextual status keeps track of existing tickets. Solving for Self-serve and duplication',
+                'Quick actions change based on merchant\u2019s category and activation status. Open tickets with contextual status keeps track of existing tickets. Solving for Self-serve and duplication',
               image: {
                 dark: '/projects/care-revamp/03-dark.png',
                 light: '/projects/care-revamp/03-light.png',
@@ -316,7 +316,7 @@ export const projectGroups: ProjectGroup[] = [
             {
               id: '04',
               caption:
-                'Each topic is contextual along with timelines, charges breakdowns and statuses. And Merchant can always create ticket from anywhere',
+                'Each topic is contextual along with timelines, charges, breakdowns, and statuses. Merchant can always create ticket at any screen within help widget',
               image: {
                 dark: '/projects/care-revamp/04-dark.png',
                 light: '/projects/care-revamp/04-light.png',

@@ -42,7 +42,7 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
           className="
             fixed left-3 right-3 sm:left-6 sm:right-6 top-1/2 -translate-y-1/2 z-50
             max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)]
-            no-scrollbar overflow-y-auto overflow-x-hidden
+            flex flex-col overflow-hidden
             rounded-2xl bg-background shadow-2xl
             focus:outline-none
             data-[state=open]:animate-in data-[state=closed]:animate-out
@@ -52,16 +52,19 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
         >
           <DialogPrimitive.Close
             aria-label="Close highlights"
-            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-muted shadow-sm text-muted-foreground transition-colors duration-150 ease-out-quad hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <MaterialIcon name="close" className="text-[24px]" />
           </DialogPrimitive.Close>
 
           {highlights && (
-            /* px sets the inset the carousel aligns to; the row then runs off
+            /* The scrolling region. min-h-0 lets it shrink inside the flex
+               column, which is what allows it to scroll rather than pushing
+               the panel past its max height.
+               px sets the inset the carousel aligns to; the row then runs off
                the panel's right edge, as it does on the page. */
-            <div className="px-6 py-10 sm:px-10">
-              <DialogPrimitive.Title className="text-2xl font-custom font-bold text-foreground">
+            <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-6 py-10 sm:px-10">
+              <DialogPrimitive.Title className="pr-14 text-2xl font-custom font-bold text-foreground">
                 {highlights.title}
               </DialogPrimitive.Title>
               <DialogPrimitive.Description className="mt-3 max-w-[80ch] text-base text-muted-foreground">

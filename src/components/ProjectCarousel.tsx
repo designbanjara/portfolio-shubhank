@@ -210,7 +210,7 @@ const ProjectCarousel = ({
     };
   }, [syncPaddles, cards.length]);
 
-  const page = (direction: 1 | -1) => {
+  const page = useCallback((direction: 1 | -1) => {
     const el = scrollerRef.current;
     if (!el) return;
 
@@ -240,7 +240,36 @@ const ProjectCarousel = ({
       left: target - gutter,
       behavior: shouldReduceMotion ? 'auto' : 'smooth',
     });
-  };
+  }, [shouldReduceMotion]);
+
+  // Arrow keys step the row, so the carousel is reachable without a pointer.
+  // Only while the group is open and the row actually scrolls, and never when
+  // the visitor is typing or using a modifier for something else.
+  useEffect(() => {
+    if (!active) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target.closest('input, textarea, select, [contenteditable="true"]')
+      ) {
+        return;
+      }
+
+      const el = scrollerRef.current;
+      if (!el || el.scrollWidth <= el.clientWidth) return;
+
+      event.preventDefault();
+      page(event.key === 'ArrowRight' ? 1 : -1);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [active, page]);
 
   if (!cards.length) return null;
 
