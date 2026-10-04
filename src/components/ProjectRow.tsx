@@ -32,7 +32,8 @@ function tiltFor(id: string, index: number): number {
 /**
  * A project on the home page: art on the left, caption on the right.
  *
- * The art is a fixed 124px tall; width follows from its own ratio, and the
+ * The art is 88px tall on phones and 124px from sm up; width follows from its
+ * own ratio, and the
  * width/height attributes reserve that width before the image loads so the
  * row does not shift as it arrives. It sits slightly tilted and straightens
  * when the row is hovered.
@@ -45,7 +46,7 @@ const ProjectRow = ({ card, index }: ProjectRowProps) => {
       <div
         style={{ '--tilt': `${tilt}deg` } as React.CSSProperties}
         className="
-          h-[124px] flex-none overflow-hidden rounded-lg
+          h-[88px] sm:h-[124px] flex-none overflow-hidden rounded-lg
           rotate-[var(--tilt)] group-hover:rotate-0
           transition-transform duration-500 ease-out-cubic motion-reduce:transition-none
         "

@@ -801,7 +801,7 @@ const BlogPost = () => {
                 className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
               >
                 <ArrowLeftIcon className="h-4 w-4" />
-                Back to {isProjectRoute ? "Projects" : "Writing"}
+                Back
               </Link>
               <h1 className="text-2xl font-bold text-foreground mb-4">{isProjectRoute ? "Project" : "Post"} not found</h1>
               <p className="text-muted-foreground">
@@ -825,7 +825,7 @@ const BlogPost = () => {
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
             >
               <ArrowLeftIcon className="h-4 w-4" />
-              Back to {isProjectRoute ? "Projects" : "Writing"}
+              Back
             </Link>
 
             <article className="prose dark:prose-invert prose-lg max-w-none">
@@ -852,7 +852,7 @@ const BlogPost = () => {
               </header>
 
               {post.properties?.blurb && (
-                <p className="introduction text-foreground/80" style={{ fontSize: '1.25em', lineHeight: '1.25', marginBottom: '1.4em' }}>
+                <p className="introduction text-base text-foreground/80" style={{ marginBottom: '1.4em' }}>
                   <CraftInlineMarkdown markdown={post.properties.blurb} />
                 </p>
               )}

@@ -73,7 +73,7 @@ const ProjectHighlightsModal = ({ highlights, onClose }: ProjectHighlightsModalP
 
               {/* Pull the row out to the panel's right edge so cards run off
                   it, as they do on the page. */}
-              <div className="carousel-in-modal mt-12 -mr-6 sm:-mr-10">
+              <div className="carousel-in-modal mt-12 sm:-mr-10">
                 <ProjectCarousel
                   cards={cards}
                   label={`${highlights.title} cards`}
