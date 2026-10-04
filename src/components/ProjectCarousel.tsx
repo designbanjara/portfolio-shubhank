@@ -41,10 +41,11 @@ const rowVariants = {
 /**
  * How far the row travels per pixel of pointer movement.
  *
- * Below 1 so a drag moves the row less than the hand, which keeps a long
- * gesture from overshooting several cards at once.
+ * Above 1 so the row outruns the hand: tracking the pointer one to one meant
+ * crossing most of the window to advance a card, which is a lot of dragging
+ * for a row this wide.
  */
-const DRAG_FACTOR = 0.6;
+const DRAG_FACTOR = 1.6;
 
 const cardVariants = {
   hidden: { opacity: 0, y: 12 },
